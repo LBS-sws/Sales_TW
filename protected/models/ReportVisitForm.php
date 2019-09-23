@@ -2402,10 +2402,11 @@ class ReportVisitForm extends CReportForm
         $models=array();
         foreach ($model['sale'] as $code=>$peoples){
             $people=array();
+			$obj_where = $this->getDealString("a.visit_obj");
             $sql = "select a.city, a.username, sum(convert(b.field_value, decimal(12,2))) as money 
 				from sal_visit a force index (idx_visit_02), sal_visit_info b   
 				where a.id=b.visit_id and b.field_id in ('svc_A7','svc_B6','svc_C7','svc_D6','svc_E7') 
-				and a.visit_dt >= '$start_dt'and a.visit_dt <= '$end_dt' and  a.visit_obj like '%10%' and a.username ='$peoples' 
+				and a.visit_dt >= '$start_dt'and a.visit_dt <= '$end_dt' and  ($obj_where) and a.username ='$peoples' 
 				group by a.city, a.username 
 			";
             $records = Yii::app()->db->createCommand($sql)->queryAll();
@@ -2419,7 +2420,8 @@ class ReportVisitForm extends CReportForm
             $sqls="select a.name as cityname ,d.name as names from security$suffix.sec_city a	,hr$suffix.hr_binding b	 ,security$suffix.sec_user  c ,hr$suffix.hr_employee d 
                 where c.username='$peoples' and b.user_id='".$peoples."' and b.employee_id=d.id and c.city=a.code";
             $cname = Yii::app()->db->createCommand($sqls)->queryRow();
-            $sql1="select id  from sal_visit where username='".$peoples."'  and  visit_dt >= '$start_dt'and visit_dt <= '$end_dt' and visit_obj like '%10%'";
+			$obj_where = $this->getDealString("visit_obj");
+            $sql1="select id  from sal_visit where username='".$peoples."'  and  visit_dt >= '$start_dt'and visit_dt <= '$end_dt' and ($obj_where)";
             $arr = Yii::app()->db->createCommand($sql1)->queryAll();
             $singular=count($arr);
             $people['singular']=$singular;
@@ -2556,4 +2558,14 @@ class ReportVisitForm extends CReportForm
         header("Content-Transfer-Encoding:binary");
         echo $output;
     }
+
+	private function getDealString($field) {
+		$rtn = '';
+		$sql = "select id from sal_visit_obj where rpt_type='DEAL'";
+		$rows = Yii::app()->db->createCommand($sql)->queryAll();
+		foreach ($rows as $row) {
+			$rtn .= ($rtn=='' ? '' : ' or ').$field." like '%\"".$row['id']."\"%'";
+		}
+		return ($rtn=='' ? "$field='0'" : $rtn);
+	}
 }
