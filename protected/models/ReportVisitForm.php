@@ -1147,7 +1147,7 @@ class ReportVisitForm extends CReportForm
     public function shul($sum,$records,$name,$names){
 	    $all=0;
         for($i=0;$i<count($records);$i++){
-            if(strpos($records[$i][$name],$names)!==false&&(strpos($records[$i]['visit_obj_name'],'签单')!==false||strpos($records[$i]['visit_obj_name'],'续约')!==false)){
+            if(strpos($records[$i][$name],$names)!==false&&(strpos($records[$i]['visit_obj_name'],'簽單')!==false||strpos($records[$i]['visit_obj_name'],'续约')!==false)){
                 $sum=$sum+1;
                 $sql="select * from sal_visit_info where visit_id = '".$records[$i]['id']."'";
                 $rows = Yii::app()->db->createCommand($sql)->queryAll();
@@ -1193,7 +1193,7 @@ class ReportVisitForm extends CReportForm
     public function shuls($sum,$records,$name,$names){
 	    $all=0;
         for($i=0;$i<count($records);$i++){
-            if(strpos($records[$i][$name],$names)!==false&&(strpos($records[$i]['visit_obj_name'],'签单')!==false||strpos($records[$i]['visit_obj_name'],'续约')!==false)){
+            if(strpos($records[$i][$name],$names)!==false&&(strpos($records[$i]['visit_obj_name'],'簽單')!==false||strpos($records[$i]['visit_obj_name'],'续约')!==false)){
                 $sum=$sum+1;
                 $sql="select * from sal_visit_info where visit_id = '".$records[$i]['id']."'";
                 $rows = Yii::app()->db->createCommand($sql)->queryAll();
@@ -1242,7 +1242,7 @@ class ReportVisitForm extends CReportForm
         $suffix = Yii::app()->params['envSuffix'];
         $a=0;
         for($i=0;$i<count($records);$i++){
-	        if(strpos($records[$i]['visit_obj_name'],'签单')!==false){
+	        if(strpos($records[$i]['visit_obj_name'],'簽單')!==false){
 	            $sql="select * from sal_visit_info where visit_id = '".$records[$i]['id']."'";
                 $rows = Yii::app()->db->createCommand($sql)->queryAll();
                foreach ($rows as $v){
