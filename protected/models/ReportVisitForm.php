@@ -202,7 +202,7 @@ class ReportVisitForm extends CReportForm
         $arr['baojia']=$this->shul($baojia,$records,'visit_obj_name','报价');
         $arr['jiuke']=$this->shul($jiuke,$records,'visit_obj_name','救客');
         $arr['genghuanxiangmu']=$this->shul($genghuanxiangmu,$records,'visit_obj_name','更换项目');
-        $arr['qiandan']=$this->shul($qiandan,$records,'visit_obj_name','签单');
+        $arr['qiandan']=$this->shul($qiandan,$records,'visit_obj_name','簽單');
         $arr['xuyue']=$this->shul($xuyue,$records,'visit_obj_name','续约');
         $arr['zuikuan']=$this->shul($zuikuan,$records,'visit_obj_name','追款');
         $arr['qitaa']=$this->shul($qitaa,$records,'visit_obj_name','其他');
@@ -300,7 +300,7 @@ class ReportVisitForm extends CReportForm
                 $arr['baojia']=$this->shul($a,$records,'visit_obj_name','报价');
                 $arr['jiuke']=$this->shul($a,$records,'visit_obj_name','救客');
                 $arr['genghuanxiangmu']=$this->shul($a,$records,'visit_obj_name','更换项目');
-                $arr['qiandan']=$this->shul($a,$records,'visit_obj_name','签单');
+                $arr['qiandan']=$this->shul($a,$records,'visit_obj_name','簽單');
                 $arr['xuyue']=$this->shul($a,$records,'visit_obj_name','续约');
                 $arr['zuikuan']=$this->shul($a,$records,'visit_obj_name','追款');
                 $arr['qitaa']=$this->shul($a,$records,'visit_obj_name','其他');
@@ -394,7 +394,7 @@ class ReportVisitForm extends CReportForm
                 $arr['baojia']=$this->shul($a,$records,'visit_obj_name','报价');
                 $arr['jiuke']=$this->shul($a,$records,'visit_obj_name','救客');
                 $arr['genghuanxiangmu']=$this->shul($a,$records,'visit_obj_name','更换项目');
-                $arr['qiandan']=$this->shul($a,$records,'visit_obj_name','签单');
+                $arr['qiandan']=$this->shul($a,$records,'visit_obj_name','簽單');
                 $arr['xuyue']=$this->shul($a,$records,'visit_obj_name','续约');
                 $arr['zuikuan']=$this->shul($a,$records,'visit_obj_name','追款');
                 $arr['qitaa']=$this->shul($a,$records,'visit_obj_name','其他');
@@ -563,7 +563,7 @@ class ReportVisitForm extends CReportForm
         $arr['baojia']=$this->shuls($baojia,$records,'visit_obj_name','报价');
         $arr['jiuke']=$this->shuls($jiuke,$records,'visit_obj_name','救客');
         $arr['genghuanxiangmu']=$this->shuls($genghuanxiangmu,$records,'visit_obj_name','更换项目');
-        $arr['qiandan']=$this->shuls($qiandan,$records,'visit_obj_name','签单');
+        $arr['qiandan']=$this->shuls($qiandan,$records,'visit_obj_name','簽單');
         $arr['xuyue']=$this->shuls($xuyue,$records,'visit_obj_name','续约');
         $arr['zuikuan']=$this->shuls($zuikuan,$records,'visit_obj_name','追款');
         $arr['qitaa']=$this->shuls($qitaa,$records,'visit_obj_name','其他');
@@ -661,7 +661,7 @@ class ReportVisitForm extends CReportForm
                 $arr['baojia']=$this->shuls($a,$records,'visit_obj_name','报价');
                 $arr['jiuke']=$this->shuls($a,$records,'visit_obj_name','救客');
                 $arr['genghuanxiangmu']=$this->shuls($a,$records,'visit_obj_name','更换项目');
-                $arr['qiandan']=$this->shuls($a,$records,'visit_obj_name','签单');
+                $arr['qiandan']=$this->shuls($a,$records,'visit_obj_name','簽單');
                 $arr['xuyue']=$this->shuls($a,$records,'visit_obj_name','续约');
                 $arr['zuikuan']=$this->shuls($a,$records,'visit_obj_name','追款');
                 $arr['qitaa']=$this->shuls($a,$records,'visit_obj_name','其他');
@@ -755,7 +755,7 @@ class ReportVisitForm extends CReportForm
                 $arr['baojia']=$this->shuls($a,$records,'visit_obj_name','报价');
                 $arr['jiuke']=$this->shuls($a,$records,'visit_obj_name','救客');
                 $arr['genghuanxiangmu']=$this->shuls($a,$records,'visit_obj_name','更换项目');
-                $arr['qiandan']=$this->shuls($a,$records,'visit_obj_name','签单');
+                $arr['qiandan']=$this->shuls($a,$records,'visit_obj_name','簽單');
                 $arr['xuyue']=$this->shuls($a,$records,'visit_obj_name','续约');
                 $arr['zuikuan']=$this->shuls($a,$records,'visit_obj_name','追款');
                 $arr['qitaa']=$this->shuls($a,$records,'visit_obj_name','其他');
@@ -925,7 +925,7 @@ class ReportVisitForm extends CReportForm
         $arr['baojia']=$this->shul($baojia,$records,'visit_obj_name','报价');
         $arr['jiuke']=$this->shul($jiuke,$records,'visit_obj_name','救客');
         $arr['genghuanxiangmu']=$this->shul($genghuanxiangmu,$records,'visit_obj_name','更换项目');
-        $arr['qiandan']=$this->shul($qiandan,$records,'visit_obj_name','签单');
+        $arr['qiandan']=$this->shul($qiandan,$records,'visit_obj_name','簽單');
         $arr['xuyue']=$this->shul($xuyue,$records,'visit_obj_name','续约');
         $arr['zuikuan']=$this->shul($zuikuan,$records,'visit_obj_name','追款');
         $arr['qitaa']=$this->shul($qitaa,$records,'visit_obj_name','其他');
@@ -1083,7 +1083,7 @@ class ReportVisitForm extends CReportForm
         $arr['baojia']=$this->shuls($baojia,$records,'visit_obj_name','报价');
         $arr['jiuke']=$this->shuls($jiuke,$records,'visit_obj_name','救客');
         $arr['genghuanxiangmu']=$this->shuls($genghuanxiangmu,$records,'visit_obj_name','更换项目');
-        $arr['qiandan']=$this->shuls($qiandan,$records,'visit_obj_name','签单');
+        $arr['qiandan']=$this->shuls($qiandan,$records,'visit_obj_name','簽單');
         $arr['xuyue']=$this->shuls($xuyue,$records,'visit_obj_name','续约');
         $arr['zuikuan']=$this->shuls($zuikuan,$records,'visit_obj_name','追款');
         $arr['qitaa']=$this->shuls($qitaa,$records,'visit_obj_name','其他');
@@ -1288,7 +1288,7 @@ class ReportVisitForm extends CReportForm
 //    public function moneyone($records){
 //        $suffix = Yii::app()->params['envSuffix'];
 //        for($i=0;$i<count($records);$i++){
-//            if(strpos($records[$i]['visit_obj_name'],'签单')!==false){
+//            if(strpos($records[$i]['visit_obj_name'],'簽單')!==false){
 //                $sql="select * from sal_visit_info where visit_id = '".$records[$i]['id']."'";
 //                $rows = Yii::app()->db->createCommand($sql)->queryAll();
 //                foreach ($rows as $v){
@@ -1355,7 +1355,7 @@ class ReportVisitForm extends CReportForm
             $i13=$i+13;
 
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,'部门总数据') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'总拜访量'.$model['all']['money']['all'].'签单量：'.$model['all']['money']['sum'].'签单金额'.$model['all']['money']['money']) ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'总拜访量'.$model['all']['money']['all'].'簽單量：'.$model['all']['money']['sum'].'簽單金额'.$model['all']['money']['money']) ;
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$i.':AC'.$i);
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$i1.':AC'.$i1);
             $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25);
@@ -1428,7 +1428,7 @@ class ReportVisitForm extends CReportForm
             $objPHPExcel->getActiveSheet()->setCellValue('S'.$i4,$model['all']['qitaa']['all']) ;
             $objPHPExcel->getActiveSheet()->setCellValue('T'.$i4,$model['all']['qitaa']['sum']) ;
             $objPHPExcel->getActiveSheet()->setCellValue('U'.$i4,$model['all']['qitaa']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i4,'签单') ;
+            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i4,'簽單') ;
             $objPHPExcel->getActiveSheet()->setCellValue('W'.$i4,$model['all']['qiandan']['all']) ;
             $objPHPExcel->getActiveSheet()->setCellValue('X'.$i4,$model['all']['qiandan']['sum']) ;
             $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i4,$model['all']['qiandan']['money']) ;
@@ -1694,7 +1694,7 @@ class ReportVisitForm extends CReportForm
                 $i12=$i+12;
                 $i13=$i+13;
                 $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,$arr['name']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'总拜访量'.$arr['money']['all'].'签单量：'.$arr['money']['sum'].'签单金额'.$arr['money']['money']) ;
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'总拜访量'.$arr['money']['all'].'簽單量：'.$arr['money']['sum'].'簽單金额'.$arr['money']['money']) ;
                 $objPHPExcel->getActiveSheet()->mergeCells('A'.$i.':AC'.$i);
                 $objPHPExcel->getActiveSheet()->mergeCells('A'.$i1.':AC'.$i1);
                 $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25);
@@ -1767,7 +1767,7 @@ class ReportVisitForm extends CReportForm
                 $objPHPExcel->getActiveSheet()->setCellValue('S'.$i4,$arr['qitaa']['all']) ;
                 $objPHPExcel->getActiveSheet()->setCellValue('T'.$i4,$arr['qitaa']['sum']) ;
                 $objPHPExcel->getActiveSheet()->setCellValue('U'.$i4,$arr['qitaa']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('V'.$i4,'签单') ;
+                $objPHPExcel->getActiveSheet()->setCellValue('V'.$i4,'簽單') ;
                 $objPHPExcel->getActiveSheet()->setCellValue('W'.$i4,$arr['qiandan']['all']) ;
                 $objPHPExcel->getActiveSheet()->setCellValue('X'.$i4,$arr['qiandan']['sum']) ;
                 $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i4,$arr['qiandan']['money']) ;
@@ -2059,7 +2059,7 @@ class ReportVisitForm extends CReportForm
             $i12=$i+12;
             $i13=$i+13;
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,'个人总数据') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'总拜访量'.$model['all']['money']['all'].'签单量：'.$model['all']['money']['sum'].'签单金额'.$model['all']['money']['money']) ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'总拜访量'.$model['all']['money']['all'].'簽單量：'.$model['all']['money']['sum'].'簽單金额'.$model['all']['money']['money']) ;
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$i.':AC'.$i);
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$i1.':AC'.$i1);
             $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25);
@@ -2132,7 +2132,7 @@ class ReportVisitForm extends CReportForm
             $objPHPExcel->getActiveSheet()->setCellValue('S'.$i4,$model['all']['qitaa']['all']) ;
             $objPHPExcel->getActiveSheet()->setCellValue('T'.$i4,$model['all']['qitaa']['sum']) ;
             $objPHPExcel->getActiveSheet()->setCellValue('U'.$i4,$model['all']['qitaa']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i4,'签单') ;
+            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i4,'簽單') ;
             $objPHPExcel->getActiveSheet()->setCellValue('W'.$i4,$model['all']['qiandan']['all']) ;
             $objPHPExcel->getActiveSheet()->setCellValue('X'.$i4,$model['all']['qiandan']['sum']) ;
             $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i4,$model['all']['qiandan']['money']) ;
