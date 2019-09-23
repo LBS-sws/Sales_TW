@@ -90,7 +90,7 @@ $this->pageTitle=Yii::app()->name . ' - Sales Visit Form';
                 </table>
 
                 <table class="tftable2" border="1">
-                    <tr><th rowspan="6" width="100">区域</th><?php for($i=0;$i<count($model['all']['address']);$i++){?><th ><?php echo $model['all']['address'][$i]['name'];?></th><td ><?php echo $model['all']['address'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr>";}?><?php }?>
+                    <tr><th rowspan="6" width="100">区域</th><?php for($i=0;$i<count($model['all']['address']);$i++){?><th ><?php echo $model['all']['address'][$i]['name'];?></th><td ><?php echo $model['all']['address'][$i]['0'];?></td><?php  if(($i+1)%7==0){ echo "</tr>";}?><?php }?>
                     <tr></tr>
                 </table>
 

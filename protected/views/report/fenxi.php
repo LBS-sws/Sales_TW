@@ -92,7 +92,7 @@ $this->pageTitle=Yii::app()->name . ' - Sales Visit Form';
                 </table>
 
                 <table class="tftable2" border="1">
-                    <tr><th rowspan="6" width="100">区域</th><?php for($i=0;$i<count($model['all']['address']);$i++){?><th ><?php echo $model['all']['address'][$i]['name'];?></th><td ><?php echo $model['all']['address'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr>";}?><?php }?>
+                    <tr><th rowspan="6" width="100">区域</th><?php for($i=0;$i<count($model['all']['address']);$i++){?><th ><?php echo $model['all']['address'][$i]['name'];?></th><td ><?php echo $model['all']['address'][$i]['0'];?></td><?php if(($i+1)%7==0){ echo "</tr>";}?><?php }?>
                     <tr></tr>
                 </table>
 
@@ -121,7 +121,7 @@ $this->pageTitle=Yii::app()->name . ' - Sales Visit Form';
                     <tr><th>停服务</th><td><?php echo $arr['tingfuwu'];?></td><th>更换项目</th><td><?php echo $arr['genghuanxiangmu'];?></td><th>增加项目</th><td><?php echo $arr['zengjiaxiangmu'];?></td><th>救客</th><td><?php echo $arr['jiuke'];?></td><th>其他</th><td><?php echo $arr['qitaa'];?></td><th>签单</th><td><?php echo $arr['qiandan'];?></td></tr>
                 </table>
                 <table class="tftable2" border="1">
-                    <tr><th rowspan="6" width="100">区域</th><?php for($i=0;$i<count($arr['address']);$i++){?><th ><?php echo $arr['address'][$i]['name'];?></th><td ><?php echo $arr['address'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr><tr>";}?><?php }?></tr>
+                    <tr><th rowspan="6" width="100">区域</th><?php for($i=0;$i<count($arr['address']);$i++){?><th ><?php echo $arr['address'][$i]['name'];?></th><td ><?php echo $arr['address'][$i]['0'];?></td><?php  if(($i+1)%7==0){ echo "</tr><tr>";}?><?php }?></tr>
                 </table>
                 <table class="tftable3" border="1">
                     <tr><th rowspan="3" width="100">客服类别（餐饮）</th><th >东/西北菜</th><td ><?php echo $arr['dongbeicai'];?></td><th >泰国菜</th><td ><?php echo $arr['taiguocai'];?></td><th >粤菜</th><td ><?php echo $arr['yuecai'];?></td><th >面包甜点</th><td ><?php echo $arr['mianbao'];?></td><th >川湘菜</th><td ><?php echo $arr['chuancai'];?></td><th >火锅</th><td ><?php echo $arr['huoguo'];?></td><th >西餐</th><td ><?php echo $arr['xican'];?></td></tr>
