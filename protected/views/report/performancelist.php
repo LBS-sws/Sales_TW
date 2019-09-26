@@ -1,4 +1,4 @@
-<?php
+    <?php
 $this->pageTitle=Yii::app()->name . ' - performance Form';
 ?>
 <?php $form=$this->beginWidget('TbActiveForm', array(
