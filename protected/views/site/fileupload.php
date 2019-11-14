@@ -1,5 +1,6 @@
 <?php
 	$doc = new DocMan($doctype,$model->id,get_class($model));
+	$doc->masterId = $model->docMasterId[strtolower($doc->docType)];
 
 	$ftrbtn = array();
 	if (!$ronly) $ftrbtn[] = TbHtml::button(Yii::t('dialog','Upload'), array('id'=>$doc->uploadButtonName,));
