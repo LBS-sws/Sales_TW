@@ -65,5 +65,7 @@ return array(
 'Mark read for all selected records?'=>'列表上的所有記錄標記為已讀？',
 'Mark Read Done'=>'標記已讀完成',
     'Please check the assigned person and information'=>'請選擇人員或者單數',
+    'Zhu1'=>'1.未分商業和餐飲組的地區只需填寫跨區和被跨區提成比例，商業和餐飲則填寫為0',
+    'Zhu2'=>'2.分組的地區只需填寫商業和餐飲跨區提成比例，跨區和被跨區則填寫為0',
 );
 ?>
