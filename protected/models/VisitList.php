@@ -16,8 +16,17 @@ class VisitList extends CListPageModel
 			'cust_type'=>Yii::t('sales','Customer Type'),
 			'staff'=>Yii::t('sales','Staff'),
 			'cust_vip'=>Yii::t('sales','VIP').'('.Yii::t('sales','Star').')',
+            'visitdoc'=>Yii::t('misc','Attachment'),
 		);
 	}
+
+
+    public function rules()
+    {
+        return array(
+            array('attr, pageNum, noOfItem, totalRow, searchField, searchValue, orderField, orderType, filter','safe',),
+        );
+    }
 
 	public function searchColumns() {
 		$suffix = Yii::app()->params['envSuffix'];
@@ -51,6 +60,7 @@ class VisitList extends CListPageModel
 		$sql1 = "select a.*, b.name as city_name, concat(f.code,' - ',f.name) as staff,  
 				(select d.name from sal_visit_type d where a.visit_type = d.id) as visit_type_name,
 				g.name as cust_type_name,
+				docman$suffix.countdoc('visit',a.id) as visitdoc,
 				h.name as district_name, VisitObjDesc(a.visit_obj) as visit_obj_name, i.cust_vip
 				from sal_visit a force index (idx_visit_02)
 				inner join hr$suffix.hr_binding c on a.username = c.user_id 
@@ -181,6 +191,7 @@ class VisitList extends CListPageModel
 					'cust_name'=>$record['cust_name'],
 					'cust_vip'=>$record['cust_vip'],
                     'shift'=>$record['shift'],
+                    'visitdoc'=>$record['visitdoc'],
 				);
 			}
 		}
@@ -188,6 +199,169 @@ class VisitList extends CListPageModel
 		$session[$this->criteriaName()] = $this->getCriteria();
 		return true;
 	}
+
+    public function retrieveDataByPage_visit($pageNum=1,$arr)
+    {
+        $suffix = Yii::app()->params['envSuffix'];
+        $citylist = Yii::app()->user->city_allow();
+        $user = Yii::app()->user->id;
+        $end=str_replace("/","-",$arr['end']);
+        $start=str_replace("/","-",$arr['start']);
+        $sql1 = "select a.*, b.name as city_name, concat(f.code,' - ',f.name) as staff,  
+				(select d.name from sal_visit_type d where a.visit_type = d.id) as visit_type_name,
+				g.name as cust_type_name,
+				docman$suffix.countdoc('visit',a.id) as visitdoc,
+				h.name as district_name, VisitObjDesc(a.visit_obj) as visit_obj_name, i.cust_vip
+				from sal_visit a force index (idx_visit_02)
+				inner join hr$suffix.hr_binding c on a.username = c.user_id 
+				inner join hr$suffix.hr_employee f on c.employee_id = f.id
+				inner join sal_cust_type g on a.cust_type = g.id
+				inner join sal_cust_district h on a.district = h.id
+				left outer join security$suffix.sec_city b on a.city=b.code
+				left outer join sal_custstar i on a.username=i.username and a.cust_name=i.cust_name
+			where b.name ='".$arr['city']."' and a.visit_dt <='".$end."' and  a.visit_dt >='".$start."' and a.visit_obj like '%10%' and f.name='".$arr['sales']."'
+			";
+        $sql2 = "select count(a.id)
+				from sal_visit a force index (idx_visit_02)
+				inner join hr$suffix.hr_binding c on a.username = c.user_id 
+				inner join hr$suffix.hr_employee f on c.employee_id = f.id
+				inner join sal_cust_type g on a.cust_type = g.id
+				inner join sal_cust_district h on a.district = h.id
+				left outer join security$suffix.sec_city b on a.city=b.code
+				left outer join sal_custstar i on a.username=i.username and a.cust_name=i.cust_name
+				where b.name ='".$arr['city']."' and a.visit_dt <='".$end."' and  a.visit_dt >='".$start."' and a.visit_obj like '%10%' and f.name='".$arr['sales']."'
+			";
+        if (!(VisitForm::isReadAll())) {
+            $x = " and a.username='$user' ";
+            $sql1 .= $x;
+            $sql2 .= $x;
+        } else {
+            $x = " and a.username is not null ";
+            $sql1 .= $x;
+            $sql2 .= $x;
+        }
+        $clause = "";
+        $static = $this->staticSearchColumns();
+        $columns = $this->searchColumns();
+        if (!empty($this->searchField) && (!empty($this->searchValue) || in_array($this->searchField, $static) || $this->isAdvancedSearch())) {
+            if ($this->isAdvancedSearch()) {
+                $clause = $this->buildSQLCriteria();
+            } elseif (in_array($this->searchField, $static)) {
+                $clause .= 'and '.$columns[$this->searchField];
+            } else {
+                $svalue = str_replace("'","\'",$this->searchValue);
+                $clause .= General::getSqlConditionClause($columns[$this->searchField],$svalue);
+            }
+        }
+
+        $order = "";
+        if (!empty($this->orderField)) {
+            switch ($this->orderField) {
+                case 'city_name': $orderf = 'b.name'; break;
+                case 'cust_name': $orderf = 'a.cust_name'; break;
+                case 'staff': $orderf = 'staff'; break;
+                case 'visit_dt': $orderf = 'a.visit_dt'; break;
+//				case 'status_dt': $orderf = 'a.status_dt'; break;
+                case 'district': $orderf = 'h.name'; break;
+                case 'street': $orderf = 'a.street'; break;
+                case 'visit_type': $orderf = 'visit_type_name'; break;
+                case 'visit_obj': $orderf = 'visit_obj_name'; break;
+                case 'cust_type': $orderf = 'g.name'; break;
+                default: $orderf = $this->orderField; break;
+            }
+            $order .= " order by ".$orderf." ";
+            if ($this->orderType=='D') $order .= "desc ";
+        } else {
+//			$order = Yii::app()->user->isSingleCity()
+//					? " order by a.visit_dt desc, f.code"
+//					: " order by a.visit_dt desc, b.name, f.code";
+            $order = " order by a.visit_dt desc, a.city, a.username";
+        }
+
+        $sql = $sql2.$clause;
+        $this->totalRow = Yii::app()->db->createCommand($sql)->queryScalar();
+
+        $sql = $sql1.$clause.$order;
+        $sql = $this->sqlWithPageCriteria($sql, $this->pageNum);
+//echo $sql;
+//Yii::app()->end();
+        $records = Yii::app()->db->createCommand($sql)->queryAll();
+        $list = array();
+        $this->attr = array();
+        if (count($records) > 0) {
+            foreach ($records as $k=>$record) {
+                $sql = "select field_id, field_value from sal_visit_info where field_id in ('svc_A','svc_B','svc_C','svc_D','svc_E','svc_F4','svc_G3') and visit_id = '".$record['id']."'";
+                $rows = Yii::app()->db->createCommand($sql)->queryAll();
+                foreach ($rows as $a) {
+                    for ($i = 0; $i < count($rows); $i++) {
+                        $list[$a['field_id']]=$a['field_value'];
+                    }
+                }
+                $quote ="";
+                if(!empty($list['svc_A'])){
+                    $quote.=$list['svc_A']."(清洁) / -";
+                }
+                if(!empty($list['svc_B'])){
+                    $quote.=$list['svc_B']."(机器) / -";
+                }
+                if(!empty($list['svc_C'])){
+                    $quote.=$list['svc_C']."(灭虫) / -";
+                }
+                if(!empty($list['svc_D'])){
+                    $quote.=$list['svc_D']."(飘盈香) / -";
+                }
+                if(!empty($list['svc_E'])){
+                    $quote.=$list['svc_E']."(甲醛) / -";
+                }
+                if(!empty($list['svc_F4'])){
+                    $quote.=$list['svc_F4']."(纸品) / -";
+                }
+                if(!empty($list['svc_G3'])){
+                    $quote.=$list['svc_G3']."(一次性售卖) / -";
+                }
+                $quote = substr($quote,0,strlen($quote)-3);
+                $quote = explode("-", $quote);
+//                print_r("<pre>");
+//                print_r($quote);
+                $this->attr[] = array(
+                    'id'=>$record['id'],
+                    'username'=>$record['username'],
+                    'visit_dt'=>General::toDate($record['visit_dt']),
+//					'status_dt'=>($record['status']=='Y' ? General::toDate($record['status_dt']) : ''),
+                    'status'=>$record['status'],
+                    'city_name'=>$record['city_name'],
+                    'city'=>$record['city'],
+                    'staff'=>$record['staff'],
+                    'district'=>$record['district_name'],
+                    'quote'=>$quote,
+                    'visit_type'=>$record['visit_type_name'],
+                    'visit_obj'=>$record['visit_obj_name'],
+                    'cust_type'=>$record['cust_type_name'],
+                    'cust_name'=>$record['cust_name'],
+                    'cust_vip'=>$record['cust_vip'],
+                    'shift'=>$record['shift'],
+                    'visitdoc'=>$record['visitdoc'],
+                );
+            }
+        }
+        $session = Yii::app()->session;
+        $session[$this->criteriaName()] = $this->getCriteria();
+        return true;
+    }
+
+
+
+    public function getCriteria() {
+        return array(
+            'searchField'=>$this->searchField,
+            'searchValue'=>$this->searchValue,
+            'orderField'=>$this->orderField,
+            'orderType'=>$this->orderType,
+            'noOfItem'=>$this->noOfItem,
+            'pageNum'=>$this->pageNum,
+            'filter'=>$this->filter,
+        );
+    }
 	
 	public function submitReport() {
 		$session = Yii::app()->session;
@@ -196,7 +370,6 @@ class VisitList extends CListPageModel
 					: '';
 		$columns = $this->searchColumns();
 		$static = $this->staticSearchColumns();
-					
 		$uid = Yii::app()->user->id;
 		$now = date("Y-m-d H:i:s");
 		$rptdesc = Yii::t('app','Sales Visit List');

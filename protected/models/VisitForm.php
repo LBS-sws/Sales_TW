@@ -17,6 +17,7 @@ class VisitForm extends CFormModel
 	public $cust_tel;
 	public $district;
 	public $street;
+	public $quote;
 	public $remarks;
 	public $status;
 	public $status_dt;
@@ -199,9 +200,17 @@ class VisitForm extends CFormModel
 			array('service','validateServices'),
 			array('id, city, city_name, remarks, staff, dept_name, post_name, street, cust_person, cust_person_role, cust_vip, 
 				cust_tel, cust_alt_name, status, status_dt, latitude, longitude, deal, cust_type_group','safe'),
-			array('files, removeFileId, docMasterId, no_of_attm','safe'), 
+			array('files, removeFileId, docMasterId, no_of_attm','safe'),
+//            array ('no_of_attm','validateTaxSlip'),
 		);
 	}
+
+//    public function validateTaxSlip($attribute, $params) {
+//        $count = $this->no_of_attm['visit'];
+//        if (in_array('10',$this->visit_obj)&&(empty($count) || $count==0)) {
+//            $this->addError($attribute, Yii::t('dialog','No visit Slip'));
+//        }
+//    }
 	
 	public function validateServiceAmount($attribute, $param) {
 		if ($this->isMakingDeal($this->visit_obj)) {
@@ -345,7 +354,7 @@ class VisitForm extends CFormModel
 				}
 			}
 		}
-		
+
 		return true;
 	}
 	

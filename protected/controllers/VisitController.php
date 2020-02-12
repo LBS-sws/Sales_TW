@@ -31,7 +31,7 @@ class VisitController extends Controller
 				'expression'=>array('VisitController','allowReadWrite'),
 			),
 			array('allow', 
-				'actions'=>array('index','view','filedownload','report'),
+				'actions'=>array('index','view','filedownload','report','listfile'),
 				'expression'=>array('VisitController','allowReadOnly'),
 			),
 			array('deny',  // deny all users
@@ -49,11 +49,22 @@ class VisitController extends Controller
 			$session = Yii::app()->session;
 			if (isset($session[$model->criteriaName()]) && !empty($session[$model->criteriaName()])) {
 				$criteria = $session[$model->criteriaName()];
+                if(!empty($_GET['start'])){
+                    $arr=$_GET;
+                 //   $criteria['filter']='[{"field_id":"visit_dt","operator":">=","srchval":"'.$arr['start'].'"},{"field_id":"visit_dt","operator":"<=","srchval":"'.$arr['end'].'"},{"field_id":"visit_obj","operator":"like","srchval":"签单"},{"field_id":"city_name","operator":"=","srchval":"'.$arr['city'].'"},{"field_id":"staff","operator":"like","srchval":"'.$arr['sales'].'"}]';//这个是直接给session
+                    $session['get']=$arr;
+                }//根据这个变化
+                //$criteria['filter']='[{"field_id":"staff","operator":"like","srchval":"5"}]';
 				$model->setCriteria($criteria);
 			}
 		}
 		$model->determinePageNum($pageNum);
-		$model->retrieveDataByPage($model->pageNum);
+        if(!empty($session['get'])){
+            $model->retrieveDataByPage_visit($model->pageNum,$session['get']);
+        }else{
+            $model->retrieveDataByPage($model->pageNum);
+        }
+       // print_r($session['get']);
 		$this->render('index',array('model'=>$model));
 	}
 
@@ -250,7 +261,12 @@ class VisitController extends Controller
 		}
 		echo $rtn;
 	}
-	
+
+    public function actionListfile($docId) {
+        $d = new DocMan('VISIT',$docId,'VisitList');
+        echo $d->genFileListView();
+    }
+
 	public static function allowReadWrite() {
 		return Yii::app()->user->validRWFunction('HK01');
 	}
