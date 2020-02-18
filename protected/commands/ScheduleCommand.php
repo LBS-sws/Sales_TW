@@ -8,10 +8,10 @@ class ScheduleCommand extends CConsoleCommand {
 	protected $multiuser = false;
 	protected $users = array();
 	
-	public function actionRptAccountStatus($whitelist='', $blacklist='') {
+	public function actionRptRenewalReminder($days=60, $whitelist='', $blacklist='') {
 		$tdate = date("Y/m/d");
-		$this->rptId = 'RptAccountStatus';
-		$this->rptName = Yii::t('report','Operation Daily Report');
+		$this->rptId = 'RptRenewalReminder';
+		$this->rptName = Yii::t('report','Renewal Reminder Report');
 		$this->reqUser = 'admin';
 		$this->format = 'EMAIL';
 	
@@ -31,33 +31,18 @@ class ScheduleCommand extends CConsoleCommand {
 						'TARGET_DT'=>General::toMyDate($tdate),
 						'LANGUAGE'=>'zh_cn',
 						'CITY_NAME'=>$name,
+						'DURATION'=>$days,
 					);
 				$this->addQueueItem();
 			}
 		}
 	}
 
-	public function actionRptNotification() {
-		$tdate = date("Y/m/d");
-		$this->rptId = 'RptNotification';
-		$this->rptName = Yii::t('report','Consolidated Notification Report');
-		$this->reqUser = 'admin';
-		$this->format = 'EMAIL';
-	
-		$this->data = array(
-						'RPT_ID'=>$this->rptId,
-						'RPT_NAME'=>$this->rptName,
-						'TARGET_DT'=>General::toMyDate($tdate),
-						'LANGUAGE'=>'zh_cn',
-					);
-		$this->addQueueItem();
-	}
-
 	protected function addQueueItem() {
 		$connection = Yii::app()->db;
 		$transaction=$connection->beginTransaction();
 		try {
-			$sql = "insert into acc_queue (rpt_desc, req_dt, username, status, rpt_type)
+			$sql = "insert into sal_queue (rpt_desc, req_dt, username, status, rpt_type)
 						values(:rpt_desc, :req_dt, :username, 'P', :rpt_type)
 					";
 			$now = date("Y-m-d H:i:s");
@@ -73,7 +58,7 @@ class ScheduleCommand extends CConsoleCommand {
 			$command->execute();
 			$qid = Yii::app()->db->getLastInsertID();
 	
-			$sql = "insert into acc_queue_param (queue_id, param_field, param_value)
+			$sql = "insert into sal_queue_param (queue_id, param_field, param_value)
 						values(:queue_id, :param_field, :param_value)
 					";
 			foreach ($this->data as $key=>$value) {
@@ -88,7 +73,7 @@ class ScheduleCommand extends CConsoleCommand {
 			}
 
 			if ($this->multiuser) {
-				$sql = "insert into swo_queue_user (queue_id, username)
+				$sql = "insert into sal_queue_user (queue_id, username)
 						values(:queue_id, :username)
 					";
 				if (!empty($this->users)) {
