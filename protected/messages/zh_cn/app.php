@@ -60,6 +60,8 @@ return array(
 	'Web Push Notification'=>'網頁推送通知',
 	'Sales List'=>'销售人均签单排行榜',
     'Sale People'=>'销售个人总金额排行榜',
+    'Signature details email'=>'签单明细电邮',
+
 	'User'=>'帐户',
 	'Group'=>'群组',
 	'Access Template'=>'权限范本',

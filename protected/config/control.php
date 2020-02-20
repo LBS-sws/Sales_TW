@@ -8,4 +8,5 @@ return array(
 	'Web Push Notification'=>array('access'=>'CN04',),
     'Sales List'=>array('access'=>'CN06',),
     'Sale People'=>array('access'=>'CN07',),
+    'Signature details email'=>array('access'=>'CN08',),
 );
