@@ -201,16 +201,16 @@ class VisitForm extends CFormModel
 			array('id, city, city_name, remarks, staff, dept_name, post_name, street, cust_person, cust_person_role, cust_vip, 
 				cust_tel, cust_alt_name, status, status_dt, latitude, longitude, deal, cust_type_group','safe'),
 			array('files, removeFileId, docMasterId, no_of_attm','safe'),
-//            array ('no_of_attm','validateTaxSlip'),
+            array ('no_of_attm','validateTaxSlip'),
 		);
 	}
 
-//    public function validateTaxSlip($attribute, $params) {
-//        $count = $this->no_of_attm['visit'];
-//        if (in_array('10',$this->visit_obj)&&(empty($count) || $count==0)) {
-//            $this->addError($attribute, Yii::t('dialog','No visit Slip'));
-//        }
-//    }
+    public function validateTaxSlip($attribute, $params) {
+        $count = $this->no_of_attm['visit'];
+        if (in_array('10',$this->visit_obj)&&(empty($count) || $count==0)) {
+            $this->addError($attribute, Yii::t('dialog','No visit Slip'));
+        }
+    }
 	
 	public function validateServiceAmount($attribute, $param) {
 		if ($this->isMakingDeal($this->visit_obj)) {
@@ -391,7 +391,11 @@ class VisitForm extends CFormModel
 			$this->saveCustCache($connection);
 			$this->updateCustVip($connection);
 			$this->updateDocman($connection,'VISIT');
-			if ($pushMessage) $this->addNotification($connection);
+			if ($this->scenario=='delete') {
+				$this->removeNotification($connection);
+			} else {
+				if ($pushMessage) $this->addNotification($connection);
+			}
 			$transaction->commit();
 		}
 		catch(Exception $e) {
@@ -593,9 +597,9 @@ class VisitForm extends CFormModel
 	protected function addNotification(&$connection) {
 		$suffix = Yii::app()->params['envSuffix'];
 		$sql = "insert into sal_push_message(
-					msg_type, message_en, message_cn, message_tw, status, lcu, luu
+					msg_type, message_en, message_cn, message_tw, status, key_id, lcu, luu
 				) values (
-					'SALORDER', :message_en, :message_cn, :message_tw, 'P', :uid, :uid
+					'SALORDER', :message_en, :message_cn, :message_tw, 'P', :key_id, :uid, :uid
 				)
 			";
 
@@ -654,8 +658,20 @@ class VisitForm extends CFormModel
 				$command->bindParam(':message_cn',$message_cn,PDO::PARAM_STR);
 			if (strpos($sql,':message_tw')!==false)
 				$command->bindParam(':message_tw',$message_tw,PDO::PARAM_STR);
+			if (strpos($sql,':key_id')!==false)
+				$command->bindParam(':key_id',$this->id,PDO::PARAM_INT);
 			if (strpos($sql,':uid')!==false)
 				$command->bindParam(':uid',$uid,PDO::PARAM_STR);
+			$command->execute();
+		}
+	}
+
+	public function removeNotification(&$connection) {
+		if ($this->id != 0) {
+			$sql = "delete from sal_push_message where key_id = :key_id";
+			$command=$connection->createCommand($sql);
+			if (strpos($sql,':key_id')!==false)
+				$command->bindParam(':key_id',$this->id,PDO::PARAM_INT);
 			$command->execute();
 		}
 	}

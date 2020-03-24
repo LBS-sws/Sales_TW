@@ -76,9 +76,9 @@ class ReportRankinglistForm extends CReportForm
             $temp['money']=$record['money'];
 
 
-            $sql = "select employee_name from hr$suffix.hr_binding where user_id='".$record['username']."'";
+            $sql = "select name from hr$suffix.hr_employee where id=(SELECT employee_id from hr$suffix.hr_binding WHERE user_id='".$record['username']."')";
             $row = Yii::app()->db->createCommand($sql)->queryRow();
-            $temp['name']= $row!==false ? $row['employee_name'] : $record['username'];
+            $temp['name']= $row!==false ? $row['name'] : $record['username'];
 
             $sql = "select a.name as city_name, b.name as region_name 
 					from security$suffix.sec_city a
