@@ -78,7 +78,7 @@ return array(
 	'less or equal'=>'小过或等于',
 	'less than'=>'小过',
 	'-- Advanced --'=>'-- 进阶 --',
-	'<< Advanced >>'=>'<< 进阶搜寻 >>',
+	'<< Advanced >>'=>'<< 高级搜寻 >>',
 	'Advanced'=>'进阶',
 	'Clear'=>'清除',
 	
@@ -89,6 +89,11 @@ return array(
 	'Mark Read'=>'标记已读',
 	'Go Top'=>'往页顶',
 	'Announcement'=>'公告',
+
+	'Latest month'=>'1个月內',
+	'3 months'=>'3个月內',
+	'6 months'=>'6个月內',
+	'1 year'=>'1年內',
 );
 
 ?>

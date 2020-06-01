@@ -9,6 +9,7 @@
 
 		$sfile = Yii::app()->baseUrl.'/js/dms.js';
 		Yii::app()->clientScript->registerScriptFile($sfile,CClientScript::POS_HEAD);
+		Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl.'/css/lbs.css');
 	?>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

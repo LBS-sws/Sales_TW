@@ -20,14 +20,6 @@ class VisitList extends CListPageModel
 		);
 	}
 
-
-    public function rules()
-    {
-        return array(
-            array('attr, pageNum, noOfItem, totalRow, searchField, searchValue, orderField, orderType, filter','safe',),
-        );
-    }
-
 	public function searchColumns() {
 		$suffix = Yii::app()->params['envSuffix'];
 		$search = array(
@@ -35,7 +27,7 @@ class VisitList extends CListPageModel
 			'visit_dt'=>"date_format(a.visit_dt,'%Y/%m/%d')",
 //			'status_dt'=>"date_format(a.status_dt,'%Y/%m/%d')",
 			'cust_name'=>'a.cust_name',
-//			'visit_type'=>'d.name',
+			'visit_type'=>'(select d.name from sal_visit_type d where a.visit_type = d.id)',
 			'visit_obj'=>'VisitObjDesc(a.visit_obj)',
 			'cust_type'=>'g.name',
 			'district'=>'h.name',
@@ -62,7 +54,7 @@ class VisitList extends CListPageModel
 				g.name as cust_type_name,
 				docman$suffix.countdoc('visit',a.id) as visitdoc,
 				h.name as district_name, VisitObjDesc(a.visit_obj) as visit_obj_name, i.cust_vip
-				from sal_visit a force index (idx_visit_02)
+				from sal_visit a
 				inner join hr$suffix.hr_binding c on a.username = c.user_id 
 				inner join hr$suffix.hr_employee f on c.employee_id = f.id
 				inner join sal_cust_type g on a.cust_type = g.id
@@ -72,7 +64,7 @@ class VisitList extends CListPageModel
 				where a.city in ($citylist)
 			";
 		$sql2 = "select count(a.id)
-				from sal_visit a force index (idx_visit_02)
+				from sal_visit a 
 				inner join hr$suffix.hr_binding c on a.username = c.user_id 
 				inner join hr$suffix.hr_employee f on c.employee_id = f.id
 				inner join sal_cust_type g on a.cust_type = g.id
@@ -103,6 +95,7 @@ class VisitList extends CListPageModel
 				$clause .= General::getSqlConditionClause($columns[$this->searchField],$svalue);
 			}
 		}
+		$clause .= $this->getDateRangeCondition('a.visit_dt');
 
 		$order = "";
 		if (!empty($this->orderField)) {
@@ -212,7 +205,7 @@ class VisitList extends CListPageModel
 				g.name as cust_type_name,
 				docman$suffix.countdoc('visit',a.id) as visitdoc,
 				h.name as district_name, VisitObjDesc(a.visit_obj) as visit_obj_name, i.cust_vip
-				from sal_visit a force index (idx_visit_02)
+				from sal_visit a
 				inner join hr$suffix.hr_binding c on a.username = c.user_id 
 				inner join hr$suffix.hr_employee f on c.employee_id = f.id
 				inner join sal_cust_type g on a.cust_type = g.id
@@ -222,7 +215,7 @@ class VisitList extends CListPageModel
 			where b.name ='".$arr['city']."' and a.visit_dt <='".$end."' and  a.visit_dt >='".$start."' and a.visit_obj like '%10%' and f.name='".$arr['sales']."'
 			";
         $sql2 = "select count(a.id)
-				from sal_visit a force index (idx_visit_02)
+				from sal_visit a
 				inner join hr$suffix.hr_binding c on a.username = c.user_id 
 				inner join hr$suffix.hr_employee f on c.employee_id = f.id
 				inner join sal_cust_type g on a.cust_type = g.id
@@ -253,6 +246,7 @@ class VisitList extends CListPageModel
                 $clause .= General::getSqlConditionClause($columns[$this->searchField],$svalue);
             }
         }
+		$clause .= $this->getDateRangeCondition('a.visit_dt');
 
         $order = "";
         if (!empty($this->orderField)) {

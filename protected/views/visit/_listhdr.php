@@ -56,4 +56,9 @@
 		?>
 	</th>
 <?php endif ?>
+    <th>
+        <?php echo TbHtml::link($this->getLabelName('visitdoc'),'#',$this->createOrderLink('request-list','visitdoc'))
+        ;
+        ?>
+    </th>
 </tr>

@@ -47,11 +47,10 @@ class DashboardController extends Controller
 		$suffix = Yii::app()->params['envSuffix'];
 		$models = array();
 		$time= date('Y-m-d', strtotime(date('Y-m-01') ));
-		$obj_where = $this->getDealString("a.visit_obj");
 		$sql = "select a.city, a.username, sum(convert(b.field_value, decimal(12,2))) as money
 				from sal_visit a force index (idx_visit_02), sal_visit_info b
-				where a.id=b.visit_id and b.field_id in ('svc_A7','svc_B6','svc_C7','svc_D6','svc_E7','svc_F4','svc_G3') 
-				and a.visit_dt >= '$time' and  ($obj_where)
+				where a.id=b.visit_id and b.field_id in ('svc_A7','svc_B6','svc_C7','svc_D6','svc_E7') 
+				and a.visit_dt >= '$time' and  a.visit_obj like '%10%'
 				group by a.city, a.username
 			";
 		$records = Yii::app()->db->createCommand($sql)->queryAll();
@@ -91,7 +90,8 @@ class DashboardController extends Controller
         $cities = General::getCityListWithNoDescendant();
         $time= date('Y-m-d', strtotime(date('Y-m-01') ));
         foreach ($cities as $code=>$name) {
-            if (strpos("/'CN'/'HK'/","'".$code."'")===false) {
+            $sum_arr = array();
+            if (strpos("/'CS'/'H-N'/'HK'/'TC'/'ZS1'/'TP'/'TY'/'KS'/'TN'/'XM'/'KH'/'ZY'/'MO'/'RN'/'MY'/","'".$code."'")===false) {
                 $sql = "select a.name as city_name, b.name as region_name 
 						from security$suffix.sec_city a
 						left outer join security$suffix.sec_city b on a.region=b.code
@@ -104,13 +104,21 @@ class DashboardController extends Controller
                 $sql1="select distinct  username FROM sal_visit  WHERE city='$code' and visit_dt >='".$time."'";
                 $people = Yii::app()->db->createCommand($sql1)->queryAll();
                 $peoples=count($people);
-                //总单数
-				$obj_where = $this->getDealString("visit_obj");
-                $sql2="select id from sal_visit where city='$code' and  ($obj_where) and visit_dt >='".$time."'";
-                $sum = Yii::app()->db->createCommand($sql2)->queryAll();
-                $sums=count($sum);
-                //人均签单数
-                $sale=$sums/($peoples==0?1:$peoples);
+                if(!empty($people)){
+                    //总单数
+                    $sql2="select id from sal_visit where city='$code' and  visit_obj like '%10%' and visit_dt >='".$time."'";
+                    $sum = Yii::app()->db->createCommand($sql2)->queryAll();
+                    foreach ($sum as $id){
+                        $sqlid="select count(visit_id) as sum from  sal_visit_info where field_id in ('svc_A7','svc_B6','svc_C7','svc_D6','svc_E7') and field_value>'0' and visit_id='".$id['id']."'";
+                        $arr = Yii::app()->db->createCommand($sqlid)->queryRow();
+                        $sum_arr[]=$arr['sum'];
+                    }
+                    $sums=array_sum($sum_arr);
+                    //人均签单数
+                    $sale=$sums/($peoples==0?1:$peoples);
+                }else{
+                    $sale=0;
+                }
                 $sale=round($sale,2);
                 $models[$code] = array('city'=>$name, 'renjun'=>$sale, 'quyu'=>$temp,'people'=>$peoples);
 
@@ -133,7 +141,7 @@ foreach ($models as $key=>$item) {
         $cities = General::getCityListWithNoDescendant();
         $time= date('Y-m-d', strtotime(date('Y-m-01') ));
         foreach ($cities as $code=>$name) {
-            if (strpos("/'CN'/'HK'/","'".$code."'")===false) {
+            if (strpos("/'CS'/'H-N'/'HK'/'TC'/'ZS1'/'TP'/'TY'/'KS'/'TN'/'XM'/'KH'/'ZY'/'MO'/'RN'/'MY'/","'".$code."'")===false) {
                 $sql = "select a.name as city_name, b.name as region_name 
 						from security$suffix.sec_city a
 						left outer join security$suffix.sec_city b on a.region=b.code
@@ -147,8 +155,7 @@ foreach ($models as $key=>$item) {
                 $people = Yii::app()->db->createCommand($sql1)->queryAll();
                 $peoples=count($people);
                 //总单数
-				$obj_where = $this->getDealString("visit_obj");
-                $sql2="select id from sal_visit where city='$code' and  ($obj_where) and visit_dt >='".$time."'";
+                $sql2="select id from sal_visit where city='$code' and  visit_obj like '%10%' and visit_dt >='".$time."'";
                 $sum = Yii::app()->db->createCommand($sql2)->queryAll();
                 $sums=count($sum);
                 //人均签单数
@@ -182,16 +189,6 @@ foreach ($models as $key=>$item) {
 //print_r($result);
         echo json_encode($result);
     }
-	
-	private function getDealString($field) {
-		$rtn = '';
-		$sql = "select id from sal_visit_obj where rpt_type='DEAL'";
-		$rows = Yii::app()->db->createCommand($sql)->queryAll();
-		foreach ($rows as $row) {
-			$rtn .= ($rtn=='' ? '' : ' or ').$field." like '%\"".$row['id']."\"%'";
-		}
-		return ($rtn=='' ? "$field='0'" : $rtn);
-	}
 }
 
 ?>

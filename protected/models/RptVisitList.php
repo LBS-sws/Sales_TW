@@ -26,14 +26,17 @@ class RptVisitList extends CReport {
 			'remarks'=>array('label'=>Yii::t('sales','Remarks'),'width'=>30,'align'=>'L'),
 			
 			'svc_A'=>array('label'=>Yii::t('sales','Monthly Amount'),'width'=>10,'align'=>'C'),
+            'svc_A10'=>array('label'=>Yii::t('sales','安装费'),'width'=>10,'align'=>'C'),
 			'svc_A1'=>array('label'=>Yii::t('sales','马桶'),'width'=>10,'align'=>'C'),
 			'svc_A2'=>array('label'=>Yii::t('sales','尿斗'),'width'=>10,'align'=>'C'),
 			'svc_A3'=>array('label'=>Yii::t('sales','水盆'),'width'=>10,'align'=>'C'),
 			'svc_A4'=>array('label'=>Yii::t('sales','清新机'),'width'=>10,'align'=>'C'),
 			'svc_A5'=>array('label'=>Yii::t('sales','皂液机'),'width'=>10,'align'=>'C'),
+            'svc_A9'=>array('label'=>Yii::t('sales','雾化消毒'),'width'=>30,'align'=>'C'),
 			'svc_A6'=>array('label'=>Yii::t('sales','预估成交率').'(0-100%)','width'=>10,'align'=>'C'),
 			'svc_A7'=>array('label'=>Yii::t('sales','合同年金额'),'width'=>10,'align'=>'C'),
 			'svc_A8'=>array('label'=>Yii::t('sales','备注'),'width'=>30,'align'=>'L'),
+
 			
 			'svc_B'=>array('label'=>Yii::t('sales','Monthly Amount'),'width'=>10,'align'=>'C'),
 			'svc_B1'=>array('label'=>Yii::t('sales','风扇机'),'width'=>10,'align'=>'C'),
@@ -45,11 +48,13 @@ class RptVisitList extends CReport {
 			'svc_B7'=>array('label'=>Yii::t('sales','备注'),'width'=>30,'align'=>'L'),
 			
 			'svc_C'=>array('label'=>Yii::t('sales','Monthly Amount'),'width'=>10,'align'=>'C'),
+            'svc_C10'=>array('label'=>Yii::t('sales','安装费'),'width'=>10,'align'=>'C'),
 			'svc_C1'=>array('label'=>Yii::t('sales','服务面积'),'width'=>10,'align'=>'C'),
 			'svc_C2'=>array('label'=>Yii::t('sales','老鼠'),'width'=>10,'align'=>'C'),
 			'svc_C3'=>array('label'=>Yii::t('sales','蟑螂'),'width'=>10,'align'=>'C'),
 			'svc_C4'=>array('label'=>Yii::t('sales','果蝇'),'width'=>10,'align'=>'C'),
 			'svc_C5'=>array('label'=>Yii::t('sales','租灭蝇灯'),'width'=>10,'align'=>'C'),
+            'svc_C9'=>array('label'=>Yii::t('sales','焗雾'),'width'=>10,'align'=>'C'),
 			'svc_C6'=>array('label'=>Yii::t('sales','预估成交率').'(0-100%)','width'=>10,'align'=>'C'),
 			'svc_C7'=>array('label'=>Yii::t('sales','合同年金额'),'width'=>10,'align'=>'C'),
 			'svc_C8'=>array('label'=>Yii::t('sales','备注'),'width'=>30,'align'=>'L'),
@@ -113,11 +118,13 @@ class RptVisitList extends CReport {
 				'label'=>Yii::t('sales','清洁').Yii::t('sales','报价'),
 				'child'=>array(
 					'svc_A',
+                    'svc_A10',
 					'svc_A1',
 					'svc_A2',
 					'svc_A3',
 					'svc_A4',
 					'svc_A5',
+                    'svc_A9',
 					'svc_A6',
 					'svc_A7',
 					'svc_A8',
@@ -142,14 +149,17 @@ class RptVisitList extends CReport {
 				'label'=>Yii::t('sales','灭虫').Yii::t('sales','报价'),
 				'child'=>array(
 					'svc_C',
+                    'svc_C10',
 					'svc_C1',
 					'svc_C2',
 					'svc_C3',
 					'svc_C4',
 					'svc_C5',
+                    'svc_C9',
 					'svc_C6',
 					'svc_C7',
 					'svc_C8',
+
 				),
 			),
 			
@@ -223,7 +233,8 @@ class RptVisitList extends CReport {
 		$this->searchValue = $criteria->searchValue;
 		$this->filter = json_decode($criteria->filter);
 	}
-		public function retrieveData() {
+	
+	public function retrieveData() {
 		$suffix = Yii::app()->params['envSuffix'];
 		$uid = $this->criteria['UID'];
 		
@@ -232,12 +243,12 @@ class RptVisitList extends CReport {
 		$citylist .= (empty($citylist) ? '' : ',')."'$city'";
 
 		$sql = "select a.*, b.name as city_name, concat(f.code,' - ',f.name) as staff,  
-				(select d.name from sal_visit_type d where a.visit_type = d.id) as visit_type_name,
-				g.name as cust_type_name,
+				d.name as visit_type_name, g.name as cust_type_name,
 				h.name as district_name, VisitObjDesc(a.visit_obj) as visit_obj_name, i.cust_vip
 				from sal_visit a 
 				inner join hr$suffix.hr_binding c on a.username = c.user_id
 				inner join hr$suffix.hr_employee f on c.employee_id = f.id
+				inner join sal_visit_type d on a.visit_type = d.id
 				inner join sal_cust_type g on a.cust_type = g.id
 				inner join sal_cust_district h on a.district = h.id
 				left outer join security$suffix.sec_city b on a.city=b.code
@@ -261,20 +272,24 @@ class RptVisitList extends CReport {
 				$clause .= General::getSqlConditionClause($columns->$fldid,$svalue);
 			}
 		}
-//		$order = $this->readAll	? " order by a.visit_dt desc, f.code" : " order by a.visit_dt desc, b.name, f.code";
-		$order = " order by a.visit_dt desc, a.city, a.username";
+		$order = $this->readAll	? " order by a.visit_dt desc, f.code" : " order by a.visit_dt desc, b.name, f.code";
 		$sql = $sql.$clause.$order;
 
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
 		if (count($rows) > 0) {
 			foreach ($rows as $row) {
 				$temp = $this->initTemp();
-				
+                if($row['shift']=='Y'){
+                    $row['shift']="(旧)";
+                }
+                if($row['shift']=='Z'){
+                    $row['shift']="(转)";
+                }
 				$temp['id'] = $row['id'];
 				$temp['visit_dt'] = General::toDate($row['visit_dt']);
 				$temp['username'] = $row['username'];
 				$stf = $this->getStaffInfo($row['username']);
-				$temp['staff'] = $stf['staff'];
+				$temp['staff'] = $stf['staff']. $row['shift'];
 				$temp['post_name'] = $stf['post_name'];
 				$temp['dept_name'] = $stf['dept_name'];
 				$temp['district'] = $row['district_name'];
@@ -295,7 +310,7 @@ class RptVisitList extends CReport {
 				$sqld = "select field_id, field_value from sal_visit_info where visit_id=".$row['id'];
 				$lines = Yii::app()->db->createCommand($sqld)->queryAll();
 				foreach ($lines as $line) {
-					if (strpos('svc_C2,svc_C3,svc_C4,svc_C5,',$line['field_id'].',')===false)
+					if (strpos('svc_C2,svc_C3,svc_C4,svc_C5,svc_C9,',$line['field_id'].',')===false)
 						$temp[$line['field_id']] = $line['field_value'];
 					else 
 						$temp[$line['field_id']] = $line['field_value']=='Y' ? 'Y' : '';
@@ -305,7 +320,8 @@ class RptVisitList extends CReport {
 			}
 		}
 		
-		return true;	}
+		return true;
+	}
 
 	public function getReportName() {
 		$city_name = isset($this->criteria) ? ' - '.General::getCityName($this->criteria['CITY']) : '';

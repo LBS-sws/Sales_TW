@@ -32,7 +32,7 @@ $this->pageTitle=Yii::app()->name . ' - Sales Visit Form';
         <?php  if (Yii::app()->user->validRWFunction('HA03')){?>
         <div class="btn-group">
             <select class="form-control" name="ShiftForm[visit_shift]" id="ShiftForm_visit_type">
-                <option value="">-- 请选择分配人员 --</option>
+                <option value=""><?php echo Yii::t('report','Please select the assigned person');?></option>
                 <?php foreach ($saleman as $v) {?>
                     <option value="<?php echo $v['id'];?>"><?php echo $v['name'];?> </option>
                 <?php }?>

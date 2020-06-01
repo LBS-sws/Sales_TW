@@ -152,7 +152,7 @@ $this->pageTitle=Yii::app()->name . ' - Sales Visit Form';
 				</div>
 			</div>
 			<div class="form-group">
-				<?php echo $form->labelEx($model,'客户名称（包括分店名）',array('class'=>"col-sm-2 control-label")); ?>
+				<?php echo $form->labelEx($model,Yii::t('sales','客户名称（包括分店名）'),array('class'=>"col-sm-2 control-label")); ?>
 				<div class="col-sm-5">
 					<?php 
 						if ($model->isReadOnly() || $model->status=='Y') {
@@ -260,6 +260,7 @@ $this->pageTitle=Yii::app()->name . ' - Sales Visit Form';
 			</div>
 
 <?php
+
 	foreach($model->serviceDefinition() as $gid=>$items) {
 		$fieldid = get_class($model).'_service_svc_'.$gid;
 		$fieldname = get_class($model).'[service][svc_'.$gid.']';
@@ -271,12 +272,12 @@ $this->pageTitle=Yii::app()->name . ' - Sales Visit Form';
 			case 'qty':
 				$content .= TbHtml::label(Yii::t('sales','Qty'),$fieldid, array('class'=>"col-sm-2 control-label"));
 				$content .= "<div class='col-sm-2'>"
-							.TbHtml::numberField($fieldname, $fieldvalue, 
+							.TbHtml::numberField($fieldname, $fieldvalue,
 								array('size'=>5,'min'=>0,'id'=>$fieldid,'readonly'=>($model->isReadOnly()),
 									'placeholder'=>Yii::t('sales','Qty'),
 								)
 							)
-							."</div>"; 
+							."</div>";
 				break;
 			case 'annual':
 				$content .= TbHtml::label(Yii::t('sales','Monthly Amount'),$fieldid, array('class'=>"col-sm-2 control-label"));
@@ -300,7 +301,7 @@ $this->pageTitle=Yii::app()->name . ' - Sales Visit Form';
 				break;
 		}
 		$content .= "</div>";
-		
+
 		$cnt = 0;
 		$out = '';
 		foreach ($items['items'] as $fid=>$fv) {
@@ -396,7 +397,7 @@ $this->pageTitle=Yii::app()->name . ' - Sales Visit Form';
 													'doctype'=>'VISIT',
 													'header'=>Yii::t('dialog','File Attachment'),
 													'ronly'=>($model->scenario=='view' || $model->isReadOnly()),
-													)); 
+													));
 ?>
 
 <?php
@@ -488,6 +489,7 @@ $('#VisitForm_cust_name').on('change', function(){
 		    $('#VisitForm_service_svc_A3').val(data.svc_A3);
 		    $('#VisitForm_service_svc_A4').val(data.svc_A4);
 		    $('#VisitForm_service_svc_A5').val(data.svc_A5);
+		    $('#VisitForm_service_svc_A9').val(data.svc_A9);
 		    $('#VisitForm_service_svc_A6').val(data.svc_A6);
 		    $('#VisitForm_service_svc_A7').val(data.svc_A7);
 		    $('#VisitForm_service_svc_A8').val(data.svc_A8);
@@ -504,7 +506,8 @@ $('#VisitForm_cust_name').on('change', function(){
 		    $('#VisitForm_service_svc_C2').prop('checked', data.svc_C2=='Y');
 		    $('#VisitForm_service_svc_C3').prop('checked', data.svc_C3=='Y');
 		    $('#VisitForm_service_svc_C4').prop('checked', data.svc_C4=='Y');
-		    $('#VisitForm_service_svc_C5').prop('checked', data.svc_C5=='Y');		    
+		    $('#VisitForm_service_svc_C5').prop('checked', data.svc_C5=='Y');	
+		    $('#VisitForm_service_svc_C9').prop('checked', data.svc_C9=='Y');		    
 		    $('#VisitForm_service_svc_C6').val(data.svc_C6);
 		    $('#VisitForm_service_svc_C7').val(data.svc_C7);
 		    $('#VisitForm_service_svc_C8').val(data.svc_C8);

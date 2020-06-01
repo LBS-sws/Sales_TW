@@ -30,7 +30,7 @@ array_multisort($last_names,SORT_DESC,$arr);
 
     <div  >
         <table border="1" style="width: 49%;text-align: center;">
-            <tr><td>排名</td><td>城市</td><td>人均签单</td>
+            <tr><td><?php echo Yii::t('report','ranking');?></td><td><?php echo Yii::t('report','city');?></td><td><?php echo Yii::t('report','renjun');?></td>
             <?php for($i=0;$i<count($arr);$i++) {?>
                 <tr> <?php if($i<(count($arr)/2)){?>  <td><?php echo $i+1;?></td><td><?php echo $arr[$i]['city'];?></td><td><?php echo $arr[$i]['renjun'];}?></td>
 
@@ -38,7 +38,7 @@ array_multisort($last_names,SORT_DESC,$arr);
             <?php }?>
         </table>
         <table  border="1" style="width: 49%;float: right;margin-top:-335px ;text-align: center;" >
-            <tr><td>排名</td><td>城市</td><td>人均签单</td>
+            <tr><td><?php echo Yii::t('report','ranking');?></td><td><?php echo Yii::t('report','city');?></td><td><?php echo Yii::t('report','renjun');?></td>
                 <?php for($i=0;$i<count($arr);$i++) {?>
             <tr>
                 <?php if($i>(count($arr)/2-1)){?>  <td><?php echo $i+1;?></td><td><?php echo $arr[$i]['city'];?></td><td><?php echo $arr[$i]['renjun'];}?></td>

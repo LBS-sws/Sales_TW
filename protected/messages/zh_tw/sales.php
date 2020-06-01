@@ -153,5 +153,8 @@ return array(
 'Latest notifications within {hr} days'=>'{hr}日內的最新通知',
 'This record has no contract amount entered'=>'此記錄沒有輸入任何合同金額',
 'Upload Error. (Please be reminded that file should not be larger than 30MB)'=>'上傳錯誤(請注意，文件不應大於30MB)',
+'Note: Please set searching criteria before pressing Report button, otherwise all data will be generated in the report.'=>
+'注：直接生成報表將會導出所有拜訪信息，請在右側搜索欄設定所需條件後繼續生成，如拜訪時間段、目的、類別等',
+'Example'=>'點擊可查看示例',
 );
 ?>

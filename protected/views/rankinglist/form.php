@@ -42,13 +42,13 @@ $this->pageTitle=Yii::app()->name . ' - Month Report';
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">销售个人签单总金额排行榜(<?php echo $model['scenario']['start_dt']."/".$model['scenario']['start_dt1'];?>)</h3>
+                    <h3 class="box-title"><?php echo Yii::t('report','List of total amount of individual sales signing');?>(<?php echo $model['scenario']['start_dt']."/".$model['scenario']['start_dt1'];?>)</h3>
                 </div>
                 <div class="box-body">
                     <div id="salepeople" class="direct-chat-messages" style="height: 250px;">
                         <table class="table table-bordered small">
                             <tbody>
-                            <tr><td><b>排名</b></td><td><b>城市</b></td><td><b>区域</b></td><td><b>姓名</b></td><td><b>签单总金额</b></td></tr>
+                            <tr><td><b><?php echo Yii::t('report','ranking');?></b></td><td><b><?php echo Yii::t('report','city');?></b></td><td><b><?php echo Yii::t('report','quyu');?></b></td><td><b><?php echo Yii::t('report','name');?></b></td><td><b><?php echo Yii::t('report','fuwumoney');?></b></td></tr>
                             <?php for ($i=0;$i<count($peopel);$i++){ ?>
                             <tr <?php if($i==0){ echo "style='color:#FF0000'";}if($i==1){ echo "style='color:#871F78'";}if($i==2){ echo "style='color:#0000FF'";}?>><td><?php echo $i+1;?></td><td><?php echo $peopel[$i]['city'];?></td><td><?php echo $peopel[$i]['quyu'];?></td><td><?php echo $peopel[$i]['name'];?></td><td><?php echo $peopel[$i]['money'];?></td></tr>
                             <?php }?>
@@ -66,13 +66,13 @@ $this->pageTitle=Yii::app()->name . ' - Month Report';
         <div class="col-md-4">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">地区销售人均签单量排行榜(<?php echo $model['scenario']['start_dt']."/".$model['scenario']['start_dt1'];?>)</h3>
+                    <h3 class="box-title"><?php echo Yii::t('report','List of regional sales per capita order signing volume');?>(<?php echo $model['scenario']['start_dt']."/".$model['scenario']['start_dt1'];?>)</h3>
                 </div>
                 <div class="box-body">
                     <div id="salelist" class="direct-chat-messages" style="height: 250px;">
                         <table class="table table-bordered small">
                             <tbody>
-                            <tr><td><b>排名</b></td><td><b>城市</b></td><td><b>区域</b></td><td><b>参与人数</b></td><td><b>人均签单量</b></td></tr>
+                            <tr><td><b><?php echo Yii::t('report','ranking');?></b></td><td><b><?php echo Yii::t('report','city');?></b></td><td><b><?php echo Yii::t('report','quyu');?></b></td><td><b><?php echo Yii::t('report','sum');?></b></td><td><b><?php echo Yii::t('report','renjun');?></b></td></tr>
                             <?php for ($i=0;$i<count($list);$i++){ ?>
                                 <tr <?php if($i==0){ echo "style='color:#FF0000'";}if($i==1){ echo "style='color:#871F78'";}if($i==2){ echo "style='color:#0000FF'";}?>><td><?php echo $i+1;?></td><td><?php echo $list[$i]['city'];?></td><td><?php echo $list[$i]['quyu'];?></td><td><?php echo $list[$i]['people'];?></td><td><?php echo $list[$i]['renjun'];?></td></tr>
                             <?php }?>
@@ -85,13 +85,13 @@ $this->pageTitle=Yii::app()->name . ' - Month Report';
         <div class="col-md-4">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">地区销售人均签单金额排行榜(<?php echo $model['scenario']['start_dt']."/".$model['scenario']['start_dt1'];?>)</h3>
+                    <h3 class="box-title"><?php echo Yii::t('report','List of regional sales per capita signed amount');?>(<?php echo $model['scenario']['start_dt']."/".$model['scenario']['start_dt1'];?>)</h3>
                 </div>
                 <div class="box-body">
                     <div id="salelists" class="direct-chat-messages" style="height: 250px;">
                         <table class="table table-bordered small">
                             <tbody>
-                            <tr><td><b>排名</b></td><td><b>城市</b></td><td><b>区域</b></td><td><b>参与人数</b></td><td><b>人均签单金额</b></td></tr>
+                            <tr><td><b><?php echo Yii::t('report','ranking');?></b></td><td><b><?php echo Yii::t('report','city');?></b></td><td><b><?php echo Yii::t('report','quyu');?></b></td><td><b><?php echo Yii::t('report','sum');?></b></td><td><b><?php echo Yii::t('report','money');?></b></td></tr>
                             <?php for ($i=0;$i<count($lists);$i++){ ?>
                                 <tr <?php if($i==0){ echo "style='color:#FF0000'";}if($i==1){ echo "style='color:#871F78'";}if($i==2){ echo "style='color:#0000FF'";}?>><td><?php echo $i+1;?></td><td><?php echo $lists[$i]['city'];?></td><td><?php echo $lists[$i]['quyu'];?></td><td><?php echo $lists[$i]['people'];?></td><td><?php echo $lists[$i]['money'];?></td></tr>
                             <?php }?>
