@@ -40,6 +40,7 @@ return array(
 	'Sales transfer'=>'离职销售人员数据转移	',
     'Sales lead'=>'销售签单业绩分类汇总	',
     'Sales ranking list'=>'销售排行榜历史记录查看',
+    'Commission integral'=>'销售提成积分表',
 	'Report'=>'报表',
 //	'Operation Daily Report'=>'每日营业择要报告',
 	'Report Manager'=>'报表管理员',
@@ -61,6 +62,7 @@ return array(
 	'Sales List'=>'销售人均签单排行榜',
     'Sale People'=>'销售个人总金额排行榜',
     'Signature details email'=>'签单明细电邮',
+    'Integarl (Read All)'=>'积分表 (全部阅读)',
 
 	'User'=>'帐户',
 	'Group'=>'群组',

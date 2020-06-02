@@ -88,11 +88,11 @@ $this->pageTitle=Yii::app()->name . ' - Report';
                 </div>
             </div>
 
-            <button name="btnSignQc2" id="btnSignQc2" class="btn btn-default" type="button" style="margin-left: 280px;">点击隐藏销售人员</button>
+            <button name="btnSignQc2" id="btnSignQc2" class="btn btn-default" type="button" style="margin-left: 280px;"><?php echo Yii::t('report','yingcang');?></button>
             <div class="form-group">
-                <?php echo $form->labelEx($model,'销售人员',array('class'=>"col-sm-2 control-label")); ?>
+                <?php echo $form->labelEx($model,'sale',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-3" style="width: 800px;" id="show" style="display: block">
-                    <label  style="width: 75px" ><input name="Fruit" type="checkbox" value="" id="all" />全选 </label><br id="label"/>
+                    <label  style="width: 75px" ><input name="Fruit" type="checkbox" value="" id="all" /><?php echo Yii::t('report','All');?> </label><br id="label"/>
                     <?php foreach ($saleman as $v) {?>
                         <label style="width: 75px" class="a" style="display: none"><input name="ReportVisitForm[sale][]" type="checkbox" value="<?php echo $v['username'];?>" <?php if(!empty($model['sale'])&&in_array($v['username'], $model['sale'])){echo "checked='checked'";}?>/><?php echo $v['name'];?> </label>
                     <?php }?>
@@ -104,22 +104,22 @@ $this->pageTitle=Yii::app()->name . ' - Report';
                 <div class="col-sm-3">
                     <?php echo $form->dropDownList($model, 'sort',
                         array(
-                            'singular'=>'签单数量',
-                            'money'=>'签单总金额',
-                            'svc_A7'=>'清洁(按金额)',
-                            'svc_C7'=>'灭虫(按金额)',
-                            'svc_E7'=>'甲醛(按金额)',
-                            'svc_F4'=>'纸品(按金额)',
-                            'svc_D6'=>'飘盈香(按金额)',
-                            'svc_B6'=>'租赁机器(按金额)',
-                            'svc_G3'=>"一次性售卖(按金额)",
-                            'svc_A7s'=>'清洁(按单数)',
-                            'svc_C7s'=>'灭虫(按单数)',
-                            'svc_E7s'=>'甲醛(按单数)',
-                            'svc_F4s'=>'纸品(按单数)',
-                            'svc_D6s'=>'飘盈香(按单数)',
-                            'svc_B6s'=>'租赁机器(按单数)',
-                            'svc_G3s'=>"一次性售卖(按单数)"
+                            'singular'=>Yii::t('report','singular'),
+                            'money'=>Yii::t('report','money'),
+                            'svc_A7'=>Yii::t('report','svc_A7'),
+                            'svc_C7'=>Yii::t('report','svc_C7'),
+                            'svc_E7'=>Yii::t('report','svc_E7'),
+                            'svc_F4'=>Yii::t('report','svc_F4'),
+                            'svc_D6'=>Yii::t('report','svc_D6'),
+                            'svc_B6'=>Yii::t('report','svc_B6'),
+                            'svc_G3'=>Yii::t('report','svc_G3'),
+                            'svc_A7s'=>Yii::t('report','svc_A7s'),
+                            'svc_C7s'=>Yii::t('report','svc_C7s'),
+                            'svc_E7s'=>Yii::t('report','svc_E7s'),
+                            'svc_F4s'=>Yii::t('report','svc_F4s'),
+                            'svc_D6s'=>Yii::t('report','svc_D6s'),
+                            'svc_B6s'=>Yii::t('report','svc_B6s'),
+                            'svc_G3s'=>Yii::t('report','svc_G3s')
                         )
                     ); ?>
                 </div>

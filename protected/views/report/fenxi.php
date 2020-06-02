@@ -31,7 +31,7 @@ $this->pageTitle=Yii::app()->name . ' - Sales Visit Form';
     </div>
 
     <div class="box box-info">
-        <div class="box-body">
+        <div class="box-body" style=" overflow-x:auto; overflow-y:auto;">
             <?php
             echo $form->hiddenField($model, 'scenario');
             echo $form->hiddenField($model, 'id');
@@ -77,55 +77,59 @@ $this->pageTitle=Yii::app()->name . ' - Sales Visit Form';
                 .tftable3 tr:hover {background-color:#ffffff;}
             </style>
             <?php if(!empty($model['all'])){?>
-            <div>   <h4>注: &nbsp; 10/5/30000 表示 总拜访量10个，签单5个，签单金额30000</h4>
-                <h3>部门总数据</h3>
+            <div>   <h4><?php echo Yii::t('report','zhu');?></h4>
+                <h3><?php echo Yii::t('report','Department total data');?></h3>
 
-                <h4><b>总拜访量:<?php echo $model['all']['money']['all'];?> 签单量：<?php echo $model['all']['money']['sum'];?>  签单金额:<?php echo $model['all']['money']['money'];?> </b></h4>
+                <h4><b><?php echo Yii::t('report','Total visits');?>:<?php echo $model['all']['money']['all'];?> <?php echo Yii::t('report','Signing quantity');?>：<?php echo $model['all']['money']['sum'];?>  <?php echo Yii::t('report','Signing amount');?>:<?php echo $model['all']['money']['money'];?> </b></h4>
 
                 <table class="tftable" border="1">
-                    <tr><th rowspan="5" width="100">拜访类型</th><th >陌生開發</th><td ><?php echo $model['all']['mobai'];?></td><th >日常跟進</th><td ><?php echo $model['all']['richanggengjin'];?></td><th >客戶資源</th><td ><?php echo $model['all']['kehuziyuan'];?></td><th >電話上門</th><td ><?php echo $model['all']['dianhuashangmen'];?></td></tr>
+                    <tr><th rowspan="5" width="100"><?php echo Yii::t('report','visit');?></th><?php for($i=0;$i<count($model['all']['visit']);$i++){?><th ><?php echo $model['all']['visit'][$i]['name'];?></th><td ><?php echo $model['all']['visit'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr>";}?><?php }?>
+                    <tr></tr>
                 </table>
 
                 <table class="tftable1" border="1">
-                    <tr><th rowspan="2" width="100">拜访目的</th><th >新開發</th><td ><?php echo $model['all']['shouci'];?></td><th  >開發中客戶覆訪</th><td ><?php echo $model['all']['huifang'];?></td>
-                    <th>停單客戶回訪</th><td><?php echo $model['all']['jiuke'];?></td><th>签单</th><td><?php echo $model['all']['qiandan'];?></td></tr>
+                    <tr><th rowspan="2" width="100"><?php echo Yii::t('report','obj');?></th><?php for($i=0;$i<count($model['all']['obj']);$i++){?><th ><?php echo $model['all']['obj'][$i]['name'];?></th><td ><?php echo $model['all']['obj'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr>";}?><?php }?>
+                       <tr></tr>
                 </table>
 
                 <table class="tftable2" border="1">
-                    <tr><th rowspan="6" width="100">区域</th><?php for($i=0;$i<count($model['all']['address']);$i++){?><th ><?php echo $model['all']['address'][$i]['name'];?></th><td ><?php echo $model['all']['address'][$i]['0'];?></td><?php if(($i+1)%7==0){ echo "</tr>";}?><?php }?>
+                    <tr><th rowspan="6" width="100"><?php echo Yii::t('report','quyu');?></th><?php for($i=0;$i<count($model['all']['address']);$i++){?><th ><?php echo $model['all']['address'][$i]['name'];?></th><td ><?php echo $model['all']['address'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr>";}?><?php }?>
                     <tr></tr>
                 </table>
 
                 <table class="tftable3" border="1">
-                    <tr><th rowspan="3" width="100">客服类别（餐饮）</th><th >PUB</th><td ><?php echo $model['all']['dongbeicai'];?></td><th >日式</th><td ><?php echo $model['all']['taiguocai'];?></td><th >蛋糕/麵包/甜點</th><td ><?php echo $model['all']['mianbao'];?></td><th >婚宴會館</th><td ><?php echo $model['all']['chuancai'];?></td><th >火鍋</th><td ><?php echo $model['all']['huoguo'];?></td><th >西餐</th><td ><?php echo $model['all']['xican'];?></td><th>中餐</th><td><?php echo $model['all']['kafeiting'];?></td></tr>
-                    <tr><th>早餐</th><td><?php echo $model['all']['zejiangcai'];?></td><th>廠房餐廳</th><td><?php echo $model['all']['riliao'];?></td><th>燒烤/炸物</th><td><?php echo $model['all']['saokao'];?></td><th>飲料店</th><td><?php echo $model['all']['yuenancai'];?></td><th>咖啡餐廳</th><td><?php echo $model['all']['xiaochi'];?></td><th>異國料理</th><td><?php echo $model['all']['qingzhencai'];?></td></tr>
-                    <tr><th rowspan="5" width="100">客服类别（非餐饮）</th><th>健身会所</th><td><?php echo $model['all']['jianshenhuisuo'];?></td><th>旅館業</th><td><?php echo $model['all']['fangdican'];?></td><th >加油站</th><td><?php echo $model['all']['peixunjigou'];?></td><th>商辦</th><td><?php echo $model['all']['xuexiao'];?></td><th>營造</th><td><?php echo $model['all']['shuiliao'];?></td><th >教育業</th><td><?php echo $model['all']['yingyuan'];?></td><th>休閒娛樂</th><td><?php echo $model['all']['xiezilou'];?></td></tr>
-                    <tr><th>工廠</th><td><?php echo $model['all']['gongcang'];?></td><th>補教</th><td><?php echo $model['all']['youyong'];?></td><th>醫療</th><td><?php echo $model['all']['wuye'];?></td><th>公家機關</th><td><?php echo $model['all']['yiyuan'];?></td><th>家居/社區</th><td><?php echo $model['all']['yinglou'];?></td></tr>
-
+                    <tr><th rowspan="3" width="100"><?php echo Yii::t('report','food');?></th><?php for($i=0;$i<count($model['all']['food']);$i++){?><th ><?php echo $model['all']['food'][$i]['name'];?></th><td ><?php echo $model['all']['food'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr>";}?><?php }?>
+                    <tr></tr>
+                    <tr><th rowspan="5" width="100"><?php echo Yii::t('report','nofood');?></th><?php for($i=0;$i<count($model['all']['nofood']);$i++){?><th ><?php echo $model['all']['nofood'][$i]['name'];?></th><td ><?php echo $model['all']['nofood'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr>";}?><?php }?>
+                    <tr></tr>
                 </table>
             </div>
             <?php }?>
             <?php if(!empty($model['one'])){ foreach ($model['one'] as $arr){?>
             <div>
-                <h3><?php echo $arr['name'];?>的数据</h3>
-                <h4><b>总拜访量:<?php echo $arr['money']['all'];?> 签单量：<?php echo $arr['money']['sum'];?>  签单金额:<?php echo $arr['money']['money'];?> </b></h4>
+                <h3><?php echo $arr['name'];?></h3>
+                <h4><b><?php echo Yii::t('report','Total visits');?>:<?php echo $arr['money']['all'];?> <?php echo Yii::t('report','Signing quantity');?>：<?php echo $arr['money']['sum'];?>  <?php echo Yii::t('report','Signing amount');?>:<?php echo $arr['money']['money'];?> </b></h4>
 
                 <table class="tftable" border="1">
-                    <tr><th rowspan="5" width="100">拜访类型</th><th >陌生開發</th><td ><?php echo $arr['mobai'];?></td><th >日常跟進</th><td ><?php echo $arr['richanggengjin'];?></td><th >客戶資源</th><td ><?php echo $arr['kehuziyuan'];?></td><th >電話上門</th><td ><?php echo $arr['dianhuashangmen'];?></td></tr>
+                    <tr><th rowspan="5" width="100"><?php echo Yii::t('report','visit');?></th><?php for($i=0;$i<count($arr['visit']);$i++){?><th ><?php echo $arr['visit'][$i]['name'];?></th><td ><?php echo $arr['visit'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr>";}?><?php }?>
+                    <tr></tr>
                 </table>
+
                 <table class="tftable1" border="1">
-                    <tr><th rowspan="2" width="100">拜访目的</th><th >新開發</th><td ><?php echo $arr['shouci'];?></td><th  >開發中客戶覆訪</th><td ><?php echo $arr['huifang'];?></td>
-                    <th>停單客戶回訪</th><td><?php echo $arr['jiuke'];?></td><th>签单</th><td><?php echo $arr['qiandan'];?></td></tr>
+                    <tr><th rowspan="2" width="100"><?php echo Yii::t('report','obj');?></th><?php for($i=0;$i<count($arr['obj']);$i++){?><th ><?php echo $arr['obj'][$i]['name'];?></th><td ><?php echo $arr['obj'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr>";}?><?php }?>
+                    <tr></tr>
                 </table>
+
                 <table class="tftable2" border="1">
-                    <tr><th rowspan="6" width="100">区域</th><?php for($i=0;$i<count($arr['address']);$i++){?><th ><?php echo $arr['address'][$i]['name'];?></th><td ><?php echo $arr['address'][$i]['0'];?></td><?php  if(($i+1)%7==0){ echo "</tr><tr>";}?><?php }?></tr>
+                    <tr><th rowspan="6" width="100"><?php echo Yii::t('report','quyu');?></th><?php for($i=0;$i<count($arr['address']);$i++){?><th ><?php echo $arr['address'][$i]['name'];?></th><td ><?php echo $arr['address'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr>";}?><?php }?>
+                    <tr></tr>
                 </table>
+
                 <table class="tftable3" border="1">
-                    <tr><th rowspan="3" width="100">客服类别（餐饮）</th><th >PUB</th><td ><?php echo $arr['dongbeicai'];?></td><th >日式</th><td ><?php echo $arr['taiguocai'];?></td><th >蛋糕/麵包/甜點</th><td ><?php echo $arr['mianbao'];?></td><th >婚宴會館</th><td ><?php echo $arr['chuancai'];?></td><th >火鍋</th><td ><?php echo $arr['huoguo'];?></td><th >西餐</th><td ><?php echo $arr['xican'];?></td><th>中餐</th><td><?php echo $arr['kafeiting'];?></td></tr>
-                    <tr><th>早餐</th><td><?php echo $arr['zejiangcai'];?></td><th>廠房餐廳</th><td><?php echo $arr['riliao'];?></td><th>燒烤/炸物</th><td><?php echo $arr['saokao'];?></td><th>飲料店</th><td><?php echo $arr['yuenancai'];?></td></tr>
-                    <tr><th>咖啡餐廳</th><td><?php echo $arr['xiaochi'];?></td><th>異國料理</th><td><?php echo $arr['qingzhencai'];?></td></tr>
-                    <tr><th rowspan="5" width="100">客服类别（非餐饮）</th><th>健身会所</th><td><?php echo $arr['jianshenhuisuo'];?></td><th>旅館業</th><td><?php echo $arr['fangdican'];?></td><th >加油站</th><td><?php echo $arr['peixunjigou'];?></td><th>商辦</th><td><?php echo $arr['xuexiao'];?></td><th>營造</th><td><?php echo $arr['shuiliao'];?></td><th >教育業</th><td><?php echo $arr['yingyuan'];?></td><th>休閒娛樂</th><td><?php echo $arr['xiezilou'];?></td></tr>
-                    <tr><th>工廠</th><td><?php echo $arr['gongcang'];?></td><th>補教</th><td><?php echo $arr['youyong'];?></td><th>醫療</th><td><?php echo $arr['wuye'];?></td><th>公家機關</th><td><?php echo $arr['yiyuan'];?></td><th>家居/社區</th><td><?php echo $arr['yinglou'];?></td></tr>
+                    <tr><th rowspan="3" width="100"><?php echo Yii::t('report','food');?></th><?php for($i=0;$i<count($arr['food']);$i++){?><th ><?php echo $arr['food'][$i]['name'];?></th><td ><?php echo $arr['food'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr>";}?><?php }?>
+                    <tr></tr>
+                    <tr><th rowspan="5" width="100"><?php echo Yii::t('report','nofood');?></th><?php for($i=0;$i<count($arr['nofood']);$i++){?><th ><?php echo $arr['nofood'][$i]['name'];?></th><td ><?php echo $arr['nofood'][$i]['0'];?></td><?php if($i==6||$i==13||$i==20||$i==27||$i==34||$i==41){ echo "</tr>";}?><?php }?>
+                    <tr></tr>
                 </table>
             </div>
             <?php } } ?>

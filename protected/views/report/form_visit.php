@@ -52,7 +52,7 @@ $this->pageTitle=Yii::app()->name . ' - Report';
             <?php endif ?>
 
             <div class="form-group">
-                <?php echo $form->labelEx($model,'开始日期',array('class'=>"col-sm-2 control-label")); ?>
+                <?php echo $form->labelEx($model,'start date',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-3">
                     <div class="input-group date">
                         <div class="input-group-addon">
@@ -66,7 +66,7 @@ $this->pageTitle=Yii::app()->name . ' - Report';
             </div>
 
             <div class="form-group">
-                <?php echo $form->labelEx($model,'结束日期',array('class'=>"col-sm-2 control-label")); ?>
+                <?php echo $form->labelEx($model,'end date',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-3">
                     <div class="input-group date">
                         <div class="input-group-addon">
@@ -83,7 +83,7 @@ $this->pageTitle=Yii::app()->name . ' - Report';
 
 
             <div class="form-group">
-                <?php echo $form->labelEx($model,'地区',array('class'=>"col-sm-2 control-label")); ?>
+                <?php echo $form->labelEx($model,'city',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-3">
                     <?php echo $form->dropDownList($model, 'city',
                         $city,
@@ -93,9 +93,9 @@ $this->pageTitle=Yii::app()->name . ' - Report';
             </div>
 
             <div class="form-group">
-                <?php echo $form->labelEx($model,'销售人员',array('class'=>"col-sm-2 control-label")); ?>
+                <?php echo $form->labelEx($model,'sale',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-3" style="width: 800px;">
-                    <label  style="width: 75px" ><input name="Fruit" type="checkbox" value="" id="all"/>全选 </label><br id="label"/>
+                    <label  style="width: 75px" ><input name="Fruit" type="checkbox" value="" id="all"/><?php echo Yii::t('report','All');?> </label><br id="label"/>
                     <?php foreach ($saleman as $v) {?>
                         <label style="width: 75px" class="a"><input name="ReportVisitForm[sale][]" type="checkbox" value="<?php echo $v['name'];?>" /><?php echo $v['name'];?> </label>
                     <?php }?>
@@ -104,12 +104,12 @@ $this->pageTitle=Yii::app()->name . ' - Report';
 
 
             <div class="form-group">
-                <?php echo $form->labelEx($model,'是否查看部门数据汇总',array('class'=>"col-sm-2 control-label")); ?>
+                <?php echo $form->labelEx($model,'bumen',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-3">
                     <?php echo $form->dropDownList($model, 'bumen',
                         array(
-                            'yes'=>'是',
-                            'no'=>"否",
+                            'yes'=>Yii::t('report','Yes'),
+                            'no'=>Yii::t('report','No'),
                         )
                     ); ?>
                 </div>

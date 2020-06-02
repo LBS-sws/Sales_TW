@@ -52,7 +52,7 @@ $this->pageTitle=Yii::app()->name . ' - Report';
             <?php endif ?>
 
             <div class="form-group">
-                <?php echo $form->labelEx($model,'开始日期',array('class'=>"col-sm-2 control-label")); ?>
+                <?php echo $form->labelEx($model,'start date',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-3">
                     <div class="input-group date">
                         <div class="input-group-addon">
@@ -66,7 +66,7 @@ $this->pageTitle=Yii::app()->name . ' - Report';
             </div>
 
             <div class="form-group">
-                <?php echo $form->labelEx($model,'结束日期',array('class'=>"col-sm-2 control-label")); ?>
+                <?php echo $form->labelEx($model,'end date',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-3">
                     <div class="input-group date">
                         <div class="input-group-addon">

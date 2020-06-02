@@ -82,7 +82,7 @@ return array(
     'Please select the assigned person'=>'-- 请选择分配人员 --',
     'yingcang'=>'点击隐藏销售人员',
     'singular'=>'签单数量',
-    'money'=>'签单总金额',
+    'money'=>'人均签单金额',
     'svc_A7'=>'清洁(按金额)',
     'svc_C7'=>'灭虫(按金额)',
     'svc_E7'=>'甲醛(按金额)',
@@ -134,6 +134,5 @@ return array(
     'Renewal Reminder Report'=>'续约提醒报表',
     'Days Before Expiry'=>'到期前',
     'days'=>'日',
-	'li'=>'例 50%：0.5',
 );
 ?>

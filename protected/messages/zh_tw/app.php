@@ -38,7 +38,7 @@ return array(
 'Customer District'=>'客戶區域',
 'Sale Staff'=>'銷售個人數據匯總',
 'Sales transfer'=>'離職銷售人員數據轉移 ',
-
+'Commission integral'=>'销售提成積分表',
 'Report'=>'報表',
 // 'Operation Daily Report'=>'每日營業擇要報告',
 'Report Manager'=>'報表管理員',
@@ -58,6 +58,7 @@ return array(
 'Web Push Notification'=>'網頁推送通知',
 'Sales List'=>'銷售排行榜單',
 'Signature details email'=>'簽單明細電郵',
+'Integarl (Read All)'=>'積分表 (全部閱讀)',
 
 'User'=>'帳戶',
 'Group'=>'群組',

@@ -3,42 +3,42 @@
 
 class ReportVisitForm extends CReportForm
 {
-    public $staffs;
-    public $staffs_desc;
-
-    protected function labelsEx() {
-        return array(
-            'staffs'=>Yii::t('report','Staffs'),
+	public $staffs;
+	public $staffs_desc;
+	
+	protected function labelsEx() {
+		return array(
+			'staffs'=>Yii::t('report','Staffs'),
             'start date'=>Yii::t('report','Start Date'),
             'end date'=>Yii::t('report','End Date'),
             'city'=>Yii::t('report','City'),
             'sort'=>Yii::t('report','Sort'),
             'sale'=>Yii::t('report','Sale'),
             'bumen'=>Yii::t('report','Bumen'),
-        );
-    }
-
-    protected function rulesEx() {
+			);
+	}
+	
+	protected function rulesEx() {
         return array(
             array('staffs, staffs_desc','safe'),
         );
-    }
-
-    protected function queueItemEx() {
-        return array(
-            'STAFFS'=>$this->staffs,
-            'STAFFSDESC'=>$this->staffs_desc,
-        );
-    }
-
-    public function init() {
-        $this->id = 'RptFive';
-        $this->name = Yii::t('app','Five Steps');
-        $this->format = 'EXCEL';
-        $this->city = "";
+	}
+	
+	protected function queueItemEx() {
+		return array(
+				'STAFFS'=>$this->staffs,
+				'STAFFSDESC'=>$this->staffs_desc,
+			);
+	}
+	
+	public function init() {
+		$this->id = 'RptFive';
+		$this->name = Yii::t('app','Five Steps');
+		$this->format = 'EXCEL';
+		$this->city = "";
         $this->cityname ="";
-        $this->fields = 'start_dt,end_dt,staffs,staffs_desc';
-        $this->start_dt = date('Y/m/01', strtotime(date("Y/m/d")));
+		$this->fields = 'start_dt,end_dt,staffs,staffs_desc';
+		$this->start_dt = date('Y/m/01', strtotime(date("Y/m/d")));
         $this->end_dt = date("Y/m/d");
         $this->staffs = '';
         $this->bumen = '';
@@ -46,10 +46,10 @@ class ReportVisitForm extends CReportForm
         $this->sale = '';
         $this->all = '';
         $this->one = '';
-        $this->staffs_desc = Yii::t('misc','All');
-    }
+		$this->staffs_desc = Yii::t('misc','All');
+	}
 
-    public function city(){
+	public function city(){
         $suffix = Yii::app()->params['envSuffix'];
         $model = new City();
         $city=Yii::app()->user->city();
@@ -99,13 +99,13 @@ class ReportVisitForm extends CReportForm
         $sql = "select a.name,d.username from hr$suffix.hr_employee a, hr$suffix.hr_binding b, security$suffix.sec_user_access c,security$suffix.sec_user d 
         where a.id=b.employee_id and b.user_id=c.username and c.system_id='sal' and c.a_read_write like '%HK01%' and c.username=d.username and d.status='A' and d.city in ($city_allow)";
         $records = Yii::app()->db->createCommand($sql)->queryAll();
-        // print_r('<pre>');
+       // print_r('<pre>');
         //print_r($records);
         return $records;
     }
 
     public function fenxi($model){
-        $start_dt=str_replace("/","-",$model['start_dt']);
+	    $start_dt=str_replace("/","-",$model['start_dt']);
         $end_dt=str_replace("/","-",$model['end_dt']);
         $suffix = Yii::app()->params['envSuffix'];
         $city=$model['city'];
@@ -330,7 +330,7 @@ class ReportVisitForm extends CReportForm
 
         //foreach ()
 //        print_r('<pre/>');
-        //  print_r($records);
+      //  print_r($records);
         return $att;
     }
 
@@ -360,70 +360,45 @@ class ReportVisitForm extends CReportForm
 				where city='".$model['city']."' ";
         $record = Yii::app()->db->createCommand($sql1)->queryAll();
         $arr=array();
-        $mobai=array();
-        $arr['mobai']=$this->shuls($mobai,$records,'visit_type_name','陌拜');
-        $arr['richanggengjin']=$this->shuls($mobai,$records,'visit_type_name','日常跟进');
-        $arr['kehuziyuan']=$this->shuls($mobai,$records,'visit_type_name','客户资源');
-        $arr['dianhuashangmen']=$this->shuls($mobai,$records,'visit_type_name','电话上门');
-        $arr['shouci']=$this->shuls($mobai,$records,'visit_obj_name','首次');
-        $arr['huifang']=$this->shuls($mobai,$records,'visit_obj_name','回访');
-        $arr['zengjiaxiangmu']=$this->shuls($mobai,$records,'visit_obj_name','增加项目');
-        $arr['tingfuwu']=$this->shuls($mobai,$records,'visit_obj_name','停服务');
-        $arr['jianjia']=$this->shuls($mobai,$records,'visit_obj_name','减价');
-        $arr['keshu']=$this->shuls($mobai,$records,'visit_obj_name','客诉');
-        $arr['baojia']=$this->shuls($mobai,$records,'visit_obj_name','报价');
-        $arr['jiuke']=$this->shuls($mobai,$records,'visit_obj_name','救客');
-        $arr['genghuanxiangmu']=$this->shuls($mobai,$records,'visit_obj_name','更换项目');
-        $arr['qiandan']=$this->shuls($mobai,$records,'visit_obj_name','签单');
-        $arr['xuyue']=$this->shuls($mobai,$records,'visit_obj_name','续约');
-        $arr['zuikuan']=$this->shuls($mobai,$records,'visit_obj_name','追款');
-        $arr['qitaa']=$this->shuls($mobai,$records,'visit_obj_name','其他');
-
-        $arr['dongbeicai']=$this->shuls($mobai,$records,'cust_type_name','东北/西北菜');
-        $arr['kafeiting']=$this->shuls($mobai,$records,'cust_type_name','咖啡厅');
-        $arr['xiaochi']=$this->shuls($mobai,$records,'cust_type_name','小吃快餐');
-        $arr['chuancai']=$this->shuls($mobai,$records,'cust_type_name','川湘菜');
-        $arr['riliao']=$this->shuls($mobai,$records,'cust_type_name','日韩料理');
-        $arr['taiguocai']=$this->shuls($mobai,$records,'cust_type_name','泰国菜');
-        $arr['zejiangcai']=$this->shuls($mobai,$records,'cust_type_name','浙江菜');
-        $arr['qingzhencai']=$this->shuls($mobai,$records,'cust_type_name','清真菜');
-        $arr['huoguo']=$this->shuls($mobai,$records,'cust_type_name','火锅');
-        $arr['saokao']=$this->shuls($mobai,$records,'cust_type_name','烧烤');
-        $arr['yuecai']=$this->shuls($mobai,$records,'cust_type_name','粤菜');
-        $arr['zizhu']=$this->shuls($mobai,$records,'cust_type_name','自助餐');
-        $arr['chacanting']=$this->shuls($mobai,$records,'cust_type_name','茶餐厅');
-        $arr['xican']=$this->shuls($mobai,$records,'cust_type_name','西餐');
-        $arr['yuenancai']=$this->shuls($mobai,$records,'cust_type_name','越南菜');
-        $arr['mianbao']=$this->shuls($mobai,$records,'cust_type_name','面包甜点');
-        $arr['yingping']=$this->shuls($mobai,$records,'cust_type_name','饮品店');
-        $arr['qitab']=$this->shuls($mobai,$records,'cust_type_name','其他(餐饮)');
-        $arr['sisdian']=$this->shuls($mobai,$records,'cust_type_name','4S店');
-        $arr['ktv']=$this->shuls($mobai,$records,'cust_type_name','KTV');
-        $arr['meifa']=$this->shuls($mobai,$records,'cust_type_name','美发');
-        $arr['tiyuguan']=$this->shuls($mobai,$records,'cust_type_name','体育馆');
-        $arr['bianlidian']=$this->shuls($mobai,$records,'cust_type_name','便利店');
-        $arr['julebu']=$this->shuls($mobai,$records,'cust_type_name','俱乐部');
-        $arr['jianshenhuisuo']=$this->shuls($mobai,$records,'cust_type_name','健身/舞蹈会所');
-        $arr['qitac']=$this->shuls($mobai,$records,'cust_type_name','其他(非餐饮)');
-        $arr['xiezilou']=$this->shuls($mobai,$records,'cust_type_name','写字楼');
-        $arr['yiyuan']=$this->shuls($mobai,$records,'cust_type_name','医院');
-        $arr['peixunjigou']=$this->shuls($mobai,$records,'cust_type_name','培训机构');
-        $arr['xuexiao']=$this->shuls($mobai,$records,'cust_type_name','学校');
-        $arr['gongcang']=$this->shuls($mobai,$records,'cust_type_name','工厂');
-        $arr['yinglou']=$this->shuls($mobai,$records,'cust_type_name','影楼');
-        $arr['yingyuan']=$this->shuls($mobai,$records,'cust_type_name','影院');
-        $arr['fangdican']=$this->shuls($mobai,$records,'cust_type_name','房地产');
-        $arr['shuiliao']=$this->shuls($mobai,$records,'cust_type_name','水疗会所');
-        $arr['youyong']=$this->shuls($mobai,$records,'cust_type_name','游泳馆');
-        $arr['wuye']=$this->shuls($mobai,$records,'cust_type_name','物业');
-        $arr['wangba']=$this->shuls($mobai,$records,'cust_type_name','网吧');
-        $arr['yinhang']=$this->shuls($mobai,$records,'cust_type_name','银行');
-        $arr['chaoshi']=$this->shuls($mobai,$records,'cust_type_name','超市');
-        $arr['jiuba']=$this->shuls($mobai,$records,'cust_type_name','酒吧');
-        $arr['jiudian']=$this->shuls($mobai,$records,'cust_type_name','酒店');
-        $arr['zhengfu']=$this->shuls($mobai,$records,'cust_type_name','政府及企事业单位');
+        $jiudian=0;
+        $sql2 = "select name
+				from sal_cust_type
+				where city='".$model['city']."' or city='99999' and type_group='1'";
+        $record = Yii::app()->db->createCommand($sql2)->queryAll();
         for($i=0;$i<count($record);$i++){
-            array_push($record[$i],$this->shuls($mobai,$records,'district_name',$record[$i]['name']));
+            array_push($record[$i],$this->shuls($jiudian,$records,'cust_type_name',$record[$i]['name']));
+
+        }
+        $arr['food']=$record;
+        $sql2 = "select name
+				from sal_cust_type
+				where city='".$model['city']."' or city='99999' and type_group='2'";
+        $record = Yii::app()->db->createCommand($sql2)->queryAll();
+        for($i=0;$i<count($record);$i++){
+            array_push($record[$i],$this->shuls($jiudian,$records,'cust_type_name',$record[$i]['name']));
+
+        }
+        $arr['nofood']=$record;
+        $sql2 = "select name
+				from sal_visit_type
+			";
+        $record = Yii::app()->db->createCommand($sql2)->queryAll();
+        for($i=0;$i<count($record);$i++){
+            array_push($record[$i],$this->shuls($jiudian,$records,'visit_type_name',$record[$i]['name']));
+
+        }
+        $arr['visit']=$record;
+        $sql2 = "select name
+				from sal_visit_obj
+			";
+        $record = Yii::app()->db->createCommand($sql2)->queryAll();
+        for($i=0;$i<count($record);$i++){
+            array_push($record[$i],$this->shuls($jiudian,$records,'visit_obj_name',$record[$i]['name']));
+
+        }
+        $arr['obj']=$record;
+        for($i=0;$i<count($record);$i++){
+            array_push($record[$i],$this->shuls($jiudian,$records,'district_name',$record[$i]['name']));
 
         }
         $meney=$this->moneys($records);
@@ -440,7 +415,7 @@ class ReportVisitForm extends CReportForm
         $start_dt=str_replace("/","-",$model['start_dt']);
         $end_dt=str_replace("/","-",$model['end_dt']);
         $suffix = Yii::app()->params['envSuffix'];
-        $a=array();
+        $arr=array();
         $sqls="select name,code from security$suffix.sec_city where region='".$model['city']."'";
         $recity = Yii::app()->db->createCommand($sqls)->queryAll();
         if(empty($recity)){
@@ -458,74 +433,49 @@ class ReportVisitForm extends CReportForm
 				left outer join sal_custstar i on a.username=i.username and a.cust_name=i.cust_name
 				where a.city='" . $model['city'] . "' and visit_dt<='" . $end_dt . "' and visit_dt>='" . $start_dt . "' and  f.name='".$v."'";
                 $records = Yii::app()->db->createCommand($sql)->queryAll();
+                $jiudian=0;
+                $sql2 = "select name
+				from sal_cust_type
+				where city='".$model['city']."' or city='99999' and type_group='1'";
+                $record = Yii::app()->db->createCommand($sql2)->queryAll();
+                for($i=0;$i<count($record);$i++){
+                    array_push($record[$i],$this->shuls($jiudian,$records,'cust_type_name',$record[$i]['name']));
 
-                $arr['mobai']=$this->shuls($a,$records,'visit_type_name','陌拜');
-                $arr['richanggengjin']=$this->shuls($a,$records,'visit_type_name','日常跟进');
-                $arr['kehuziyuan']=$this->shuls($a,$records,'visit_type_name','客户资源');
-                $arr['dianhuashangmen']=$this->shuls($a,$records,'visit_type_name','电话上门');
-                $arr['shouci']=$this->shuls($a,$records,'visit_obj_name','首次');
-                $arr['huifang']=$this->shuls($a,$records,'visit_obj_name','回访');
-                $arr['zengjiaxiangmu']=$this->shuls($a,$records,'visit_obj_name','增加项目');
-                $arr['tingfuwu']=$this->shuls($a,$records,'visit_obj_name','停服务');
-                $arr['jianjia']=$this->shuls($a,$records,'visit_obj_name','减价');
-                $arr['keshu']=$this->shuls($a,$records,'visit_obj_name','客诉');
-                $arr['baojia']=$this->shuls($a,$records,'visit_obj_name','报价');
-                $arr['jiuke']=$this->shuls($a,$records,'visit_obj_name','救客');
-                $arr['genghuanxiangmu']=$this->shuls($a,$records,'visit_obj_name','更换项目');
-                $arr['qiandan']=$this->shuls($a,$records,'visit_obj_name','签单');
-                $arr['xuyue']=$this->shuls($a,$records,'visit_obj_name','续约');
-                $arr['zuikuan']=$this->shuls($a,$records,'visit_obj_name','追款');
-                $arr['qitaa']=$this->shuls($a,$records,'visit_obj_name','其他');
+                }
+                $arr['food']=$record;
+                $sql2 = "select name
+				from sal_cust_type
+				where city='".$model['city']."' or city='99999' and type_group='2'";
+                $record = Yii::app()->db->createCommand($sql2)->queryAll();
+                for($i=0;$i<count($record);$i++){
+                    array_push($record[$i],$this->shuls($jiudian,$records,'cust_type_name',$record[$i]['name']));
 
-                $arr['dongbeicai']=$this->shuls($a,$records,'cust_type_name','东北/西北菜');
-                $arr['kafeiting']=$this->shuls($a,$records,'cust_type_name','咖啡厅');
-                $arr['xiaochi']=$this->shuls($a,$records,'cust_type_name','小吃快餐');
-                $arr['chuancai']=$this->shuls($a,$records,'cust_type_name','川湘菜');
-                $arr['riliao']=$this->shuls($a,$records,'cust_type_name','日韩料理');
-                $arr['taiguocai']=$this->shuls($a,$records,'cust_type_name','泰国菜');
-                $arr['zejiangcai']=$this->shuls($a,$records,'cust_type_name','浙江菜');
-                $arr['qingzhencai']=$this->shuls($a,$records,'cust_type_name','清真菜');
-                $arr['huoguo']=$this->shuls($a,$records,'cust_type_name','火锅');
-                $arr['saokao']=$this->shuls($a,$records,'cust_type_name','烧烤');
-                $arr['yuecai']=$this->shuls($a,$records,'cust_type_name','粤菜');
-                $arr['zizhu']=$this->shuls($a,$records,'cust_type_name','自助餐');
-                $arr['chacanting']=$this->shuls($a,$records,'cust_type_name','茶餐厅');
-                $arr['xican']=$this->shuls($a,$records,'cust_type_name','西餐');
-                $arr['yuenancai']=$this->shuls($a,$records,'cust_type_name','越南菜');
-                $arr['mianbao']=$this->shuls($a,$records,'cust_type_name','面包甜点');
-                $arr['yingping']=$this->shuls($a,$records,'cust_type_name','饮品店');
-                $arr['qitab']=$this->shuls($a,$records,'cust_type_name','其他(餐饮)');
-                $arr['sisdian']=$this->shuls($a,$records,'cust_type_name','4S店');
-                $arr['ktv']=$this->shuls($a,$records,'cust_type_name','KTV');
-                $arr['meifa']=$this->shuls($a,$records,'cust_type_name','美发');
-                $arr['tiyuguan']=$this->shuls($a,$records,'cust_type_name','体育馆');
-                $arr['bianlidian']=$this->shuls($a,$records,'cust_type_name','便利店');
-                $arr['julebu']=$this->shuls($a,$records,'cust_type_name','俱乐部');
-                $arr['jianshenhuisuo']=$this->shuls($a,$records,'cust_type_name','健身/舞蹈会所');
-                $arr['qitac']=$this->shuls($a,$records,'cust_type_name','其他(非餐饮)');
-                $arr['xiezilou']=$this->shuls($a,$records,'cust_type_name','写字楼');
-                $arr['yiyuan']=$this->shuls($a,$records,'cust_type_name','医院');
-                $arr['peixunjigou']=$this->shuls($a,$records,'cust_type_name','培训机构');
-                $arr['xuexiao']=$this->shuls($a,$records,'cust_type_name','学校');
-                $arr['gongcang']=$this->shuls($a,$records,'cust_type_name','工厂');
-                $arr['yinglou']=$this->shuls($a,$records,'cust_type_name','影楼');
-                $arr['yingyuan']=$this->shuls($a,$records,'cust_type_name','影院');
-                $arr['fangdican']=$this->shuls($a,$records,'cust_type_name','房地产');
-                $arr['shuiliao']=$this->shuls($a,$records,'cust_type_name','水疗会所');
-                $arr['youyong']=$this->shuls($a,$records,'cust_type_name','游泳馆');
-                $arr['wuye']=$this->shuls($a,$records,'cust_type_name','物业');
-                $arr['wangba']=$this->shuls($a,$records,'cust_type_name','网吧');
-                $arr['yinhang']=$this->shuls($a,$records,'cust_type_name','银行');
-                $arr['chaoshi']=$this->shuls($a,$records,'cust_type_name','超市');
-                $arr['jiuba']=$this->shuls($a,$records,'cust_type_name','酒吧');
-                $arr['jiudian']=$this->shuls($a,$records,'cust_type_name','酒店');
-                $arr['zhengfu']=$this->shuls($a,$records,'cust_type_name','政府及企事业单位');
+                }
+                $arr['nofood']=$record;
+                $sql2 = "select name
+				from sal_visit_type
+			";
+                $record = Yii::app()->db->createCommand($sql2)->queryAll();
+                for($i=0;$i<count($record);$i++){
+                    array_push($record[$i],$this->shuls($jiudian,$records,'visit_type_name',$record[$i]['name']));
+
+                }
+                $arr['visit']=$record;
+                $sql2 = "select name
+				from sal_visit_obj
+			";
+                $record = Yii::app()->db->createCommand($sql2)->queryAll();
+                for($i=0;$i<count($record);$i++){
+                    array_push($record[$i],$this->shuls($jiudian,$records,'visit_obj_name',$record[$i]['name']));
+
+                }
+                $arr['obj']=$record;
                 $sql1 = "select name
 				from sal_cust_district
 				where city='".$model['city']."' ";
                 $record = Yii::app()->db->createCommand($sql1)->queryAll();
                 for($i=0;$i<count($record);$i++){
-                    array_push($record[$i],$this->shuls($a,$records,'district_name',$record[$i]['name']));
+                    array_push($record[$i],$this->shuls($jiudian,$records,'district_name',$record[$i]['name']));
                 }
                 $meney=$this->moneys($records);
                 $arr['address']=$record;
@@ -552,74 +502,49 @@ class ReportVisitForm extends CReportForm
 				left outer join sal_custstar i on a.username=i.username and a.cust_name=i.cust_name
 				where a.city in ($city_allow) and visit_dt<='" . $end_dt . "' and visit_dt>='" . $start_dt . "'";
                 $records = Yii::app()->db->createCommand($sql)->queryAll();
+                $jiudian=0;
+                $sql2 = "select name
+				from sal_cust_type
+				where city='".$model['city']."' or city='99999' and type_group='1'";
+                $record = Yii::app()->db->createCommand($sql2)->queryAll();
+                for($i=0;$i<count($record);$i++){
+                    array_push($record[$i],$this->shuls($jiudian,$records,'cust_type_name',$record[$i]['name']));
 
-                $arr['mobai']=$this->shuls($a,$records,'visit_type_name','陌拜');
-                $arr['richanggengjin']=$this->shuls($a,$records,'visit_type_name','日常跟进');
-                $arr['kehuziyuan']=$this->shuls($a,$records,'visit_type_name','客户资源');
-                $arr['dianhuashangmen']=$this->shuls($a,$records,'visit_type_name','电话上门');
-                $arr['shouci']=$this->shuls($a,$records,'visit_obj_name','首次');
-                $arr['huifang']=$this->shuls($a,$records,'visit_obj_name','回访');
-                $arr['zengjiaxiangmu']=$this->shuls($a,$records,'visit_obj_name','增加项目');
-                $arr['tingfuwu']=$this->shuls($a,$records,'visit_obj_name','停服务');
-                $arr['jianjia']=$this->shuls($a,$records,'visit_obj_name','减价');
-                $arr['keshu']=$this->shuls($a,$records,'visit_obj_name','客诉');
-                $arr['baojia']=$this->shuls($a,$records,'visit_obj_name','报价');
-                $arr['jiuke']=$this->shuls($a,$records,'visit_obj_name','救客');
-                $arr['genghuanxiangmu']=$this->shuls($a,$records,'visit_obj_name','更换项目');
-                $arr['qiandan']=$this->shuls($a,$records,'visit_obj_name','签单');
-                $arr['xuyue']=$this->shuls($a,$records,'visit_obj_name','续约');
-                $arr['zuikuan']=$this->shuls($a,$records,'visit_obj_name','追款');
-                $arr['qitaa']=$this->shuls($a,$records,'visit_obj_name','其他');
+                }
+                $arr['food']=$record;
+                $sql2 = "select name
+				from sal_cust_type
+				where city='".$model['city']."' or city='99999' and type_group='2'";
+                $record = Yii::app()->db->createCommand($sql2)->queryAll();
+                for($i=0;$i<count($record);$i++){
+                    array_push($record[$i],$this->shuls($jiudian,$records,'cust_type_name',$record[$i]['name']));
 
-                $arr['dongbeicai']=$this->shuls($a,$records,'cust_type_name','东北/西北菜');
-                $arr['kafeiting']=$this->shuls($a,$records,'cust_type_name','咖啡厅');
-                $arr['xiaochi']=$this->shuls($a,$records,'cust_type_name','小吃快餐');
-                $arr['chuancai']=$this->shuls($a,$records,'cust_type_name','川湘菜');
-                $arr['riliao']=$this->shuls($a,$records,'cust_type_name','日韩料理');
-                $arr['taiguocai']=$this->shuls($a,$records,'cust_type_name','泰国菜');
-                $arr['zejiangcai']=$this->shuls($a,$records,'cust_type_name','浙江菜');
-                $arr['qingzhencai']=$this->shuls($a,$records,'cust_type_name','清真菜');
-                $arr['huoguo']=$this->shuls($a,$records,'cust_type_name','火锅');
-                $arr['saokao']=$this->shuls($a,$records,'cust_type_name','烧烤');
-                $arr['yuecai']=$this->shuls($a,$records,'cust_type_name','粤菜');
-                $arr['zizhu']=$this->shuls($a,$records,'cust_type_name','自助餐');
-                $arr['chacanting']=$this->shuls($a,$records,'cust_type_name','茶餐厅');
-                $arr['xican']=$this->shuls($a,$records,'cust_type_name','西餐');
-                $arr['yuenancai']=$this->shuls($a,$records,'cust_type_name','越南菜');
-                $arr['mianbao']=$this->shuls($a,$records,'cust_type_name','面包甜点');
-                $arr['yingping']=$this->shuls($a,$records,'cust_type_name','饮品店');
-                $arr['qitab']=$this->shuls($a,$records,'cust_type_name','其他(餐饮)');
-                $arr['sisdian']=$this->shuls($a,$records,'cust_type_name','4S店');
-                $arr['ktv']=$this->shuls($a,$records,'cust_type_name','KTV');
-                $arr['meifa']=$this->shuls($a,$records,'cust_type_name','美发');
-                $arr['tiyuguan']=$this->shuls($a,$records,'cust_type_name','体育馆');
-                $arr['bianlidian']=$this->shuls($a,$records,'cust_type_name','便利店');
-                $arr['julebu']=$this->shuls($a,$records,'cust_type_name','俱乐部');
-                $arr['jianshenhuisuo']=$this->shuls($a,$records,'cust_type_name','健身/舞蹈会所');
-                $arr['qitac']=$this->shuls($a,$records,'cust_type_name','其他(非餐饮)');
-                $arr['xiezilou']=$this->shuls($a,$records,'cust_type_name','写字楼');
-                $arr['yiyuan']=$this->shuls($a,$records,'cust_type_name','医院');
-                $arr['peixunjigou']=$this->shuls($a,$records,'cust_type_name','培训机构');
-                $arr['xuexiao']=$this->shuls($a,$records,'cust_type_name','学校');
-                $arr['gongcang']=$this->shuls($a,$records,'cust_type_name','工厂');
-                $arr['yinglou']=$this->shuls($a,$records,'cust_type_name','影楼');
-                $arr['yingyuan']=$this->shuls($a,$records,'cust_type_name','影院');
-                $arr['fangdican']=$this->shuls($a,$records,'cust_type_name','房地产');
-                $arr['shuiliao']=$this->shuls($a,$records,'cust_type_name','水疗会所');
-                $arr['youyong']=$this->shuls($a,$records,'cust_type_name','游泳馆');
-                $arr['wuye']=$this->shuls($a,$records,'cust_type_name','物业');
-                $arr['wangba']=$this->shuls($a,$records,'cust_type_name','网吧');
-                $arr['yinhang']=$this->shuls($a,$records,'cust_type_name','银行');
-                $arr['chaoshi']=$this->shuls($a,$records,'cust_type_name','超市');
-                $arr['jiuba']=$this->shuls($a,$records,'cust_type_name','酒吧');
-                $arr['jiudian']=$this->shuls($a,$records,'cust_type_name','酒店');
-                $arr['zhengfu']=$this->shuls($a,$records,'cust_type_name','政府及企事业单位');
+                }
+                $arr['nofood']=$record;
+                $sql2 = "select name
+				from sal_visit_type
+			";
+                $record = Yii::app()->db->createCommand($sql2)->queryAll();
+                for($i=0;$i<count($record);$i++){
+                    array_push($record[$i],$this->shuls($jiudian,$records,'visit_type_name',$record[$i]['name']));
+
+                }
+                $arr['visit']=$record;
+                $sql2 = "select name
+				from sal_visit_obj
+			";
+                $record = Yii::app()->db->createCommand($sql2)->queryAll();
+                for($i=0;$i<count($record);$i++){
+                    array_push($record[$i],$this->shuls($jiudian,$records,'visit_obj_name',$record[$i]['name']));
+
+                }
+                $arr['obj']=$record;
                 $sql1 = "select name
 				from sal_cust_district
 				where city='".$city."' ";
                 $record = Yii::app()->db->createCommand($sql1)->queryAll();
                 for($i=0;$i<count($record);$i++){
-                    array_push($record[$i],$this->shuls($a,$records,'district_name',$record[$i]['name']));
+                    array_push($record[$i],$this->shuls($jiudian,$records,'district_name',$record[$i]['name']));
                 }
                 $meney=$this->moneys($records);
                 $arr['address']=$record;
@@ -667,7 +592,7 @@ class ReportVisitForm extends CReportForm
         $jiudian=0;
         $sql2 = "select name
 				from sal_cust_type
-				where city='".$model['city']."' or city='99999' and type_group='1'";
+				where city='".$city."' or city='99999' and type_group='1'";
         $record = Yii::app()->db->createCommand($sql2)->queryAll();
         for($i=0;$i<count($record);$i++){
             array_push($record[$i],$this->shul($jiudian,$records,'cust_type_name',$record[$i]['name']));
@@ -676,7 +601,7 @@ class ReportVisitForm extends CReportForm
         $arr['food']=$record;
         $sql2 = "select name
 				from sal_cust_type
-				where city='".$model['city']."' or city='99999' and type_group='2'";
+				where city='".$city."' or city='99999' and type_group='2'";
         $record = Yii::app()->db->createCommand($sql2)->queryAll();
         for($i=0;$i<count($record);$i++){
             array_push($record[$i],$this->shul($jiudian,$records,'cust_type_name',$record[$i]['name']));
@@ -741,83 +666,61 @@ class ReportVisitForm extends CReportForm
 				where city='".$city."' ";
         $record = Yii::app()->db->createCommand($sql1)->queryAll();
         $arr=array();
-        $mobai=array();
-        $arr['mobai']=$this->shuls($mobai,$records,'visit_type_name','陌拜');
-        $arr['richanggengjin']=$this->shuls($mobai,$records,'visit_type_name','日常跟进');
-        $arr['kehuziyuan']=$this->shuls($mobai,$records,'visit_type_name','客户资源');
-        $arr['dianhuashangmen']=$this->shuls($mobai,$records,'visit_type_name','电话上门');
-        $arr['shouci']=$this->shuls($mobai,$records,'visit_obj_name','首次');
-        $arr['huifang']=$this->shuls($mobai,$records,'visit_obj_name','回访');
-        $arr['zengjiaxiangmu']=$this->shuls($mobai,$records,'visit_obj_name','增加项目');
-        $arr['tingfuwu']=$this->shuls($mobai,$records,'visit_obj_name','停服务');
-        $arr['jianjia']=$this->shuls($mobai,$records,'visit_obj_name','减价');
-        $arr['keshu']=$this->shuls($mobai,$records,'visit_obj_name','客诉');
-        $arr['baojia']=$this->shuls($mobai,$records,'visit_obj_name','报价');
-        $arr['jiuke']=$this->shuls($mobai,$records,'visit_obj_name','救客');
-        $arr['genghuanxiangmu']=$this->shuls($mobai,$records,'visit_obj_name','更换项目');
-        $arr['qiandan']=$this->shuls($mobai,$records,'visit_obj_name','签单');
-        $arr['xuyue']=$this->shuls($mobai,$records,'visit_obj_name','续约');
-        $arr['zuikuan']=$this->shuls($mobai,$records,'visit_obj_name','追款');
-        $arr['qitaa']=$this->shuls($mobai,$records,'visit_obj_name','其他');
-
-        $arr['dongbeicai']=$this->shuls($mobai,$records,'cust_type_name','东北/西北菜');
-        $arr['kafeiting']=$this->shuls($mobai,$records,'cust_type_name','咖啡厅');
-        $arr['xiaochi']=$this->shuls($mobai,$records,'cust_type_name','小吃快餐');
-        $arr['chuancai']=$this->shuls($mobai,$records,'cust_type_name','川湘菜');
-        $arr['riliao']=$this->shuls($mobai,$records,'cust_type_name','日韩料理');
-        $arr['taiguocai']=$this->shuls($mobai,$records,'cust_type_name','泰国菜');
-        $arr['zejiangcai']=$this->shuls($mobai,$records,'cust_type_name','浙江菜');
-        $arr['qingzhencai']=$this->shuls($mobai,$records,'cust_type_name','清真菜');
-        $arr['huoguo']=$this->shuls($mobai,$records,'cust_type_name','火锅');
-        $arr['saokao']=$this->shuls($mobai,$records,'cust_type_name','烧烤');
-        $arr['yuecai']=$this->shuls($mobai,$records,'cust_type_name','粤菜');
-        $arr['zizhu']=$this->shuls($mobai,$records,'cust_type_name','自助餐');
-        $arr['chacanting']=$this->shuls($mobai,$records,'cust_type_name','茶餐厅');
-        $arr['xican']=$this->shuls($mobai,$records,'cust_type_name','西餐');
-        $arr['yuenancai']=$this->shuls($mobai,$records,'cust_type_name','越南菜');
-        $arr['mianbao']=$this->shuls($mobai,$records,'cust_type_name','面包甜点');
-        $arr['yingping']=$this->shuls($mobai,$records,'cust_type_name','饮品店');
-        $arr['qitab']=$this->shuls($mobai,$records,'cust_type_name','其他(餐饮)');
-        $arr['sisdian']=$this->shuls($mobai,$records,'cust_type_name','4S店');
-        $arr['ktv']=$this->shuls($mobai,$records,'cust_type_name','KTV');
-        $arr['meifa']=$this->shuls($mobai,$records,'cust_type_name','美发');
-        $arr['tiyuguan']=$this->shuls($mobai,$records,'cust_type_name','体育馆');
-        $arr['bianlidian']=$this->shuls($mobai,$records,'cust_type_name','便利店');
-        $arr['julebu']=$this->shuls($mobai,$records,'cust_type_name','俱乐部');
-        $arr['jianshenhuisuo']=$this->shuls($mobai,$records,'cust_type_name','健身/舞蹈会所');
-        $arr['qitac']=$this->shuls($mobai,$records,'cust_type_name','其他(非餐饮)');
-        $arr['xiezilou']=$this->shuls($mobai,$records,'cust_type_name','写字楼');
-        $arr['yiyuan']=$this->shuls($mobai,$records,'cust_type_name','医院');
-        $arr['peixunjigou']=$this->shuls($mobai,$records,'cust_type_name','培训机构');
-        $arr['xuexiao']=$this->shuls($mobai,$records,'cust_type_name','学校');
-        $arr['gongcang']=$this->shuls($mobai,$records,'cust_type_name','工厂');
-        $arr['yinglou']=$this->shuls($mobai,$records,'cust_type_name','影楼');
-        $arr['yingyuan']=$this->shuls($mobai,$records,'cust_type_name','影院');
-        $arr['fangdican']=$this->shuls($mobai,$records,'cust_type_name','房地产');
-        $arr['shuiliao']=$this->shuls($mobai,$records,'cust_type_name','水疗会所');
-        $arr['youyong']=$this->shuls($mobai,$records,'cust_type_name','游泳馆');
-        $arr['wuye']=$this->shuls($mobai,$records,'cust_type_name','物业');
-        $arr['wangba']=$this->shuls($mobai,$records,'cust_type_name','网吧');
-        $arr['yinhang']=$this->shuls($mobai,$records,'cust_type_name','银行');
-        $arr['chaoshi']=$this->shuls($mobai,$records,'cust_type_name','超市');
-        $arr['jiuba']=$this->shuls($mobai,$records,'cust_type_name','酒吧');
-        $arr['jiudian']=$this->shuls($mobai,$records,'cust_type_name','酒店');
-        $arr['zhengfu']=$this->shuls($mobai,$records,'cust_type_name','政府及企事业单位');
+        $jiudian=0;
+        $sql2 = "select name
+				from sal_cust_type
+				where city='".$city."' or city='99999' and type_group='1'";
+        $record = Yii::app()->db->createCommand($sql2)->queryAll();
         for($i=0;$i<count($record);$i++){
-            array_push($record[$i],$this->shuls($mobai,$records,'district_name',$record[$i]['name']));
+            array_push($record[$i],$this->shuls($jiudian,$records,'cust_type_name',$record[$i]['name']));
+
+        }
+        $arr['food']=$record;
+        $sql2 = "select name
+				from sal_cust_type
+				where city='".$city."' or city='99999' and type_group='2'";
+        $record = Yii::app()->db->createCommand($sql2)->queryAll();
+        for($i=0;$i<count($record);$i++){
+            array_push($record[$i],$this->shuls($jiudian,$records,'cust_type_name',$record[$i]['name']));
+
+        }
+        $arr['nofood']=$record;
+        $sql2 = "select name
+				from sal_visit_type
+			";
+        $record = Yii::app()->db->createCommand($sql2)->queryAll();
+        for($i=0;$i<count($record);$i++){
+            array_push($record[$i],$this->shuls($jiudian,$records,'visit_type_name',$record[$i]['name']));
+
+        }
+        $arr['visit']=$record;
+        $sql2 = "select name
+				from sal_visit_obj
+			";
+        $record = Yii::app()->db->createCommand($sql2)->queryAll();
+        for($i=0;$i<count($record);$i++){
+            array_push($record[$i],$this->shuls($jiudian,$records,'visit_obj_name',$record[$i]['name']));
+
+        }
+        $arr['obj']=$record;
+        $sql1 = "select name
+				from sal_cust_district
+				where city='".$city."' ";
+        $record = Yii::app()->db->createCommand($sql1)->queryAll();
+        for($i=0;$i<count($record);$i++){
+            array_push($record[$i],$this->shuls($jiudian,$records,'district_name',$record[$i]['name']));
 
         }
         $meney=$this->moneys($records);
         $arr['address']=$record;
         $arr['money']=$meney;
-//        print_r('<pre/>');
-//        print_r($records);
+
         return $arr;
 
     }
 
     public function shul($sum,$records,$name,$names){
-        $all=0;
+	    $all=0;
         $sum_arr=array();
         $sum=array();
         for($i=0;$i<count($records);$i++){
@@ -872,7 +775,7 @@ class ReportVisitForm extends CReportForm
     }
 
     public function shuls($sum,$records,$name,$names){
-        $all=0;
+	    $all=0;
         $sum_arr=array();
         $sum=array();
         for($i=0;$i<count($records);$i++){
@@ -933,15 +836,15 @@ class ReportVisitForm extends CReportForm
         $a=0;
         $sum_arr=array();
         for($i=0;$i<count($records);$i++){
-            if(strpos($records[$i]['visit_obj_name'],'签单')!==false){
+	        if(strpos($records[$i]['visit_obj_name'],'签单')!==false){
                 $sqlid="select count(visit_id) as sum from  sal_visit_info where field_id in ('svc_A7','svc_B6','svc_C7','svc_D6','svc_E7') and field_value>'0' and visit_id='".$records[$i]['id']."'";
                 $model = Yii::app()->db->createCommand($sqlid)->queryRow();
                 $sum_arr[]=$model['sum'];
-                $sql="select * from sal_visit_info where visit_id = '".$records[$i]['id']."'";
+	            $sql="select * from sal_visit_info where visit_id = '".$records[$i]['id']."'";
                 $rows = Yii::app()->db->createCommand($sql)->queryAll();
-                foreach ($rows as $v){
-                    $arr[$v['field_id']]=$v['field_value'];
-                }
+               foreach ($rows as $v){
+                   $arr[$v['field_id']]=$v['field_value'];
+               }
                 if(empty($arr['svc_A7'])){
                     $arr['svc_A7']=0;
                 }
@@ -1037,18 +940,7 @@ class ReportVisitForm extends CReportForm
             $ex=$i;
             $i1=$i+1;
             $i2=$i+2;
-            $i3=$i+3;
-            $i4=$i+4;
-            $i5=$i+5;
-            $i6=$i+6;
-            $i7=$i+7;
-            $i8=$i+8;
-            $i9=$i+9;
-            $i10=$i+10;
-            $i11=$i+11;
-            $i12=$i+12;
-            $i13=$i+13;
-
+            $i13=$i+2;
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,'部门总数据') ;
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'总拜访量'.$model['all']['money']['all'].'签单量：'.$model['all']['money']['sum'].'签单金额'.$model['all']['money']['money']) ;
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$i.':AC'.$i);
@@ -1056,256 +948,201 @@ class ReportVisitForm extends CReportForm
             $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25);
             $objPHPExcel->getActiveSheet()->getRowDimension($i1)->setRowHeight(25);
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$i2,'拜访类型') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i2,'陌拜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i2,$model['all']['mobai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i2,$model['all']['mobai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i2,$model['all']['mobai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i2,'日常跟进') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i2,$model['all']['richanggengjin']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i2,$model['all']['richanggengjin']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i2,$model['all']['richanggengjin']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i2,'客户资源') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i2,$model['all']['kehuziyuan']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i2,$model['all']['kehuziyuan']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i2,$model['all']['kehuziyuan']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i2,'电话上门') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i2,$model['all']['dianhuashangmen']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i2,$model['all']['dianhuashangmen']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i2,$model['all']['dianhuashangmen']['money']) ;
-
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i3,'拜访目的') ;
-            $objPHPExcel->getActiveSheet()->mergeCells('A'.$i3.':A'.$i4);
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i3,'首次') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i3,$model['all']['shouci']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i3,$model['all']['shouci']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i3,$model['all']['shouci']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i3,'客诉') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i3,$model['all']['keshu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i3,$model['all']['keshu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i3,$model['all']['keshu']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i3,'续约') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i3,$model['all']['xuyue']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i3,$model['all']['xuyue']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i3,$model['all']['xuyue']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i3,'回访') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i3,$model['all']['huifang']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i3,$model['all']['huifang']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i3,$model['all']['huifang']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i3,'报价') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i3,$model['all']['baojia']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i3,$model['all']['baojia']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i3,$model['all']['baojia']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i3,'追款') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i3,$model['all']['zuikuan']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i3,$model['all']['zuikuan']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i3,$model['all']['zuikuan']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i3,'减价') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i3,$model['all']['jianjia']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i3,$model['all']['jianjia']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i3,$model['all']['jianjia']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i4,'停服务') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i4,$model['all']['tingfuwu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i4,$model['all']['tingfuwu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i4,$model['all']['tingfuwu']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i4,'更换项目') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i4,$model['all']['genghuanxiangmu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i4,$model['all']['genghuanxiangmu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i4,$model['all']['genghuanxiangmu']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i4,'增加项目') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i4,$model['all']['zengjiaxiangmu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i4,$model['all']['zengjiaxiangmu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i4,$model['all']['zengjiaxiangmu']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i4,'救客') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i4,$model['all']['jiuke']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i4,$model['all']['jiuke']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i4,$model['all']['jiuke']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i4,'其他') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i4,$model['all']['qitaa']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i4,$model['all']['qitaa']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i4,$model['all']['qitaa']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i4,'签单') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i4,$model['all']['qiandan']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i4,$model['all']['qiandan']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i4,$model['all']['qiandan']['money']) ;
-
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i5,'客服类别（餐饮）') ;
-            $objPHPExcel->getActiveSheet()->mergeCells('A'.$i5.':A'.$i7);
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i5,'东/西北菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i5,$model['all']['dongbeicai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i5,$model['all']['dongbeicai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i5,$model['all']['dongbeicai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i5,'泰国菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i5,$model['all']['taiguocai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i5,$model['all']['taiguocai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i5,$model['all']['taiguocai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i5,'粤菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i5,$model['all']['yuecai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i5,$model['all']['yuecai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i5,$model['all']['yuecai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i5,'面包甜点') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i5,$model['all']['mianbao']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i5,$model['all']['mianbao']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i5,$model['all']['mianbao']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i5,'川湘菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i5,$model['all']['chuancai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i5,$model['all']['chuancai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i5,$model['all']['chuancai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i5,'火锅') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i5,$model['all']['huoguo']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i5,$model['all']['huoguo']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i5,$model['all']['huoguo']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i5,'西餐') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i5,$model['all']['xican']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i5,$model['all']['xican']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i5,$model['all']['xican']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i6,'咖啡厅') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i6,$model['all']['kafeiting']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i6,$model['all']['kafeiting']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i6,$model['all']['kafeiting']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i6,'浙江菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i6,$model['all']['zejiangcai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i6,$model['all']['zejiangcai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i6,$model['all']['zejiangcai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i6,'自助餐') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i6,$model['all']['zizhu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i6,$model['all']['zizhu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i6,$model['all']['zizhu']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i6,'饮品店') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i6,$model['all']['yingping']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i6,$model['all']['yingping']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i6,$model['all']['yingping']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i6,'日韩料理') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i6,$model['all']['riliao']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i6,$model['all']['riliao']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i6,$model['all']['riliao']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i6,'烧烤') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i6,$model['all']['saokao']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i6,$model['all']['saokao']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i6,$model['all']['saokao']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i6,'越南菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i6,$model['all']['yuenancai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i6,$model['all']['yuenancai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i6,$model['all']['yuenancai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i7,'小吃快餐') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i7,$model['all']['xiaochi']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i7,$model['all']['xiaochi']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i7,$model['all']['xiaochi']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i7,'清真菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i7,$model['all']['qingzhencai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i7,$model['all']['qingzhencai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i7,$model['all']['qingzhencai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i7,'茶餐厅') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i7,$model['all']['chacanting']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i7,$model['all']['chacanting']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i7,$model['all']['chacanting']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i7,'其他') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i7,$model['all']['qitab']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i7,$model['all']['qitab']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i7,$model['all']['qitab']['money']) ;
-
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i8,'客服类别（非餐饮）') ;
-            $objPHPExcel->getActiveSheet()->mergeCells('A'.$i8.':A'.$i11);
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i8,'4S店') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i8,$model['all']['sisdian']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i8,$model['all']['sisdian']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i8,$model['all']['sisdian']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i8,'健身会所') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i8,$model['all']['jianshenhuisuo']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i8,$model['all']['jianshenhuisuo']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i8,$model['all']['jianshenhuisuo']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i8,'房地产') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i8,$model['all']['fangdican']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i8,$model['all']['fangdican']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i8,$model['all']['fangdican']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i8,'美容/发馆') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i8,$model['all']['meifa']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i8,$model['all']['meifa']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i8,$model['all']['meifa']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i8,'银行') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i8,$model['all']['yinhang']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i8,$model['all']['yinhang']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i8,$model['all']['yinhang']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i8,'俱乐部') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i8,$model['all']['julebu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i8,$model['all']['julebu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i8,$model['all']['julebu']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i8,'培训机构') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i8,$model['all']['peixunjigou']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i8,$model['all']['peixunjigou']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i8,$model['all']['peixunjigou']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i9,'KTV') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i9,$model['all']['ktv']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i9,$model['all']['ktv']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i9,$model['all']['ktv']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i9,'其他') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i9,$model['all']['qitac']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i9,$model['all']['qitac']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i9,$model['all']['qitac']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i9,'学校') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i9,$model['all']['xuexiao']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i9,$model['all']['xuexiao']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i9,$model['all']['xuexiao']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i9,'水疗会所') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i9,$model['all']['shuiliao']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i9,$model['all']['shuiliao']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i9,$model['all']['shuiliao']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i9,'超市') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i9,$model['all']['chaoshi']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i9,$model['all']['chaoshi']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i9,$model['all']['chaoshi']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i9,'网吧') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i9,$model['all']['wangba']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i9,$model['all']['wangba']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i9,$model['all']['wangba']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i9,'影院') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i9,$model['all']['yingyuan']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i9,$model['all']['yingyuan']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i9,$model['all']['yingyuan']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i10,'体育馆') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i10,$model['all']['tiyuguan']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i10,$model['all']['tiyuguan']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i10,$model['all']['tiyuguan']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i10,'写字楼') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i10,$model['all']['xiezilou']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i10,$model['all']['xiezilou']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i10,$model['all']['xiezilou']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i10,'工厂') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i10,$model['all']['gongcang']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i10,$model['all']['gongcang']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i10,$model['all']['gongcang']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i10,'游泳馆') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i10,$model['all']['youyong']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i10,$model['all']['youyong']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i10,$model['all']['youyong']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i10,'酒吧') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i10,$model['all']['jiuba']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i10,$model['all']['jiuba']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i10,$model['all']['jiuba']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i10,'物业') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i10,$model['all']['wuye']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i10,$model['all']['wuye']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i10,$model['all']['wuye']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i10,'酒店') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i10,$model['all']['jiudian']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i10,$model['all']['jiudian']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i10,$model['all']['jiudian']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i11,'便利店') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i11,$model['all']['bianlidian']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i11,$model['all']['bianlidian']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i11,$model['all']['bianlidian']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i11,'医院') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i11,$model['all']['yiyuan']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i11,$model['all']['yiyuan']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i11,$model['all']['yiyuan']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i11,'影楼') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i11,$model['all']['yinglou']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i11,$model['all']['yinglou']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i11,$model['all']['yinglou']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i12,'政府及企事业单位') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i12,$model['all']['zhengfu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i12,$model['all']['zhengfu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i12,$model['all']['zhengfu']['money']) ;
-
+            $a=$i13;
+            for($o=1;$o<count($model['all']['visit']);$o++){
+                if($o%7==1){
+                    $objPHPExcel->getActiveSheet()->setCellValue('B'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('C'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('D'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                }
+                if($o%7==2){
+                    $objPHPExcel->getActiveSheet()->setCellValue('F'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('I'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                }
+                if($o%7==3){
+                    $objPHPExcel->getActiveSheet()->setCellValue('J'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('K'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('L'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('M'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                }
+                if($o%7==4){
+                    $objPHPExcel->getActiveSheet()->setCellValue('N'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('O'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('P'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                }
+                if($o%7==5){
+                    $objPHPExcel->getActiveSheet()->setCellValue('R'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('S'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('T'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('U'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                }
+                if($o%7==6){
+                    $objPHPExcel->getActiveSheet()->setCellValue('V'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('W'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('X'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                }
+                if($o%7==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                    $i13=$i13+1;
+                }
+            }
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
+            $i13=$i13+1;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'拜访目的') ;
+            $a=$i13;
+            for($o=1;$o<count($model['all']['obj']);$o++){
+                if($o%7==1){
+                    $objPHPExcel->getActiveSheet()->setCellValue('B'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('C'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('D'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                }
+                if($o%7==2){
+                    $objPHPExcel->getActiveSheet()->setCellValue('F'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('I'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                }
+                if($o%7==3){
+                    $objPHPExcel->getActiveSheet()->setCellValue('J'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('K'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('L'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('M'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                }
+                if($o%7==4){
+                    $objPHPExcel->getActiveSheet()->setCellValue('N'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('O'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('P'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                }
+                if($o%7==5){
+                    $objPHPExcel->getActiveSheet()->setCellValue('R'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('S'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('T'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('U'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                }
+                if($o%7==6){
+                    $objPHPExcel->getActiveSheet()->setCellValue('V'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('W'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('X'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                }
+                if($o%7==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                    $i13=$i13+1;
+                }
+            }
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
+            $i13=$i13+1;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客服类别（餐饮）') ;
+            $a=$i13;
+            for($o=1;$o<count($model['all']['food']);$o++){
+                if($o%7==1){
+                    $objPHPExcel->getActiveSheet()->setCellValue('B'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('C'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('D'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$i13,$model['all']['food'][$o][0]['money']) ;
+                }
+                if($o%7==2){
+                    $objPHPExcel->getActiveSheet()->setCellValue('F'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('I'.$i13,$model['all']['food'][$o][0]['money']) ;
+                }
+                if($o%7==3){
+                    $objPHPExcel->getActiveSheet()->setCellValue('J'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('K'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('L'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('M'.$i13,$model['all']['food'][$o][0]['money']) ;
+                }
+                if($o%7==4){
+                    $objPHPExcel->getActiveSheet()->setCellValue('N'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('O'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('P'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i13,$model['all']['food'][$o][0]['money']) ;
+                }
+                if($o%7==5){
+                    $objPHPExcel->getActiveSheet()->setCellValue('R'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('S'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('T'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('U'.$i13,$model['all']['food'][$o][0]['money']) ;
+                }
+                if($o%7==6){
+                    $objPHPExcel->getActiveSheet()->setCellValue('V'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('W'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('X'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i13,$model['all']['food'][$o][0]['money']) ;
+                }
+                if($o%7==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i13,$model['all']['food'][$o][0]['money']) ;
+                    $i13=$i13+1;
+                }
+            }
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
+            $i13=$i13+1;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客服类别（非餐饮）') ;
+            $a=$i13;
+            for($o=1;$o<count($model['all']['nofood']);$o++){
+                if($o%7==1){
+                    $objPHPExcel->getActiveSheet()->setCellValue('B'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('C'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('D'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                }
+                if($o%7==2){
+                    $objPHPExcel->getActiveSheet()->setCellValue('F'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('I'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                }
+                if($o%7==3){
+                    $objPHPExcel->getActiveSheet()->setCellValue('J'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('K'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('L'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('M'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                }
+                if($o%7==4){
+                    $objPHPExcel->getActiveSheet()->setCellValue('N'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('O'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('P'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                }
+                if($o%7==5){
+                    $objPHPExcel->getActiveSheet()->setCellValue('R'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('S'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('T'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('U'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                }
+                if($o%7==6){
+                    $objPHPExcel->getActiveSheet()->setCellValue('V'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('W'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('X'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                }
+                if($o%7==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                    $i13=$i13+1;
+                }
+            }
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
+            $i13=$i13+1;
 //            区域的
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'区域') ;
             $a=$i13;
@@ -1377,17 +1214,7 @@ class ReportVisitForm extends CReportForm
                 $ex=$i;
                 $i1=$i+1;
                 $i2=$i+2;
-                $i3=$i+3;
-                $i4=$i+4;
-                $i5=$i+5;
-                $i6=$i+6;
-                $i7=$i+7;
-                $i8=$i+8;
-                $i9=$i+9;
-                $i10=$i+10;
-                $i11=$i+11;
-                $i12=$i+12;
-                $i13=$i+13;
+                $i13=$i+2;
                 $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,$arr['name']) ;
                 $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'总拜访量'.$arr['money']['all'].'签单量：'.$arr['money']['sum'].'签单金额'.$arr['money']['money']) ;
                 $objPHPExcel->getActiveSheet()->mergeCells('A'.$i.':AC'.$i);
@@ -1395,255 +1222,201 @@ class ReportVisitForm extends CReportForm
                 $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25);
                 $objPHPExcel->getActiveSheet()->getRowDimension($i1)->setRowHeight(25);
                 $objPHPExcel->getActiveSheet()->setCellValue('A'.$i2,'拜访类型') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$i2,'陌拜') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$i2,$arr['mobai']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$i2,$arr['mobai']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$i2,$arr['mobai']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$i2,'日常跟进') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$i2,$arr['richanggengjin']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$i2,$arr['richanggengjin']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$i2,$arr['richanggengjin']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('J'.$i2,'客户资源') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('K'.$i2,$arr['kehuziyuan']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('L'.$i2,$arr['kehuziyuan']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('M'.$i2,$arr['kehuziyuan']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('N'.$i2,'电话上门') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('O'.$i2,$arr['dianhuashangmen']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('P'.$i2,$arr['dianhuashangmen']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i2,$arr['dianhuashangmen']['money']) ;
-
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i3,'拜访目的') ;
-                $objPHPExcel->getActiveSheet()->mergeCells('A'.$i3.':A'.$i4);
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$i3,'首次') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$i3,$arr['shouci']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$i3,$arr['shouci']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$i3,$arr['shouci']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$i3,'客诉') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$i3,$arr['keshu']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$i3,$arr['keshu']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$i3,$arr['keshu']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('J'.$i3,'续约') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('K'.$i3,$arr['xuyue']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('L'.$i3,$arr['xuyue']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('M'.$i3,$arr['xuyue']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('N'.$i3,'回访') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('O'.$i3,$arr['huifang']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('P'.$i3,$arr['huifang']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i3,$arr['huifang']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('R'.$i3,'报价') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('S'.$i3,$arr['baojia']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('T'.$i3,$arr['baojia']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('U'.$i3,$arr['baojia']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('V'.$i3,'追款') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('W'.$i3,$arr['zuikuan']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('X'.$i3,$arr['zuikuan']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i3,$arr['zuikuan']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i3,'减价') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i3,$arr['jianjia']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i3,$arr['jianjia']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i3,$arr['jianjia']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$i4,'停服务') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$i4,$arr['tingfuwu']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$i4,$arr['tingfuwu']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$i4,$arr['tingfuwu']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$i4,'更换项目') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$i4,$arr['genghuanxiangmu']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$i4,$arr['genghuanxiangmu']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$i4,$arr['genghuanxiangmu']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('J'.$i4,'增加项目') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('K'.$i4,$arr['zengjiaxiangmu']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('L'.$i4,$arr['zengjiaxiangmu']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('M'.$i4,$arr['zengjiaxiangmu']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('N'.$i4,'救客') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('O'.$i4,$arr['jiuke']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('P'.$i4,$arr['jiuke']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i4,$arr['jiuke']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('R'.$i4,'其他') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('S'.$i4,$arr['qitaa']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('T'.$i4,$arr['qitaa']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('U'.$i4,$arr['qitaa']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('V'.$i4,'签单') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('W'.$i4,$arr['qiandan']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('X'.$i4,$arr['qiandan']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i4,$arr['qiandan']['money']) ;
-
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i5,'客服类别（餐饮）') ;
-                $objPHPExcel->getActiveSheet()->mergeCells('A'.$i5.':A'.$i7);
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$i5,'东/西北菜') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$i5,$arr['dongbeicai']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$i5,$arr['dongbeicai']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$i5,$arr['dongbeicai']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$i5,'泰国菜') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$i5,$arr['taiguocai']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$i5,$arr['taiguocai']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$i5,$arr['taiguocai']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('J'.$i5,'粤菜') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('K'.$i5,$arr['yuecai']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('L'.$i5,$arr['yuecai']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('M'.$i5,$arr['yuecai']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('N'.$i5,'面包甜点') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('O'.$i5,$arr['mianbao']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('P'.$i5,$arr['mianbao']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i5,$arr['mianbao']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('R'.$i5,'川湘菜') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('S'.$i5,$arr['chuancai']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('T'.$i5,$arr['chuancai']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('U'.$i5,$arr['chuancai']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('V'.$i5,'火锅') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('W'.$i5,$arr['huoguo']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('X'.$i5,$arr['huoguo']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i5,$arr['huoguo']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i5,'西餐') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i5,$arr['xican']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i5,$arr['xican']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i5,$arr['xican']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$i6,'咖啡厅') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$i6,$arr['kafeiting']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$i6,$arr['kafeiting']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$i6,$arr['kafeiting']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$i6,'浙江菜') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$i6,$arr['zejiangcai']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$i6,$arr['zejiangcai']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$i6,$arr['zejiangcai']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('J'.$i6,'自助餐') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('K'.$i6,$arr['zizhu']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('L'.$i6,$arr['zizhu']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('M'.$i6,$arr['zizhu']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('N'.$i6,'饮品店') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('O'.$i6,$arr['yingping']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('P'.$i6,$arr['yingping']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i6,$arr['yingping']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('R'.$i6,'日韩料理') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('S'.$i6,$arr['riliao']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('T'.$i6,$arr['riliao']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('U'.$i6,$arr['riliao']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('V'.$i6,'烧烤') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('W'.$i6,$arr['saokao']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('X'.$i6,$arr['saokao']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i6,$arr['saokao']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i6,'越南菜') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i6,$arr['yuenancai']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i6,$arr['yuenancai']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i6,$arr['yuenancai']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$i7,'小吃快餐') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$i7,$arr['xiaochi']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$i7,$arr['xiaochi']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$i7,$arr['xiaochi']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$i7,'清真菜') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$i7,$arr['qingzhencai']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$i7,$arr['qingzhencai']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$i7,$arr['qingzhencai']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('J'.$i7,'茶餐厅') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('K'.$i7,$arr['chacanting']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('L'.$i7,$arr['chacanting']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('M'.$i7,$arr['chacanting']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('N'.$i7,'其他') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('O'.$i7,$arr['qitab']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('P'.$i7,$arr['qitab']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i7,$arr['qitab']['money']) ;
-
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i8,'客服类别（非餐饮）') ;
-                $objPHPExcel->getActiveSheet()->mergeCells('A'.$i8.':A'.$i11);
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$i8,'4S店') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$i8,$arr['sisdian']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$i8,$arr['sisdian']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$i8,$arr['sisdian']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$i8,'健身会所') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$i8,$arr['jianshenhuisuo']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$i8,$arr['jianshenhuisuo']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$i8,$arr['jianshenhuisuo']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('J'.$i8,'房地产') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('K'.$i8,$arr['fangdican']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('L'.$i8,$arr['fangdican']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('M'.$i8,$arr['fangdican']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('N'.$i8,'美容/发馆') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('O'.$i8,$arr['meifa']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('P'.$i8,$arr['meifa']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i8,$arr['meifa']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('R'.$i8,'银行') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('S'.$i8,$arr['yinhang']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('T'.$i8,$arr['yinhang']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('U'.$i8,$arr['yinhang']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('V'.$i8,'俱乐部') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('W'.$i8,$arr['julebu']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('X'.$i8,$arr['julebu']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i8,$arr['julebu']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i8,'培训机构') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i8,$arr['peixunjigou']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i8,$arr['peixunjigou']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i8,$arr['peixunjigou']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$i9,'KTV') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$i9,$arr['ktv']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$i9,$arr['ktv']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$i9,$arr['ktv']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$i9,'其他') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$i9,$arr['qitac']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$i9,$arr['qitac']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$i9,$arr['qitac']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('J'.$i9,'学校') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('K'.$i9,$arr['xuexiao']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('L'.$i9,$arr['xuexiao']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('M'.$i9,$arr['xuexiao']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('N'.$i9,'水疗会所') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('O'.$i9,$arr['shuiliao']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('P'.$i9,$arr['shuiliao']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i9,$arr['shuiliao']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('R'.$i9,'超市') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('S'.$i9,$arr['chaoshi']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('T'.$i9,$arr['chaoshi']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('U'.$i9,$arr['chaoshi']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('V'.$i9,'网吧') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('W'.$i9,$arr['wangba']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('X'.$i9,$arr['wangba']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i9,$arr['wangba']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i9,'影院') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i9,$arr['yingyuan']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i9,$arr['yingyuan']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i9,$arr['yingyuan']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$i10,'体育馆') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$i10,$arr['tiyuguan']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$i10,$arr['tiyuguan']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$i10,$arr['tiyuguan']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$i10,'写字楼') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$i10,$arr['xiezilou']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$i10,$arr['xiezilou']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$i10,$arr['xiezilou']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('J'.$i10,'工厂') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('K'.$i10,$arr['gongcang']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('L'.$i10,$arr['gongcang']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('M'.$i10,$arr['gongcang']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('N'.$i10,'游泳馆') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('O'.$i10,$arr['youyong']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('P'.$i10,$arr['youyong']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i10,$arr['youyong']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('R'.$i10,'酒吧') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('S'.$i10,$arr['jiuba']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('T'.$i10,$arr['jiuba']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('U'.$i10,$arr['jiuba']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('V'.$i10,'物业') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('W'.$i10,$arr['wuye']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('X'.$i10,$arr['wuye']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i10,$arr['wuye']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i10,'酒店') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i10,$arr['jiudian']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i10,$arr['jiudian']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i10,$arr['jiudian']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('B'.$i11,'便利店') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('C'.$i11,$arr['bianlidian']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('D'.$i11,$arr['bianlidian']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('E'.$i11,$arr['bianlidian']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('F'.$i11,'医院') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('G'.$i11,$arr['yiyuan']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('H'.$i11,$arr['yiyuan']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('I'.$i11,$arr['yiyuan']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('J'.$i11,'影楼') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('K'.$i11,$arr['yinglou']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('L'.$i11,$arr['yinglou']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('M'.$i11,$arr['yinglou']['money']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('N'.$i12,'政府及企事业单位') ;
-                $objPHPExcel->getActiveSheet()->setCellValue('O'.$i12,$arr['zhengfu']['all']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('P'.$i12,$arr['zhengfu']['sum']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i12,$arr['zhengfu']['money']) ;
+                $a=$i13;
+                for($o=1;$o<count($arr['visit']);$o++){
+                    if($o%7==1){
+                        $objPHPExcel->getActiveSheet()->setCellValue('B'.$i13,$arr['visit'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('C'.$i13,$arr['visit'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('D'.$i13,$arr['visit'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('E'.$i13,$arr['visit'][$o][0]['money']) ;
+                    }
+                    if($o%7==2){
+                        $objPHPExcel->getActiveSheet()->setCellValue('F'.$i13,$arr['visit'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('G'.$i13,$arr['visit'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('H'.$i13,$arr['visit'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('I'.$i13,$arr['visit'][$o][0]['money']) ;
+                    }
+                    if($o%7==3){
+                        $objPHPExcel->getActiveSheet()->setCellValue('J'.$i13,$arr['visit'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('K'.$i13,$arr['visit'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('L'.$i13,$arr['visit'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('M'.$i13,$arr['visit'][$o][0]['money']) ;
+                    }
+                    if($o%7==4){
+                        $objPHPExcel->getActiveSheet()->setCellValue('N'.$i13,$arr['visit'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('O'.$i13,$arr['visit'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('P'.$i13,$arr['visit'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i13,$arr['visit'][$o][0]['money']) ;
+                    }
+                    if($o%7==5){
+                        $objPHPExcel->getActiveSheet()->setCellValue('R'.$i13,$arr['visit'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('S'.$i13,$arr['visit'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('T'.$i13,$arr['visit'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('U'.$i13,$arr['visit'][$o][0]['money']) ;
+                    }
+                    if($o%7==6){
+                        $objPHPExcel->getActiveSheet()->setCellValue('V'.$i13,$arr['visit'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('W'.$i13,$arr['visit'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('X'.$i13,$arr['visit'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i13,$arr['visit'][$o][0]['money']) ;
+                    }
+                    if($o%7==0){
+                        $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i13,$arr['visit'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i13,$arr['visit'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i13,$arr['visit'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i13,$arr['visit'][$o][0]['money']) ;
+                        $i13=$i13+1;
+                    }
+                }
+                $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
+                $i13=$i13+1;
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'拜访目的') ;
+                $a=$i13;
+                for($o=1;$o<count($arr['obj']);$o++){
+                    if($o%7==1){
+                        $objPHPExcel->getActiveSheet()->setCellValue('B'.$i13,$arr['obj'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('C'.$i13,$arr['obj'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('D'.$i13,$arr['obj'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('E'.$i13,$arr['obj'][$o][0]['money']) ;
+                    }
+                    if($o%7==2){
+                        $objPHPExcel->getActiveSheet()->setCellValue('F'.$i13,$arr['obj'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('G'.$i13,$arr['obj'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('H'.$i13,$arr['obj'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('I'.$i13,$arr['obj'][$o][0]['money']) ;
+                    }
+                    if($o%7==3){
+                        $objPHPExcel->getActiveSheet()->setCellValue('J'.$i13,$arr['obj'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('K'.$i13,$arr['obj'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('L'.$i13,$arr['obj'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('M'.$i13,$arr['obj'][$o][0]['money']) ;
+                    }
+                    if($o%7==4){
+                        $objPHPExcel->getActiveSheet()->setCellValue('N'.$i13,$arr['obj'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('O'.$i13,$arr['obj'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('P'.$i13,$arr['obj'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i13,$arr['obj'][$o][0]['money']) ;
+                    }
+                    if($o%7==5){
+                        $objPHPExcel->getActiveSheet()->setCellValue('R'.$i13,$arr['obj'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('S'.$i13,$arr['obj'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('T'.$i13,$arr['obj'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('U'.$i13,$arr['obj'][$o][0]['money']) ;
+                    }
+                    if($o%7==6){
+                        $objPHPExcel->getActiveSheet()->setCellValue('V'.$i13,$arr['obj'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('W'.$i13,$arr['obj'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('X'.$i13,$arr['obj'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i13,$arr['obj'][$o][0]['money']) ;
+                    }
+                    if($o%7==0){
+                        $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i13,$arr['obj'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i13,$arr['obj'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i13,$arr['obj'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i13,$arr['obj'][$o][0]['money']) ;
+                        $i13=$i13+1;
+                    }
+                }
+                $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
+                $i13=$i13+1;
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客服类别（餐饮）') ;
+                $a=$i13;
+                for($o=1;$o<count($arr['food']);$o++){
+                    if($o%7==1){
+                        $objPHPExcel->getActiveSheet()->setCellValue('B'.$i13,$arr['food'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('C'.$i13,$arr['food'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('D'.$i13,$arr['food'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('E'.$i13,$arr['food'][$o][0]['money']) ;
+                    }
+                    if($o%7==2){
+                        $objPHPExcel->getActiveSheet()->setCellValue('F'.$i13,$arr['food'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('G'.$i13,$arr['food'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('H'.$i13,$arr['food'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('I'.$i13,$arr['food'][$o][0]['money']) ;
+                    }
+                    if($o%7==3){
+                        $objPHPExcel->getActiveSheet()->setCellValue('J'.$i13,$arr['food'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('K'.$i13,$arr['food'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('L'.$i13,$arr['food'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('M'.$i13,$arr['food'][$o][0]['money']) ;
+                    }
+                    if($o%7==4){
+                        $objPHPExcel->getActiveSheet()->setCellValue('N'.$i13,$arr['food'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('O'.$i13,$arr['food'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('P'.$i13,$arr['food'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i13,$arr['food'][$o][0]['money']) ;
+                    }
+                    if($o%7==5){
+                        $objPHPExcel->getActiveSheet()->setCellValue('R'.$i13,$arr['food'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('S'.$i13,$arr['food'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('T'.$i13,$arr['food'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('U'.$i13,$arr['food'][$o][0]['money']) ;
+                    }
+                    if($o%7==6){
+                        $objPHPExcel->getActiveSheet()->setCellValue('V'.$i13,$arr['food'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('W'.$i13,$arr['food'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('X'.$i13,$arr['food'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i13,$arr['food'][$o][0]['money']) ;
+                    }
+                    if($o%7==0){
+                        $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i13,$arr['food'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i13,$arr['food'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i13,$arr['food'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i13,$arr['food'][$o][0]['money']) ;
+                        $i13=$i13+1;
+                    }
+                }
+                $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
+                $i13=$i13+1;
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客服类别（非餐饮）') ;
+                $a=$i13;
+                for($o=1;$o<count($arr['nofood']);$o++){
+                    if($o%7==1){
+                        $objPHPExcel->getActiveSheet()->setCellValue('B'.$i13,$arr['nofood'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('C'.$i13,$arr['nofood'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('D'.$i13,$arr['nofood'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('E'.$i13,$arr['nofood'][$o][0]['money']) ;
+                    }
+                    if($o%7==2){
+                        $objPHPExcel->getActiveSheet()->setCellValue('F'.$i13,$arr['nofood'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('G'.$i13,$arr['nofood'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('H'.$i13,$arr['nofood'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('I'.$i13,$arr['nofood'][$o][0]['money']) ;
+                    }
+                    if($o%7==3){
+                        $objPHPExcel->getActiveSheet()->setCellValue('J'.$i13,$arr['nofood'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('K'.$i13,$arr['nofood'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('L'.$i13,$arr['nofood'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('M'.$i13,$arr['nofood'][$o][0]['money']) ;
+                    }
+                    if($o%7==4){
+                        $objPHPExcel->getActiveSheet()->setCellValue('N'.$i13,$arr['nofood'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('O'.$i13,$arr['nofood'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('P'.$i13,$arr['nofood'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i13,$arr['nofood'][$o][0]['money']) ;
+                    }
+                    if($o%7==5){
+                        $objPHPExcel->getActiveSheet()->setCellValue('R'.$i13,$arr['nofood'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('S'.$i13,$arr['nofood'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('T'.$i13,$arr['nofood'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('U'.$i13,$arr['nofood'][$o][0]['money']) ;
+                    }
+                    if($o%7==6){
+                        $objPHPExcel->getActiveSheet()->setCellValue('V'.$i13,$arr['nofood'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('W'.$i13,$arr['nofood'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('X'.$i13,$arr['nofood'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i13,$arr['nofood'][$o][0]['money']) ;
+                    }
+                    if($o%7==0){
+                        $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i13,$arr['nofood'][$o]['name']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i13,$arr['nofood'][$o][0]['all']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i13,$arr['nofood'][$o][0]['sum']) ;
+                        $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i13,$arr['nofood'][$o][0]['money']) ;
+                        $i13=$i13+1;
+                    }
+                }
+                $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
+                $i13=$i13+1;
 //            区域的
                 $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'区域');
                 $a=$i13;
@@ -1735,24 +1508,13 @@ class ReportVisitForm extends CReportForm
         $objReader  = PHPExcel_IOFactory::createReader('Excel2007');
         $path = Yii::app()->basePath.'/commands/template/sale.xlsx';
         $objPHPExcel = $objReader->load($path);
-//        print_r("<pre>");
-//        print_r($model);
+
         if(!empty($model['all'])){
             $i=3;
             $ex=$i;
             $i1=$i+1;
             $i2=$i+2;
-            $i3=$i+3;
-            $i4=$i+4;
-            $i5=$i+5;
-            $i6=$i+6;
-            $i7=$i+7;
-            $i8=$i+8;
-            $i9=$i+9;
-            $i10=$i+10;
-            $i11=$i+11;
-            $i12=$i+12;
-            $i13=$i+13;
+            $i13=$i+2;
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,'个人总数据') ;
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'总拜访量'.$model['all']['money']['all'].'签单量：'.$model['all']['money']['sum'].'签单金额'.$model['all']['money']['money']) ;
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$i.':AC'.$i);
@@ -1760,256 +1522,201 @@ class ReportVisitForm extends CReportForm
             $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25);
             $objPHPExcel->getActiveSheet()->getRowDimension($i1)->setRowHeight(25);
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$i2,'拜访类型') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i2,'陌拜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i2,$model['all']['mobai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i2,$model['all']['mobai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i2,$model['all']['mobai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i2,'日常跟进') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i2,$model['all']['richanggengjin']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i2,$model['all']['richanggengjin']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i2,$model['all']['richanggengjin']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i2,'客户资源') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i2,$model['all']['kehuziyuan']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i2,$model['all']['kehuziyuan']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i2,$model['all']['kehuziyuan']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i2,'电话上门') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i2,$model['all']['dianhuashangmen']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i2,$model['all']['dianhuashangmen']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i2,$model['all']['dianhuashangmen']['money']) ;
-
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i3,'拜访目的') ;
-            $objPHPExcel->getActiveSheet()->mergeCells('A'.$i3.':A'.$i4);
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i3,'首次') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i3,$model['all']['shouci']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i3,$model['all']['shouci']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i3,$model['all']['shouci']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i3,'客诉') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i3,$model['all']['keshu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i3,$model['all']['keshu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i3,$model['all']['keshu']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i3,'续约') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i3,$model['all']['xuyue']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i3,$model['all']['xuyue']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i3,$model['all']['xuyue']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i3,'回访') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i3,$model['all']['huifang']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i3,$model['all']['huifang']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i3,$model['all']['huifang']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i3,'报价') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i3,$model['all']['baojia']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i3,$model['all']['baojia']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i3,$model['all']['baojia']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i3,'追款') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i3,$model['all']['zuikuan']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i3,$model['all']['zuikuan']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i3,$model['all']['zuikuan']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i3,'减价') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i3,$model['all']['jianjia']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i3,$model['all']['jianjia']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i3,$model['all']['jianjia']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i4,'停服务') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i4,$model['all']['tingfuwu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i4,$model['all']['tingfuwu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i4,$model['all']['tingfuwu']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i4,'更换项目') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i4,$model['all']['genghuanxiangmu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i4,$model['all']['genghuanxiangmu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i4,$model['all']['genghuanxiangmu']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i4,'增加项目') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i4,$model['all']['zengjiaxiangmu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i4,$model['all']['zengjiaxiangmu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i4,$model['all']['zengjiaxiangmu']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i4,'救客') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i4,$model['all']['jiuke']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i4,$model['all']['jiuke']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i4,$model['all']['jiuke']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i4,'其他') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i4,$model['all']['qitaa']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i4,$model['all']['qitaa']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i4,$model['all']['qitaa']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i4,'签单') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i4,$model['all']['qiandan']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i4,$model['all']['qiandan']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i4,$model['all']['qiandan']['money']) ;
-
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i5,'客服类别（餐饮）') ;
-            $objPHPExcel->getActiveSheet()->mergeCells('A'.$i5.':A'.$i7);
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i5,'东/西北菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i5,$model['all']['dongbeicai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i5,$model['all']['dongbeicai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i5,$model['all']['dongbeicai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i5,'泰国菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i5,$model['all']['taiguocai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i5,$model['all']['taiguocai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i5,$model['all']['taiguocai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i5,'粤菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i5,$model['all']['yuecai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i5,$model['all']['yuecai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i5,$model['all']['yuecai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i5,'面包甜点') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i5,$model['all']['mianbao']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i5,$model['all']['mianbao']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i5,$model['all']['mianbao']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i5,'川湘菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i5,$model['all']['chuancai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i5,$model['all']['chuancai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i5,$model['all']['chuancai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i5,'火锅') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i5,$model['all']['huoguo']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i5,$model['all']['huoguo']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i5,$model['all']['huoguo']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i5,'西餐') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i5,$model['all']['xican']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i5,$model['all']['xican']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i5,$model['all']['xican']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i6,'咖啡厅') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i6,$model['all']['kafeiting']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i6,$model['all']['kafeiting']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i6,$model['all']['kafeiting']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i6,'浙江菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i6,$model['all']['zejiangcai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i6,$model['all']['zejiangcai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i6,$model['all']['zejiangcai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i6,'自助餐') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i6,$model['all']['zizhu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i6,$model['all']['zizhu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i6,$model['all']['zizhu']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i6,'饮品店') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i6,$model['all']['yingping']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i6,$model['all']['yingping']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i6,$model['all']['yingping']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i6,'日韩料理') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i6,$model['all']['riliao']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i6,$model['all']['riliao']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i6,$model['all']['riliao']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i6,'烧烤') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i6,$model['all']['saokao']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i6,$model['all']['saokao']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i6,$model['all']['saokao']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i6,'越南菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i6,$model['all']['yuenancai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i6,$model['all']['yuenancai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i6,$model['all']['yuenancai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i7,'小吃快餐') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i7,$model['all']['xiaochi']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i7,$model['all']['xiaochi']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i7,$model['all']['xiaochi']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i7,'清真菜') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i7,$model['all']['qingzhencai']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i7,$model['all']['qingzhencai']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i7,$model['all']['qingzhencai']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i7,'茶餐厅') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i7,$model['all']['chacanting']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i7,$model['all']['chacanting']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i7,$model['all']['chacanting']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i7,'其他') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i7,$model['all']['qitab']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i7,$model['all']['qitab']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i7,$model['all']['qitab']['money']) ;
-
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i8,'客服类别（非餐饮）') ;
-            $objPHPExcel->getActiveSheet()->mergeCells('A'.$i8.':A'.$i11);
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i8,'4S店') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i8,$model['all']['sisdian']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i8,$model['all']['sisdian']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i8,$model['all']['sisdian']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i8,'健身会所') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i8,$model['all']['jianshenhuisuo']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i8,$model['all']['jianshenhuisuo']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i8,$model['all']['jianshenhuisuo']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i8,'房地产') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i8,$model['all']['fangdican']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i8,$model['all']['fangdican']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i8,$model['all']['fangdican']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i8,'美容/发馆') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i8,$model['all']['meifa']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i8,$model['all']['meifa']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i8,$model['all']['meifa']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i8,'银行') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i8,$model['all']['yinhang']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i8,$model['all']['yinhang']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i8,$model['all']['yinhang']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i8,'俱乐部') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i8,$model['all']['julebu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i8,$model['all']['julebu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i8,$model['all']['julebu']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i8,'培训机构') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i8,$model['all']['peixunjigou']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i8,$model['all']['peixunjigou']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i8,$model['all']['peixunjigou']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i9,'KTV') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i9,$model['all']['ktv']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i9,$model['all']['ktv']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i9,$model['all']['ktv']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i9,'其他') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i9,$model['all']['qitac']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i9,$model['all']['qitac']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i9,$model['all']['qitac']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i9,'学校') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i9,$model['all']['xuexiao']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i9,$model['all']['xuexiao']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i9,$model['all']['xuexiao']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i9,'水疗会所') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i9,$model['all']['shuiliao']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i9,$model['all']['shuiliao']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i9,$model['all']['shuiliao']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i9,'超市') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i9,$model['all']['chaoshi']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i9,$model['all']['chaoshi']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i9,$model['all']['chaoshi']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i9,'网吧') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i9,$model['all']['wangba']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i9,$model['all']['wangba']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i9,$model['all']['wangba']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i9,'影院') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i9,$model['all']['yingyuan']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i9,$model['all']['yingyuan']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i9,$model['all']['yingyuan']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i10,'体育馆') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i10,$model['all']['tiyuguan']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i10,$model['all']['tiyuguan']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i10,$model['all']['tiyuguan']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i10,'写字楼') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i10,$model['all']['xiezilou']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i10,$model['all']['xiezilou']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i10,$model['all']['xiezilou']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i10,'工厂') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i10,$model['all']['gongcang']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i10,$model['all']['gongcang']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i10,$model['all']['gongcang']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i10,'游泳馆') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i10,$model['all']['youyong']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i10,$model['all']['youyong']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i10,$model['all']['youyong']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$i10,'酒吧') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$i10,$model['all']['jiuba']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$i10,$model['all']['jiuba']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$i10,$model['all']['jiuba']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$i10,'物业') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$i10,$model['all']['wuye']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$i10,$model['all']['wuye']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i10,$model['all']['wuye']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i10,'酒店') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i10,$model['all']['jiudian']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i10,$model['all']['jiudian']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i10,$model['all']['jiudian']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i11,'便利店') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i11,$model['all']['bianlidian']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i11,$model['all']['bianlidian']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i11,$model['all']['bianlidian']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i11,'医院') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$i11,$model['all']['yiyuan']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$i11,$model['all']['yiyuan']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$i11,$model['all']['yiyuan']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$i11,'影楼') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$i11,$model['all']['yinglou']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$i11,$model['all']['yinglou']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$i11,$model['all']['yinglou']['money']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$i12,'政府及企事业单位') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$i12,$model['all']['zhengfu']['all']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$i12,$model['all']['zhengfu']['sum']) ;
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i12,$model['all']['zhengfu']['money']) ;
-
+            $a=$i13;
+            for($o=1;$o<count($model['all']['visit']);$o++){
+                if($o%7==1){
+                    $objPHPExcel->getActiveSheet()->setCellValue('B'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('C'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('D'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                }
+                if($o%7==2){
+                    $objPHPExcel->getActiveSheet()->setCellValue('F'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('I'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                }
+                if($o%7==3){
+                    $objPHPExcel->getActiveSheet()->setCellValue('J'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('K'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('L'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('M'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                }
+                if($o%7==4){
+                    $objPHPExcel->getActiveSheet()->setCellValue('N'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('O'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('P'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                }
+                if($o%7==5){
+                    $objPHPExcel->getActiveSheet()->setCellValue('R'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('S'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('T'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('U'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                }
+                if($o%7==6){
+                    $objPHPExcel->getActiveSheet()->setCellValue('V'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('W'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('X'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                }
+                if($o%7==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i13,$model['all']['visit'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i13,$model['all']['visit'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i13,$model['all']['visit'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i13,$model['all']['visit'][$o][0]['money']) ;
+                    $i13=$i13+1;
+                }
+            }
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
+            $i13=$i13+1;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'拜访目的') ;
+            $a=$i13;
+            for($o=1;$o<count($model['all']['obj']);$o++){
+                if($o%7==1){
+                    $objPHPExcel->getActiveSheet()->setCellValue('B'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('C'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('D'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                }
+                if($o%7==2){
+                    $objPHPExcel->getActiveSheet()->setCellValue('F'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('I'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                }
+                if($o%7==3){
+                    $objPHPExcel->getActiveSheet()->setCellValue('J'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('K'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('L'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('M'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                }
+                if($o%7==4){
+                    $objPHPExcel->getActiveSheet()->setCellValue('N'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('O'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('P'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                }
+                if($o%7==5){
+                    $objPHPExcel->getActiveSheet()->setCellValue('R'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('S'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('T'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('U'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                }
+                if($o%7==6){
+                    $objPHPExcel->getActiveSheet()->setCellValue('V'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('W'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('X'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                }
+                if($o%7==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i13,$model['all']['obj'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i13,$model['all']['obj'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i13,$model['all']['obj'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i13,$model['all']['obj'][$o][0]['money']) ;
+                    $i13=$i13+1;
+                }
+            }
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
+            $i13=$i13+1;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客服类别（餐饮）') ;
+            $a=$i13;
+            for($o=1;$o<count($model['all']['food']);$o++){
+                if($o%7==1){
+                    $objPHPExcel->getActiveSheet()->setCellValue('B'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('C'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('D'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$i13,$model['all']['food'][$o][0]['money']) ;
+                }
+                if($o%7==2){
+                    $objPHPExcel->getActiveSheet()->setCellValue('F'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('I'.$i13,$model['all']['food'][$o][0]['money']) ;
+                }
+                if($o%7==3){
+                    $objPHPExcel->getActiveSheet()->setCellValue('J'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('K'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('L'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('M'.$i13,$model['all']['food'][$o][0]['money']) ;
+                }
+                if($o%7==4){
+                    $objPHPExcel->getActiveSheet()->setCellValue('N'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('O'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('P'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i13,$model['all']['food'][$o][0]['money']) ;
+                }
+                if($o%7==5){
+                    $objPHPExcel->getActiveSheet()->setCellValue('R'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('S'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('T'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('U'.$i13,$model['all']['food'][$o][0]['money']) ;
+                }
+                if($o%7==6){
+                    $objPHPExcel->getActiveSheet()->setCellValue('V'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('W'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('X'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i13,$model['all']['food'][$o][0]['money']) ;
+                }
+                if($o%7==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i13,$model['all']['food'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i13,$model['all']['food'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i13,$model['all']['food'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i13,$model['all']['food'][$o][0]['money']) ;
+                    $i13=$i13+1;
+                }
+            }
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
+            $i13=$i13+1;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客服类别（非餐饮）') ;
+            $a=$i13;
+            for($o=1;$o<count($model['all']['nofood']);$o++){
+                if($o%7==1){
+                    $objPHPExcel->getActiveSheet()->setCellValue('B'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('C'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('D'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('E'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                }
+                if($o%7==2){
+                    $objPHPExcel->getActiveSheet()->setCellValue('F'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('G'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('H'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('I'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                }
+                if($o%7==3){
+                    $objPHPExcel->getActiveSheet()->setCellValue('J'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('K'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('L'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('M'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                }
+                if($o%7==4){
+                    $objPHPExcel->getActiveSheet()->setCellValue('N'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('O'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('P'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Q'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                }
+                if($o%7==5){
+                    $objPHPExcel->getActiveSheet()->setCellValue('R'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('S'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('T'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('U'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                }
+                if($o%7==6){
+                    $objPHPExcel->getActiveSheet()->setCellValue('V'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('W'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('X'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('Y'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                }
+                if($o%7==0){
+                    $objPHPExcel->getActiveSheet()->setCellValue('Z'.$i13,$model['all']['nofood'][$o]['name']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AA'.$i13,$model['all']['nofood'][$o][0]['all']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AB'.$i13,$model['all']['nofood'][$o][0]['sum']) ;
+                    $objPHPExcel->getActiveSheet()->setCellValue('AC'.$i13,$model['all']['nofood'][$o][0]['money']) ;
+                    $i13=$i13+1;
+                }
+            }
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
+            $i13=$i13+1;
 //            区域的
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'区域') ;
             $a=$i13;
@@ -2146,48 +1853,48 @@ class ReportVisitForm extends CReportForm
             $svc_F4s=0;
             $svc_G3s=0;
             foreach ($arr as $arrs){
-                $sql2="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_A7' ";
-                $money2 = Yii::app()->db->createCommand($sql2)->queryAll();
+            $sql2="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_A7' ";
+            $money2 = Yii::app()->db->createCommand($sql2)->queryAll();
                 if(!empty($money2[0]['field_value'])){
                     $svc_A7=$svc_A7+1;
                     $svc_A7s+=$money2[0]['field_value'];
                 }
-                $sql3="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_B6' ";
-                $money3 = Yii::app()->db->createCommand($sql3)->queryAll();
-                if(!empty($money3[0]['field_value'])){
-                    $svc_B6=$svc_B6+1;
-                    $svc_B6s+=$money3[0]['field_value'];
-                }
-                $sql4="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_C7' ";
-                $money4 = Yii::app()->db->createCommand($sql4)->queryAll();
-                if(!empty($money4[0]['field_value'])){
-                    $svc_C7=$svc_C7+1;
-                    $svc_C7s+=$money4[0]['field_value'];
-                }
-                $sql5="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_D6' ";
-                $money5 = Yii::app()->db->createCommand($sql5)->queryAll();
-                if(!empty($money5[0]['field_value'])){
-                    $svc_D6=$svc_D6+1;
-                    $svc_D6s+=$money5[0]['field_value'];
-                }
-                $sql6="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_E7' ";
-                $money6 = Yii::app()->db->createCommand($sql6)->queryAll();
-                if(!empty($money6[0]['field_value'])){
-                    $svc_E7=$svc_E7+1;
-                    $svc_E7s+=$money6[0]['field_value'];
-                }
-                $sql7="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_F4' ";
-                $money7 = Yii::app()->db->createCommand($sql7)->queryAll();
-                if(!empty($money7[0]['field_value'])){
-                    $svc_F4=$svc_F4+1;
-                    $svc_F4s+=$money7[0]['field_value'];
-                }
-                $sql8="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_G3' ";
-                $money8 = Yii::app()->db->createCommand($sql8)->queryAll();
-                if(!empty($money8[0]['field_value'])){
-                    $svc_G3=$svc_G3+1;
-                    $svc_G3s+=$money8[0]['field_value'];
-                }
+            $sql3="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_B6' ";
+            $money3 = Yii::app()->db->createCommand($sql3)->queryAll();
+            if(!empty($money3[0]['field_value'])){
+                $svc_B6=$svc_B6+1;
+                $svc_B6s+=$money3[0]['field_value'];
+            }
+            $sql4="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_C7' ";
+            $money4 = Yii::app()->db->createCommand($sql4)->queryAll();
+            if(!empty($money4[0]['field_value'])){
+                $svc_C7=$svc_C7+1;
+                $svc_C7s+=$money4[0]['field_value'];
+            }
+            $sql5="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_D6' ";
+            $money5 = Yii::app()->db->createCommand($sql5)->queryAll();
+            if(!empty($money5[0]['field_value'])){
+                $svc_D6=$svc_D6+1;
+                $svc_D6s+=$money5[0]['field_value'];
+            }
+            $sql6="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_E7' ";
+            $money6 = Yii::app()->db->createCommand($sql6)->queryAll();
+            if(!empty($money6[0]['field_value'])){
+                $svc_E7=$svc_E7+1;
+                $svc_E7s+=$money6[0]['field_value'];
+            }
+            $sql7="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_F4' ";
+            $money7 = Yii::app()->db->createCommand($sql7)->queryAll();
+            if(!empty($money7[0]['field_value'])){
+                $svc_F4=$svc_F4+1;
+                $svc_F4s+=$money7[0]['field_value'];
+            }
+            $sql8="select field_value from sal_visit_info where visit_id='".$arrs['id']."' and field_id='svc_G3' ";
+            $money8 = Yii::app()->db->createCommand($sql8)->queryAll();
+            if(!empty($money8[0]['field_value'])){
+                $svc_G3=$svc_G3+1;
+                $svc_G3s+=$money8[0]['field_value'];
+            }
             }
 
             $people['svc_A7']=$svc_A7s;

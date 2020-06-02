@@ -37,5 +37,9 @@ return array(
 'Performance'=>'跨區業績目標',
 'Performance List'=>'跨區業績目標列表',
 'Performance Form'=>'跨區業績目標表單',
+
+'Intrgral'=>'銷售提成積分',
+'Intrgral List'=>'銷售提成積分列表',
+'Intrgral Form'=>'銷售提成積分表單',
 );
 ?>

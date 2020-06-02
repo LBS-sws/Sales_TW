@@ -52,7 +52,7 @@ $this->pageTitle=Yii::app()->name . ' - Report';
 		<?php endif ?>
 		
 			<div class="form-group">
-				<?php echo $form->labelEx($model,'入职日期',array('class'=>"col-sm-2 control-label")); ?>
+				<?php echo $form->labelEx($model,'start_dt',array('class'=>"col-sm-2 control-label")); ?>
 				<div class="col-sm-3">
 					<div class="input-group date">
 						<div class="input-group-addon">
@@ -66,7 +66,7 @@ $this->pageTitle=Yii::app()->name . ' - Report';
 			</div>
 
             <div class="form-group">
-                <?php echo $form->labelEx($model,'员工编号',array('class'=>"col-sm-2 control-label")); ?>
+                <?php echo $form->labelEx($model,'staffs_desc',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-3">
                     <?php echo $form->textField($model, 'staffs_desc',
                         array('size'=>10,'maxlength'=>10,'readonly'=>('readonly'))
@@ -76,15 +76,15 @@ $this->pageTitle=Yii::app()->name . ' - Report';
 
 
             <div class="form-group">
-                <?php echo $form->labelEx($model,'部曲阶段',array('class'=>"col-sm-2 control-label")); ?>
+                <?php echo $form->labelEx($model,'five',array('class'=>"col-sm-2 control-label")); ?>
                 <div class="col-sm-3">
                     <?php echo $form->dropDownList($model, 'five',
                         array(
-                            'all'=>'全部',
-                            'one'=>'阶段1',
-                            'two'=>'阶段1-2',
-                            'three'=>'阶段1-3',
-                            'four'=>'阶段1-4',
+                            'all'=>Yii::t('misc','All'),
+                            'one'=>Yii::t('report','stage').'1',
+                            'two'=>Yii::t('report','stage').'1-2',
+                            'three'=>Yii::t('report','stage').'1-3',
+                            'four'=>Yii::t('report','stage').'1-4',
                         ),
                         array('disabled'=>($model->scenario=='view'))
                     ); ?>
