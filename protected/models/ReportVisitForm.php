@@ -779,7 +779,7 @@ class ReportVisitForm extends CReportForm
         $sum_arr=array();
         $sum=array();
         for($i=0;$i<count($records);$i++){
-            if(strpos($records[$i][$name],$names)!==false&&(strpos($records[$i]['visit_obj_name'],'签单')!==false||strpos($records[$i]['visit_obj_name'],'续约')!==false)){
+            if(strpos($records[$i][$name],$names)!==false&&(strpos($records[$i]['visit_obj_name'],'簽單')!==false||strpos($records[$i]['visit_obj_name'],'续约')!==false)){
                 $sqlid="select count(visit_id) as sum from  sal_visit_info where field_id in ('svc_A7','svc_B6','svc_C7','svc_D6','svc_E7') and field_value>'0' and visit_id='".$records[$i]['id']."'";
                 $model = Yii::app()->db->createCommand($sqlid)->queryRow();
                 $sum_arr[]=$model['sum'];
@@ -836,7 +836,7 @@ class ReportVisitForm extends CReportForm
         $a=0;
         $sum_arr=array();
         for($i=0;$i<count($records);$i++){
-	        if(strpos($records[$i]['visit_obj_name'],'签单')!==false){
+	        if(strpos($records[$i]['visit_obj_name'],'簽單')!==false){
                 $sqlid="select count(visit_id) as sum from  sal_visit_info where field_id in ('svc_A7','svc_B6','svc_C7','svc_D6','svc_E7') and field_value>'0' and visit_id='".$records[$i]['id']."'";
                 $model = Yii::app()->db->createCommand($sqlid)->queryRow();
                 $sum_arr[]=$model['sum'];
@@ -941,13 +941,13 @@ class ReportVisitForm extends CReportForm
             $i1=$i+1;
             $i2=$i+2;
             $i13=$i+2;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,'部门总数据') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'总拜访量'.$model['all']['money']['all'].'签单量：'.$model['all']['money']['sum'].'签单金额'.$model['all']['money']['money']) ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,'部門總數據') ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'總拜訪量'.$model['all']['money']['all'].'簽單量：'.$model['all']['money']['sum'].'簽單金額'.$model['all']['money']['money']) ;
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$i.':AC'.$i);
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$i1.':AC'.$i1);
             $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25);
             $objPHPExcel->getActiveSheet()->getRowDimension($i1)->setRowHeight(25);
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i2,'拜访类型') ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i2,'拜訪類型') ;
             $a=$i13;
             for($o=1;$o<count($model['all']['visit']);$o++){
                 if($o%7==1){
@@ -996,7 +996,7 @@ class ReportVisitForm extends CReportForm
             }
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
             $i13=$i13+1;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'拜访目的') ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'拜訪目的') ;
             $a=$i13;
             for($o=1;$o<count($model['all']['obj']);$o++){
                 if($o%7==1){
@@ -1045,7 +1045,7 @@ class ReportVisitForm extends CReportForm
             }
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
             $i13=$i13+1;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客服类别（餐饮）') ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客戶類別（餐飲）') ;
             $a=$i13;
             for($o=1;$o<count($model['all']['food']);$o++){
                 if($o%7==1){
@@ -1094,7 +1094,7 @@ class ReportVisitForm extends CReportForm
             }
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
             $i13=$i13+1;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客服类别（非餐饮）') ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客戶類別（非餐飲）') ;
             $a=$i13;
             for($o=1;$o<count($model['all']['nofood']);$o++){
                 if($o%7==1){
@@ -1216,12 +1216,12 @@ class ReportVisitForm extends CReportForm
                 $i2=$i+2;
                 $i13=$i+2;
                 $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,$arr['name']) ;
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'总拜访量'.$arr['money']['all'].'签单量：'.$arr['money']['sum'].'签单金额'.$arr['money']['money']) ;
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'總拜訪量'.$arr['money']['all'].'簽單量：'.$arr['money']['sum'].'簽單金額'.$arr['money']['money']) ;
                 $objPHPExcel->getActiveSheet()->mergeCells('A'.$i.':AC'.$i);
                 $objPHPExcel->getActiveSheet()->mergeCells('A'.$i1.':AC'.$i1);
                 $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25);
                 $objPHPExcel->getActiveSheet()->getRowDimension($i1)->setRowHeight(25);
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i2,'拜访类型') ;
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i2,'拜訪類型') ;
                 $a=$i13;
                 for($o=1;$o<count($arr['visit']);$o++){
                     if($o%7==1){
@@ -1270,7 +1270,7 @@ class ReportVisitForm extends CReportForm
                 }
                 $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
                 $i13=$i13+1;
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'拜访目的') ;
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'拜訪目的') ;
                 $a=$i13;
                 for($o=1;$o<count($arr['obj']);$o++){
                     if($o%7==1){
@@ -1319,7 +1319,7 @@ class ReportVisitForm extends CReportForm
                 }
                 $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
                 $i13=$i13+1;
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客服类别（餐饮）') ;
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客戶類別（餐飲）') ;
                 $a=$i13;
                 for($o=1;$o<count($arr['food']);$o++){
                     if($o%7==1){
@@ -1368,7 +1368,7 @@ class ReportVisitForm extends CReportForm
                 }
                 $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
                 $i13=$i13+1;
-                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客服类别（非餐饮）') ;
+                $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客戶類別（非餐飲）') ;
                 $a=$i13;
                 for($o=1;$o<count($arr['nofood']);$o++){
                     if($o%7==1){
@@ -1516,12 +1516,12 @@ class ReportVisitForm extends CReportForm
             $i2=$i+2;
             $i13=$i+2;
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,'个人总数据') ;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'总拜访量'.$model['all']['money']['all'].'签单量：'.$model['all']['money']['sum'].'签单金额'.$model['all']['money']['money']) ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i1,'總拜訪量'.$model['all']['money']['all'].'簽單量：'.$model['all']['money']['sum'].'簽單金額'.$model['all']['money']['money']) ;
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$i.':AC'.$i);
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$i1.':AC'.$i1);
             $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25);
             $objPHPExcel->getActiveSheet()->getRowDimension($i1)->setRowHeight(25);
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i2,'拜访类型') ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i2,'拜訪類型') ;
             $a=$i13;
             for($o=1;$o<count($model['all']['visit']);$o++){
                 if($o%7==1){
@@ -1570,7 +1570,7 @@ class ReportVisitForm extends CReportForm
             }
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
             $i13=$i13+1;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'拜访目的') ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'拜訪目的') ;
             $a=$i13;
             for($o=1;$o<count($model['all']['obj']);$o++){
                 if($o%7==1){
@@ -1619,7 +1619,7 @@ class ReportVisitForm extends CReportForm
             }
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
             $i13=$i13+1;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客服类别（餐饮）') ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客戶類別（餐飲）') ;
             $a=$i13;
             for($o=1;$o<count($model['all']['food']);$o++){
                 if($o%7==1){
@@ -1668,7 +1668,7 @@ class ReportVisitForm extends CReportForm
             }
             $objPHPExcel->getActiveSheet()->mergeCells('A'.$a.':A'.$i13);
             $i13=$i13+1;
-            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客服类别（非餐饮）') ;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i13,'客戶類別（非餐飲）') ;
             $a=$i13;
             for($o=1;$o<count($model['all']['nofood']);$o++){
                 if($o%7==1){
