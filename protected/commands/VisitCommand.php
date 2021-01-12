@@ -20,7 +20,7 @@ class VisitCommand extends CConsoleCommand
             $record = $model->getDescendant($Addressee['city']);
             array_unshift($record, $Addressee['city']);
             foreach ($record as $k) {
-                $nocity = array('CN', 'CS', 'H-N', 'HB', 'HD', 'HD1', 'HK', 'HN', 'HN1', 'HN2', 'HX', 'HXHB', 'JMS', 'KS', 'MO', 'MY', 'RN', 'TC', 'TN', 'TP', 'TY', 'XM', 'ZS1', 'ZY');
+                $nocity = array('CN', 'CS', 'H-N', 'HB', 'HD', 'HD1', 'HK', 'HN', 'HN1', 'HN2', 'HX', 'HXHB', 'JMS',  'MO', 'MY', 'RN', 'TY', 'XM', 'ZS1', 'ZY');
                 $sql_city = "select name from security$suffix.sec_city where code='$k'";
                 $city = Yii::app()->db->createCommand($sql_city)->queryScalar();
                 if (in_array($k, $nocity, true)) {
@@ -31,7 +31,7 @@ class VisitCommand extends CConsoleCommand
                               inner join  security$suffix.sec_user_access c on b.user_id=c.username  
                               inner join  security$suffix.sec_user d on c.username=d.username 
                               inner join  sales$suffix.sal_visit e on b.user_id=e.username
-        where  c.system_id='sal' and c.a_read_write like '%HK01%' and  d.status='A' and a.city='$k' and  e.visit_obj like '%10%' and   e.visit_dt >= '" . $arr['start_dt'] . "'and e.visit_dt <= '" . $arr['end_dt'] . "'";
+        where  c.system_id='sal' and c.a_read_write like '%HK01%' and  d.status='A' and a.city='$k' and  e.visit_obj like '%3%' and   e.visit_dt >= '" . $arr['start_dt'] . "'and e.visit_dt <= '" . $arr['end_dt'] . "'";
                     $people = Yii::app()->db->createCommand($sql_people)->queryAll();
                     //邮件数据
                     if (!empty($people)) {
