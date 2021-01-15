@@ -155,5 +155,13 @@ return array(
 	'Note: Please set searching criteria before pressing Report button, otherwise all data will be generated in the report.'=>
 	'注：直接生成报表将会导出所有拜访信息，请在右侧搜索栏设定所需条件后继续生成，如拜访时间段、目的、类别等',
 	'Example'=>'点击可查看示例',
+
+    'Employee_name'=>'員工',
+    'All Sum'=>'分数',
+    'Service Type'=>'服务类型',
+    'Quotation'=>'报价',
+    'Quotations'=>'已报价',
+    'No Quotation'=>'未报价',
+    'Quotation judgment'=>'是否报价（是/否）'
 );
 ?>

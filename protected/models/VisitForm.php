@@ -24,6 +24,8 @@ class VisitForm extends CFormModel
 	public $latitude;
 	public $longitude;
 	public $deal = 'N';
+	public $service_type;
+	public $quotation='N';
 
 	public $service = array();
 	protected $dynamic_fields = array('latitude', 'longitude', 'deal');
@@ -182,7 +184,9 @@ class VisitForm extends CFormModel
 			'cust_tel'=>Yii::t('sales','Phone'),
 			'district'=>Yii::t('sales','District'),
 			'street'=>Yii::t('sales','Street'),
+            'service_type'=>Yii::t('sales','Service Type'),
 			'cust_alt_name'=>Yii::t('sales','Branch Name (if any)'),
+            'quotation'=>Yii::t('sales','Quotation'),
 		);
 		
 		$services = $this->serviceDefinition();
@@ -200,10 +204,10 @@ class VisitForm extends CFormModel
 
 	public function rules() {
 		return array(
-			array('visit_dt, username, district, visit_type, visit_obj, cust_type, cust_type_group, cust_name','required'),
+			array('visit_dt, username, district, visit_type, visit_obj,service_type, cust_type, cust_type_group, cust_name','required'),
 			array('service','validateServiceAmount'),
 			array('service','validateServices'),
-			array('id, city, city_name, remarks, staff, dept_name, post_name, street, cust_person, cust_person_role, cust_vip, 
+			array('id, city, city_name, remarks, staff, dept_name, post_name, street, cust_person, cust_person_role, cust_vip,quotation,
 				cust_tel, cust_alt_name, status, status_dt, latitude, longitude, deal, cust_type_group','safe'),
 			array('files, removeFileId, docMasterId, no_of_attm','safe'),
             array ('no_of_attm','validateTaxSlip'),
@@ -338,12 +342,14 @@ class VisitForm extends CFormModel
 			$this->cust_tel = $row['cust_tel'];
 			$this->visit_type = $row['visit_type'];
 			$this->visit_obj = json_decode($row['visit_obj']);
+			$this->service_type = json_decode($row['service_type']);
 			$this->cust_type = $row['cust_type'];
 			$this->remarks = $row['remarks'];
 			$this->status = $row['status'];
 			$this->status_dt = $row['status_dt'];
 			$this->cust_type_group = $row['type_group'];
 			$this->no_of_attm['visit'] = $row['visitcountdoc'];
+            $this->quotation = $row['quotation'];
 		}
 		
 		$sql = "select * from sal_visit_info where visit_id = $index";
@@ -405,7 +411,7 @@ class VisitForm extends CFormModel
 		}
 		catch(Exception $e) {
 			$transaction->rollback();
-			throw new CHttpException(404,'Cannot update.');
+			throw new CHttpException(404,'Cannot update.'.$e->getMessage());
 		}
 	}
 
@@ -418,11 +424,11 @@ class VisitForm extends CFormModel
 				break;
 			case 'new':
 				$sql = "insert into sal_visit(
-							username, visit_dt, visit_type, visit_obj, cust_type, cust_name, cust_person_role, 
+							username, visit_dt, visit_type, visit_obj, cust_type, cust_name, cust_person_role,service_type,quotation,
 							cust_alt_name, cust_person, cust_tel, district, street, remarks, status, status_dt,
 							city, luu, lcu
 						) values (
-							:username, :visit_dt, :visit_type, :visit_obj, :cust_type, :cust_name, :cust_person_role, 
+							:username, :visit_dt, :visit_type, :visit_obj, :cust_type, :cust_name, :cust_person_role,:service_type,:quotation,
 							:cust_alt_name, :cust_person, :cust_tel, :district, :street, :remarks, :status, :status_dt,
 							:city, :luu, :lcu
 						)";
@@ -433,6 +439,8 @@ class VisitForm extends CFormModel
 					visit_dt = :visit_dt, 
 					visit_type = :visit_type, 
 					visit_obj = :visit_obj, 
+					service_type=:service_type,
+					quotation=:quotation,
 					cust_type = :cust_type, 
 					cust_name = :cust_name, 
 					cust_alt_name = :cust_alt_name, 
@@ -463,13 +471,20 @@ class VisitForm extends CFormModel
 		if (strpos($sql,':visit_type')!==false)
 			$command->bindParam(':visit_type',$this->visit_type,PDO::PARAM_INT);
 		if (strpos($sql,':visit_obj')!==false) {
-			$value = json_encode($this->visit_obj);
-			$command->bindParam(':visit_obj',$value,PDO::PARAM_STR);
+			$values = json_encode($this->visit_obj);
+			//print_r($value);exit();
+			$command->bindParam(':visit_obj',$values,PDO::PARAM_STR);
 		}
+        if (strpos($sql,':service_type')!==false) {
+            $value = json_encode($this->service_type);
+            $command->bindParam(':service_type',$value,PDO::PARAM_STR);
+        }
 		if (strpos($sql,':cust_type')!==false)
 			$command->bindParam(':cust_type',$this->cust_type,PDO::PARAM_INT);
 		if (strpos($sql,':cust_name')!==false)
 			$command->bindParam(':cust_name',$this->cust_name,PDO::PARAM_STR);
+        if (strpos($sql,':quotation')!==false)
+            $command->bindParam(':quotation',$this->quotation,PDO::PARAM_STR);
 		if (strpos($sql,':cust_alt_name')!==false)
 			$command->bindParam(':cust_alt_name',$this->cust_alt_name,PDO::PARAM_STR);
 		if (strpos($sql,':cust_person')!==false)
@@ -553,7 +568,7 @@ class VisitForm extends CFormModel
 			}
 		}
 	}
-	
+
 	protected function saveCustCache(&$connection) {
 		$sql = '';
 		switch ($this->scenario) {
@@ -625,9 +640,15 @@ class VisitForm extends CFormModel
 							$amount = $this->service[$fldid];
 							
 							if ($key == 'F' || $key == 'G') {
-								$svcmsg_cn .= (($svcmsg_cn=="") ? "" : "，")."服务类型：$svctype ，合同金额：$amount";
-								$svcmsg_tw .= (($svcmsg_tw=="") ? "" : "，")."服務類型：$svctype ，合同金額：$amount";
-								$svcmsg_en .= (($svcmsg_en=="") ? "" : ",")."Service Type: $svctype , Amount: $amount";
+								if ($k == 'F4' || $key == 'G') {
+									$svcmsg_cn .= (($svcmsg_cn=="") ? "" : "，")."服务类型：$svctype ，合同金额：$amount";
+									$svcmsg_tw .= (($svcmsg_tw=="") ? "" : "，")."服務類型：$svctype ，合同金額：$amount";
+									$svcmsg_en .= (($svcmsg_en=="") ? "" : ",")."Service Type: $svctype , Amount: $amount";
+								}
+							} elseif ($k == 'A10' || $k == 'C10') {
+								$svcmsg_cn .= (($svcmsg_cn=="") ? "" : "，")."服务类型：$svctype ，安装费：$amount";
+								$svcmsg_tw .= (($svcmsg_tw=="") ? "" : "，")."服務類型：$svctype ，安装费：$amount";
+								$svcmsg_en .= (($svcmsg_en=="") ? "" : ",")."Service Type: $svctype , Installed Amount: $amount";
 							} else {
 								$svcmsg_cn .= (($svcmsg_cn=="") ? "" : "，")."服务类型：$svctype ，合同年金额：$amount";
 								$svcmsg_tw .= (($svcmsg_tw=="") ? "" : "，")."服務類型：$svctype ，合同年金額：$amount";
@@ -743,6 +764,20 @@ class VisitForm extends CFormModel
 		}
 		return $rtn;
 	}
+
+    public static function getServiceTypeList()
+    {
+        $suffix = Yii::app()->params['envSuffix'];
+        $list = array();
+        $sql = "select id, description from swoper$suffix.swo_customer_type order by description";
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+        if (count($rows) > 0) {
+            foreach ($rows as $row) {
+                $list[$row['id']] = $row['description'];
+            }
+        }
+        return $list;
+    }
 
 	public function getVisitObjList() {
 //		$rtn = array(''=>Yii::t('misc','-- None --'));
