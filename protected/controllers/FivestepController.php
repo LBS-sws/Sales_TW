@@ -151,8 +151,8 @@ class FivestepController extends Controller
                         $sum['svc_E7s'] = array_sum(array_map(create_function('$val', 'return $val["svc_E7s"];'), $arr_email));
                         $sum['svc_F4s'] = array_sum(array_map(create_function('$val', 'return $val["svc_F4s"];'), $arr_email));
                         $sum['svc_G3s'] = array_sum(array_map(create_function('$val', 'return $val["svc_G3s"];'), $arr_email));
+                        print_r('<pre>');  print_r($people);  print_r('---');  print_r($arr_email);
                     }
-                    print_r('<pre>');  print_r($people);  print_r('---');  print_r($arr_email);
                 }
             }
         }
