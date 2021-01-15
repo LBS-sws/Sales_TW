@@ -42,90 +42,30 @@ class VisitController extends Controller
 
 	public function actionIndex($pageNum=0) 
 	{
-
-        $suffix = Yii::app()->params['envSuffix'];
-        $firstDay = date("Y/m/d");
-        $arr['start_dt'] = date("Y/m/d", strtotime("$firstDay - 6 day"));
-        $arr['end_dt'] = $firstDay;
-        //收件人
-        $sql = "select a.username,a.email,a.city,c.name from  security$suffix.sec_user a 
-              inner join security$suffix.sec_user_access b on a.username = b.username 
-              inner join security$suffix.sec_city c on a.city = c.code 
-              where b.system_id='sal' and b.a_control like '%CN08%' and a.status='A'
-              ";
-        $records = Yii::app()->db->createCommand($sql)->queryAll();
-        foreach ($records as $Addressee) {
-            //城市
-            $model = new City();
-            $record = $model->getDescendant($Addressee['city']);
-            array_unshift($record, $Addressee['city']);
-            foreach ($record as $k) {
-                $nocity = array('CN', 'CS', 'H-N', 'HB', 'HD', 'HD1', 'HK', 'HN', 'HN1', 'HN2', 'HX', 'HXHB', 'JMS', 'MO', 'MY', 'RN', 'TY', 'XM', 'ZS1', 'ZY');
-                $sql_city = "select name from security$suffix.sec_city where code='$k'";
-                $city = Yii::app()->db->createCommand($sql_city)->queryScalar();
-                if (in_array($k, $nocity, true)) {
-                } else {
-                    //需要的销售
-                    $sql_people = "select a.name,e.username from hr$suffix.hr_employee a
-                              inner join  hr$suffix.hr_binding b on a.id=b.employee_id 
-                              inner join  security$suffix.sec_user_access c on b.user_id=c.username  
-                              inner join  security$suffix.sec_user d on c.username=d.username 
-                              inner join  sales$suffix.sal_visit e on b.user_id=e.username
-       where  c.system_id='sal' and c.a_read_write like '%HK01%' and  d.status='A' and a.city='$k' and   e.visit_dt >= '" . $arr['start_dt'] . "'and e.visit_dt <= '" . $arr['end_dt'] . "' and  a.staff_status =0";
-                    $people = Yii::app()->db->createCommand($sql_people)->queryAll();
-                    //邮件数据
-                    if (!empty($people)) {
-                        $people = array_unique($people, SORT_REGULAR);
-                        $arr['sale'] = array_column($people, 'username');
-                        $arr['sort'] = 'singular';
-                        $arr_email = ReportVisitForm::Summary($arr);
-                        $sum['money'] = array_sum(array_map(create_function('$val', 'return $val["money"];'), $arr_email));
-                        $sum['singular'] = array_sum(array_map(create_function('$val', 'return $val["singular"];'), $arr_email));
-                        $sum['svc_A7'] = array_sum(array_map(create_function('$val', 'return $val["svc_A7"];'), $arr_email));
-                        $sum['svc_B6'] = array_sum(array_map(create_function('$val', 'return $val["svc_B6"];'), $arr_email));
-                        $sum['svc_C7'] = array_sum(array_map(create_function('$val', 'return $val["svc_C7"];'), $arr_email));
-                        $sum['svc_D6'] = array_sum(array_map(create_function('$val', 'return $val["svc_D6"];'), $arr_email));
-                        $sum['svc_E7'] = array_sum(array_map(create_function('$val', 'return $val["svc_E7"];'), $arr_email));
-                        $sum['svc_F4'] = array_sum(array_map(create_function('$val', 'return $val["svc_F4"];'), $arr_email));
-                        $sum['svc_G3'] = array_sum(array_map(create_function('$val', 'return $val["svc_G3"];'), $arr_email));
-                        $sum['svc_A7s'] = array_sum(array_map(create_function('$val', 'return $val["svc_A7s"];'), $arr_email));
-                        $sum['svc_B6s'] = array_sum(array_map(create_function('$val', 'return $val["svc_B6s"];'), $arr_email));
-                        $sum['svc_C7s'] = array_sum(array_map(create_function('$val', 'return $val["svc_C7s"];'), $arr_email));
-                        $sum['svc_D6s'] = array_sum(array_map(create_function('$val', 'return $val["svc_D6s"];'), $arr_email));
-                        $sum['svc_E7s'] = array_sum(array_map(create_function('$val', 'return $val["svc_E7s"];'), $arr_email));
-                        $sum['svc_F4s'] = array_sum(array_map(create_function('$val', 'return $val["svc_F4s"];'), $arr_email));
-                        $sum['svc_G3s'] = array_sum(array_map(create_function('$val', 'return $val["svc_G3s"];'), $arr_email));
-                    }
-                    print_r('<pre>');  print_r($people);  print_r('---');  print_r($arr_email);
-                }
-            }
+		$model = new VisitList;
+		if (isset($_POST['VisitList'])) {
+			$model->attributes = $_POST['VisitList'];
+		} else {
+			$session = Yii::app()->session;
+			if (isset($session[$model->criteriaName()]) && !empty($session[$model->criteriaName()])) {
+				$criteria = $session[$model->criteriaName()];
+                if(!empty($_GET['start'])){
+                    $arr=$_GET;
+                 //   $criteria['filter']='[{"field_id":"visit_dt","operator":">=","srchval":"'.$arr['start'].'"},{"field_id":"visit_dt","operator":"<=","srchval":"'.$arr['end'].'"},{"field_id":"visit_obj","operator":"like","srchval":"签单"},{"field_id":"city_name","operator":"=","srchval":"'.$arr['city'].'"},{"field_id":"staff","operator":"like","srchval":"'.$arr['sales'].'"}]';//这个是直接给session
+                    $session['get']=$arr;
+                }//根据这个变化
+                //$criteria['filter']='[{"field_id":"staff","operator":"like","srchval":"5"}]';
+				$model->setCriteria($criteria);
+			}
+		}
+		$model->determinePageNum($pageNum);
+        if(!empty($session['get'])){
+            $model->retrieveDataByPage_visit($model->pageNum,$session['get']);
+        }else{
+            $model->retrieveDataByPage($model->pageNum);
         }
-
-
-//		$model = new VisitList;
-//		if (isset($_POST['VisitList'])) {
-//			$model->attributes = $_POST['VisitList'];
-//		} else {
-//			$session = Yii::app()->session;
-//			if (isset($session[$model->criteriaName()]) && !empty($session[$model->criteriaName()])) {
-//				$criteria = $session[$model->criteriaName()];
-//                if(!empty($_GET['start'])){
-//                    $arr=$_GET;
-//                 //   $criteria['filter']='[{"field_id":"visit_dt","operator":">=","srchval":"'.$arr['start'].'"},{"field_id":"visit_dt","operator":"<=","srchval":"'.$arr['end'].'"},{"field_id":"visit_obj","operator":"like","srchval":"签单"},{"field_id":"city_name","operator":"=","srchval":"'.$arr['city'].'"},{"field_id":"staff","operator":"like","srchval":"'.$arr['sales'].'"}]';//这个是直接给session
-//                    $session['get']=$arr;
-//                }//根据这个变化
-//                //$criteria['filter']='[{"field_id":"staff","operator":"like","srchval":"5"}]';
-//				$model->setCriteria($criteria);
-//			}
-//		}
-//		$model->determinePageNum($pageNum);
-//        if(!empty($session['get'])){
-//            $model->retrieveDataByPage_visit($model->pageNum,$session['get']);
-//        }else{
-//            $model->retrieveDataByPage($model->pageNum);
-//        }
-//       // print_r($session['get']);
-//		$this->render('index',array('model'=>$model));
+       // print_r($session['get']);
+		$this->render('index',array('model'=>$model));
 	}
 
 	public function actionReport() {
