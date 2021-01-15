@@ -24,6 +24,10 @@ return array(
                 'access'=>'HK04',
                 'url'=>'/performance/index',
             ),
+            'Sales Target'=>array(
+                'access'=>'HK05',
+                'url'=>'/Target/index',
+            ),
 		),
 	),
 
@@ -47,9 +51,32 @@ return array(
                 'access'=>'HA04',
                 'url'=>'/report/performance',
             ),
+            'Sales Turnover'=>array(
+                'access'=>'HA07',
+                'url'=>'/report/turnover',
+            ),
             'Sales ranking list'=>array(
                 'access'=>'HA05',
                 'url'=>'/rankinglist/index',
+            ),
+            'Commission integral'=>array(
+                'access'=>'HA06',
+                'url'=>'/integral/index',
+            ),
+        ),
+    ),
+
+    'Sales segment query'=>array(
+        'access'=>'HD',
+        'icon'=>'fa-edit',
+        'items'=>array(
+            'Sales segment details query'=>array(
+                'access'=>'HD01',
+                'url'=>'/rank/index',
+            ),
+            'Sales history segment query'=>array(
+                'access'=>'HD02',
+                'url'=>'/rankhistory/index',
             ),
         ),
     ),
@@ -93,6 +120,11 @@ return array(
 				'url'=>'/district/index',
 				'tag'=>'@',
 			),
+            'Sales Rank'=>array(
+                'access'=>'HC05',
+                'url'=>'/level/index',
+                'tag'=>'@',
+            ),
 		),
 	),
 

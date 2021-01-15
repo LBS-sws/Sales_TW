@@ -19,6 +19,7 @@ return array(
 'Quiz'=>'培訓測驗系統',
 'Academic Credit'=>'學分系統',
 'Online Library'=>'網上文庫',
+'Charitable Credit'=>'慈善分系統',
 
 'System Use'=>'系統使用',
 
@@ -81,6 +82,7 @@ return array(
 'Sales lead'=>'銷售簽單業績分類匯總',
 'Sales ranking list'=>'銷售排行榜歷史記錄查看',
 'Performance Objectives'=>'跨區業績目標',
+'Sales Target'=>'銷售目標',
 
 'Pending'=>'等候',
 'In Progress'=>'進行中',
@@ -95,5 +97,11 @@ return array(
 'Transaction Type'=>'交易類別',
 'Account'=>'賬戶',
 'Delegation'=>'授權',
+
+'Sales segment query'=>'銷售段位查詢',
+'Sales segment details query'=>'銷售段位明細查詢',
+'Sales history segment query'=>'銷售歷史段位查詢',
+'Sales Rank'=>'銷售段位設置',
+'Sales Turnover'=>'銷售成交率報表',
 );
 ?>

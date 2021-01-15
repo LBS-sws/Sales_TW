@@ -19,6 +19,7 @@ return array(
     'Quiz'=>'培训测验系统',
     'Academic Credit'=>'学分系统',
 	'Online Library'=>'网上文库',
+	'Charitable Credit'=>'慈善分系统',
 
 	'System Use'=>'系统使用',
 
@@ -46,6 +47,7 @@ return array(
 	'Report Manager'=>'报表管理员',
 	'Sales Visit List'=>'销售拜访报表',
     'Performance Objectives'=>'跨区业绩目标',
+    'Sales Target'=>'销售目标',
 
 	'System Setting'=>'系统设置',
 	'Security'=>'保安',
@@ -95,5 +97,12 @@ return array(
 	'Transaction Type'=>'交易类别',
 	'Account'=>'账户',
 	'Delegation'=>'授权',
+
+	'Sales segment query'=>'销售段位查询',
+	'Sales segment details query'=>'销售段位明细查询',
+    'Sales history segment query'=>'销售历史段位查询',
+	'Sales Rank'=>'销售段位设置',
+	'Sales Turnover'=>'销售成交率报表',
+
 );
 ?>

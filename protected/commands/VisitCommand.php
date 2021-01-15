@@ -37,10 +37,8 @@ class VisitCommand extends CConsoleCommand
                     if (!empty($people)) {
                         $people = array_unique($people, SORT_REGULAR);
                         $arr['sale'] = array_column($people, 'username');
-                        $arr['sort'] = 'money';
+                        $arr['sort'] = 'singular';
                         $arr_email = ReportVisitForm::Summary($arr);
-                        $arraycol = array_column($arr_email,'singular');
-                        array_multisort($arraycol,SORT_DESC,$arr_email);
                         $sum['money'] = array_sum(array_map(create_function('$val', 'return $val["money"];'), $arr_email));
                         $sum['singular'] = array_sum(array_map(create_function('$val', 'return $val["singular"];'), $arr_email));
                         $sum['svc_A7'] = array_sum(array_map(create_function('$val', 'return $val["svc_A7"];'), $arr_email));
