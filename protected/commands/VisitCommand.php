@@ -4,8 +4,8 @@ class VisitCommand extends CConsoleCommand
     public function run()
     {
         $suffix = Yii::app()->params['envSuffix'];
-        $firstDay = date("Y/m/d");
-        $arr['start_dt'] = date("Y/m/d", strtotime("$firstDay - 6 day"));
+        $firstDay = date("Y-m-d");
+        $arr['start_dt'] = date("Y-m-d", strtotime("$firstDay - 6 day"));
         $arr['end_dt'] = $firstDay;
         //收件人
         $sql = "select a.username,a.email,a.city,c.name from  security$suffix.sec_user a 
