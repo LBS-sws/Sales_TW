@@ -2078,12 +2078,18 @@ class ReportVisitForm extends CReportForm
         $att=array();
         $sql1="select cust_name from sal_visit  where username='$man' and service_type like '%$a%'  and visit_dt >= '$start_dt'and visit_dt <= '$end_dt' group by cust_name";
         $ai = Yii::app()->db->createCommand($sql1)->queryAll();
-        if(empty($ai)){$ai=0;}
-        $ai=count($ai);
+        if(empty($ai)){
+            $ai=0;
+        }else{
+            $ai=count($ai);
+        }
         $sql2="select cust_name  from sal_visit  where username='$man' and service_type like '%$a%' and visit_obj like '%3%'  and visit_dt >= '$start_dt'and visit_dt <= '$end_dt' group by cust_name";
         $b = Yii::app()->db->createCommand($sql2)->queryAll();
-        if(empty($b)){$b=0;}
-        $b=count($b);
+        if(empty($b)){
+            $b=0;
+        }else{
+            $b=count($b);
+        }
         if($ai==0){
             $c=0;
         }else{
