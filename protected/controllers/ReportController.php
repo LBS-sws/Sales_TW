@@ -10,6 +10,8 @@ class ReportController extends Controller
         'staff'=>'HA02',
         'sale'=>'HA02',
         'down'=>'HA02',
+        'turnover'=>'HA07',
+        'turnoverdown'=>'HA07',
         'performance'=>'HA04',
         'performancelist'=>'HA04',
         'performancedown'=>'HA04',
@@ -280,6 +282,44 @@ class ReportController extends Controller
         }
 //        print_r('<pre/>');
 //        print_r($model);
+    }
+
+    public function actionTurnover() {
+        $this->function_id = self::$actions['turnover'];
+        Yii::app()->session['active_func'] = $this->function_id;
+        $model = new ReportVisitForm;
+        if (isset($_POST['ReportVisitForm'])) {
+            $model->attributes = $_POST['ReportVisitForm'];
+        }
+        $city=$model->city();
+        $saleman=$model->salepeople();
+        if(!empty(Yii::app()->session['index'])){
+            $model['start_dt']=Yii::app()->session['index']['start_dt'];
+            $model['end_dt']=Yii::app()->session['index']['end_dt'];
+            $model['city']=Yii::app()->session['index']['city'];
+            if(!empty(Yii::app()->session['index']['sale'])){
+                $model['sale']=Yii::app()->session['index']['sale'];
+            }
+
+            $saleman=$model->salepeoples($model['city']);
+        }
+
+//        print_r('<pre/>');
+//        print_r(   $model['sale']);
+        $this->render('turnover',array('model'=>$model,'city'=>$city,'saleman'=>$saleman));
+    }
+
+    public function actionTurnoverDown(){
+        $this->function_id = self::$actions['turnoverdown'];
+        Yii::app()->session['active_func'] = $this->function_id;
+        $model = new ReportVisitForm;
+        if(isset($_POST['ReportVisitForm']['sale'])){
+            $arr = $_POST['ReportVisitForm'];
+            $model->TurnoverExcel($arr);
+        }else{
+            Dialog::message(Yii::t('dialog','Warning'), Yii::t('dialog','Please check the assigned person'));
+            $this->redirect(Yii::app()->createUrl('report/turnover'));
+        }
     }
 
     public static function allowExecute() {

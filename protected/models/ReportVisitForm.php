@@ -1981,4 +1981,117 @@ class ReportVisitForm extends CReportForm
         }
         return ($rtn=='' ? "$field='0'" : $rtn);
     }
+
+    public function TurnoverExcel($arr){
+        $start_dt=str_replace("/","-",$arr['start_dt']);
+        $end_dt=str_replace("/","-",$arr['end_dt']);
+        $suffix = Yii::app()->params['envSuffix'];
+        $city=General::getCityName($arr['city']);
+        Yii::$enableIncludePath = false;
+        $phpExcelPath = Yii::getPathOfAlias('ext.phpexcel');
+        spl_autoload_unregister(array('YiiBase','autoload'));
+        include($phpExcelPath . DIRECTORY_SEPARATOR . 'PHPExcel.php');
+        $objPHPExcel = new PHPExcel;
+        $objReader  = PHPExcel_IOFactory::createReader('Excel2007');
+        $path = Yii::app()->basePath.'/commands/template/TurnoverExcel.xlsx';
+        $objPHPExcel = $objReader->load($path);
+        $objPHPExcel->getActiveSheet()->mergeCells('A1:C1');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', '销售成交率报表 -'.$city) ;
+        $i=3;
+//        $objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25);
+        foreach ($arr['sale'] as $man){
+            $sql1="select employee_name  from hr$suffix.hr_binding  where user_id='$man' ";
+            $name = Yii::app()->db->createCommand($sql1)->queryScalar();
+            $ia=$this->TurnoverDate($man,1,$start_dt,$end_dt);
+            $ib=$this->TurnoverDate($man,2,$start_dt,$end_dt);
+            $inv=$this->TurnoverDate($man,4,$start_dt,$end_dt);
+            $poapyinx=$this->TurnoverDate($man,5,$start_dt,$end_dt);
+            $kongqi=$this->TurnoverDate($man,7,$start_dt,$end_dt);
+            //数据
+            $objPHPExcel->getActiveSheet()->mergeCells('A'.$i.':C'.$i);
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i, '拜访日期'.$arr['start_dt'].'-'.$arr['end_dt']) ;
+            $objPHPExcel->getActiveSheet()->mergeCells('D'.$i.':F'.$i);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i, '员工 ：'.$name) ;
+            $i=$i+1;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,'服务类型');
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i,'IA');
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i,'IB');
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i,'INV');
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i,'飘盈香');
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i,'空气净化机');
+            $i=$i+1;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,'拜访数量');
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i,$ia['visit']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i,$ib['visit']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i,$inv['visit']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i,$poapyinx['visit']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i,$kongqi['visit']);
+            $i=$i+1;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,'签单数量');
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i,$ia['sign']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i,$ib['sign']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i,$inv['sign']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i,$poapyinx['sign']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i,$kongqi['sign']);
+            $i=$i+1;
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.$i,'签单成交率');
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.$i,$ia['turnover']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$i,$ib['turnover']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$i,$inv['turnover']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i,$poapyinx['turnover']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.$i,$kongqi['turnover']);
+            $styleArray = array(
+                'borders' => array(
+                    'allborders' => array(
+                        //'style' => PHPExcel_Style_Border::BORDER_THICK,//边框是粗的
+                        'style' => PHPExcel_Style_Border::BORDER_THIN,//细边框
+                        'color' => array('argb' => '999999'),
+                    ),
+                ),
+            );
+            $a=$i-4;
+            $objPHPExcel->getActiveSheet()->getStyle('A'.$a.':F'.$i)->applyFromArray($styleArray);
+            $i=$i+2;
+        }
+//        print_r('<pre/>');
+//        print_r($model['all']);
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        ob_start();
+        $objWriter->save('php://output');
+        $output = ob_get_clean();
+        spl_autoload_register(array('YiiBase','autoload'));
+        $time=time();
+        $str="templates/TurnoverExcel_".$time.".xlsx";
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control:must-revalidate, post-check=0, pre-check=0");
+        header("Content-Type:application/force-download");
+        header("Content-Type:application/vnd.ms-execl");
+        header("Content-Type:application/octet-stream");
+        header("Content-Type:application/download");;
+        header('Content-Disposition:attachment;filename="'.$str.'"');
+        header("Content-Transfer-Encoding:binary");
+        echo $output;
+    }
+
+    public function TurnoverDate($man,$a,$start_dt,$end_dt){
+        $att=array();
+        $sql1="select cust_name from sal_visit  where username='$man' and service_type like '%$a%'  and visit_dt >= '$start_dt'and visit_dt <= '$end_dt' group by cust_name";
+        $ai = Yii::app()->db->createCommand($sql1)->queryAll();
+        if(empty($ai)){$ai=0;}
+        $ai=count($ai);
+        $sql2="select cust_name  from sal_visit  where username='$man' and service_type like '%$a%' and visit_obj like '%3%'  and visit_dt >= '$start_dt'and visit_dt <= '$end_dt' group by cust_name";
+        $b = Yii::app()->db->createCommand($sql2)->queryAll();
+        if(empty($b)){$b=0;}
+        $b=count($b);
+        if($ai==0){
+            $c=0;
+        }else{
+            $c=$b/$ai;
+        }
+        $att['visit']=$ai;
+        $att['sign']=$b;
+        $att['turnover']=(round($c,2)*100)."%";
+        return $att;
+    }
 }
