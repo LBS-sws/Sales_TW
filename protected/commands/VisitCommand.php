@@ -63,7 +63,7 @@ class VisitCommand extends CConsoleCommand
                         $subject = $city . "地区签单明细" . $arr['start_dt'] . "-" . $arr['end_dt'];
                         $description = "</<br>".$arr['start_dt'] . "-" . $arr['end_dt'];
                         $url = Yii::app()->params['webroot'];
-                        $url .= "/visit/index?start=" . $arr['start_dt'] . "&end=" . $arr['end_dt'] . "&city=" . $city;
+                        $url .= "/index.php/visit/index?start=" . $arr['start_dt'] . "&end=" . $arr['end_dt'] . "&city=" . $city;
                         $message = <<<EOF
 <table cellpadding="10" cellspacing="1" style="color:#666;font:13px Arial;line-height:1.4em;width:100%;">
 	<tbody>
