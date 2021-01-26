@@ -280,6 +280,7 @@ class VisitList extends CListPageModel
 //echo $sql;
 //Yii::app()->end();
         $records = Yii::app()->db->createCommand($sql)->queryAll();
+        print_r($sql);
         $list = array();
         $this->attr = array();
         if (count($records) > 0) {

@@ -40,7 +40,7 @@ class VisitController extends Controller
 		);
 	}
 
-	public function actionIndex($pageNum=0) 
+	public function actionIndex($pageNum=0)
 	{
 		$model = new VisitList;
 		if (isset($_POST['VisitList'])) {
@@ -60,6 +60,7 @@ class VisitController extends Controller
 		}
 		$model->determinePageNum($pageNum);
         if(!empty($session['get'])){
+            print_r($session['get']);
             $model->retrieveDataByPage_visit($model->pageNum,$session['get']);
         }else{
             $model->retrieveDataByPage($model->pageNum);
