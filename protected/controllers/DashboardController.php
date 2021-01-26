@@ -50,7 +50,7 @@ class DashboardController extends Controller
 		$sql = "select a.city, a.username, sum(convert(b.field_value, decimal(12,2))) as money
 				from sal_visit a force index (idx_visit_02), sal_visit_info b
 				where a.id=b.visit_id and b.field_id in ('svc_A7','svc_B6','svc_C7','svc_D6','svc_E7') 
-				and a.visit_dt >= '$time' and  a.visit_obj like '%10%'
+				and a.visit_dt >= '$time' and  a.visit_obj like '%3%'
 				group by a.city, a.username
 			";
 		$records = Yii::app()->db->createCommand($sql)->queryAll();
@@ -91,7 +91,7 @@ class DashboardController extends Controller
         $time= date('Y-m-d', strtotime(date('Y-m-01') ));
         foreach ($cities as $code=>$name) {
             $sum_arr = array();
-            if (strpos("/'CS'/'H-N'/'HK'/'TC'/'ZS1'/'TP'/'TY'/'KS'/'TN'/'XM'/'KH'/'ZY'/'MO'/'RN'/'MY'/","'".$code."'")===false) {
+            if (strpos("/'CS'/'HK'/","'".$code."'")===false) {
                 $sql = "select a.name as city_name, b.name as region_name 
 						from security$suffix.sec_city a
 						left outer join security$suffix.sec_city b on a.region=b.code
@@ -106,7 +106,7 @@ class DashboardController extends Controller
                 $peoples=count($people);
                 if(!empty($people)){
                     //总单数
-                    $sql2="select id from sal_visit where city='$code' and  visit_obj like '%10%' and visit_dt >='".$time."'";
+                    $sql2="select id from sal_visit where city='$code' and  visit_obj like '%3%' and visit_dt >='".$time."'";
                     $sum = Yii::app()->db->createCommand($sql2)->queryAll();
                     foreach ($sum as $id){
                         $sqlid="select count(visit_id) as sum from  sal_visit_info where field_id in ('svc_A7','svc_B6','svc_C7','svc_D6','svc_E7') and field_value>'0' and visit_id='".$id['id']."'";
@@ -141,7 +141,7 @@ foreach ($models as $key=>$item) {
         $cities = General::getCityListWithNoDescendant();
         $time= date('Y-m-d', strtotime(date('Y-m-01') ));
         foreach ($cities as $code=>$name) {
-            if (strpos("/'CS'/'H-N'/'HK'/'TC'/'ZS1'/'TP'/'TY'/'KS'/'TN'/'XM'/'KH'/'ZY'/'MO'/'RN'/'MY'/","'".$code."'")===false) {
+            if (strpos("/'CS'/'HK'/","'".$code."'")===false) {
                 $sql = "select a.name as city_name, b.name as region_name 
 						from security$suffix.sec_city a
 						left outer join security$suffix.sec_city b on a.region=b.code
@@ -155,7 +155,7 @@ foreach ($models as $key=>$item) {
                 $people = Yii::app()->db->createCommand($sql1)->queryAll();
                 $peoples=count($people);
                 //总单数
-                $sql2="select id from sal_visit where city='$code' and  visit_obj like '%10%' and visit_dt >='".$time."'";
+                $sql2="select id from sal_visit where city='$code' and  visit_obj like '%3%' and visit_dt >='".$time."'";
                 $sum = Yii::app()->db->createCommand($sql2)->queryAll();
                 $sums=count($sum);
                 //人均签单数
