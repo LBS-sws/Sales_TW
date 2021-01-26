@@ -1,7 +1,7 @@
 <?php
 class VisitCommand extends CConsoleCommand
 {
-    public function run()
+    public function run($args)
     {
         $suffix = Yii::app()->params['envSuffix'];
         $firstDay = empty($args) ? date("Y-m-d") : $args[0];

@@ -60,7 +60,6 @@ class VisitController extends Controller
 		}
 		$model->determinePageNum($pageNum);
         if(!empty($session['get'])){
-            print_r($session['get']);
             $model->retrieveDataByPage_visit($model->pageNum,$session['get']);
         }else{
             $model->retrieveDataByPage($model->pageNum);
