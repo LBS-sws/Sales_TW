@@ -1836,6 +1836,9 @@ class ReportVisitForm extends CReportForm
             }else{
                 $sums=0;
             }
+            $sqlbf="select count(id) from sal_visit where username='".$peoples."'  and  visit_dt >= '$start_dt'and visit_dt <= '$end_dt' ";
+            $baifang = Yii::app()->db->createCommand($sqlbf)->queryScalar();
+            $people['visit']=$baifang;
             $people['singular']=$sums;
             $people['cityname']=$cname['cityname'];
             $people['names']=$cname['names'];
