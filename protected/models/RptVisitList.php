@@ -54,6 +54,7 @@ class RptVisitList extends CReport {
 			'svc_C3'=>array('label'=>Yii::t('sales','蟑螂'),'width'=>10,'align'=>'C'),
 			'svc_C4'=>array('label'=>Yii::t('sales','果蝇'),'width'=>10,'align'=>'C'),
 			'svc_C5'=>array('label'=>Yii::t('sales','租灭蝇灯'),'width'=>10,'align'=>'C'),
+            'svc_C11'=>array('label'=>Yii::t('sales','螞蟻'),'width'=>10,'align'=>'C'),
             'svc_C9'=>array('label'=>Yii::t('sales','焗雾'),'width'=>10,'align'=>'C'),
 			'svc_C6'=>array('label'=>Yii::t('sales','预估成交率').'(0-100%)','width'=>10,'align'=>'C'),
 			'svc_C7'=>array('label'=>Yii::t('sales','合同年金额'),'width'=>10,'align'=>'C'),
@@ -155,6 +156,7 @@ class RptVisitList extends CReport {
 					'svc_C3',
 					'svc_C4',
 					'svc_C5',
+                    'svc_C11',
                     'svc_C9',
 					'svc_C6',
 					'svc_C7',
@@ -310,7 +312,7 @@ class RptVisitList extends CReport {
 				$sqld = "select field_id, field_value from sal_visit_info where visit_id=".$row['id'];
 				$lines = Yii::app()->db->createCommand($sqld)->queryAll();
 				foreach ($lines as $line) {
-					if (strpos('svc_C2,svc_C3,svc_C4,svc_C5,svc_C9,',$line['field_id'].',')===false)
+					if (strpos('svc_C2,svc_C3,svc_C4,svc_C5,svc_C11,svc_C9,',$line['field_id'].',')===false)
 						$temp[$line['field_id']] = $line['field_value'];
 					else 
 						$temp[$line['field_id']] = $line['field_value']=='Y' ? 'Y' : '';

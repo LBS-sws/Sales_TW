@@ -91,6 +91,7 @@ class VisitForm extends CFormModel
                         'C3'=>array('name'=>Yii::t('sales','蟑螂'),'type'=>'checkbox'),
                         'C4'=>array('name'=>Yii::t('sales','果蝇'),'type'=>'checkbox'),
                         'C5'=>array('name'=>Yii::t('sales','租灭蝇灯'),'type'=>'checkbox'),
+                        'C11'=>array('name'=>Yii::t('sales','螞蟻'),'type'=>'checkbox'),
                         'C9'=>array('name'=>Yii::t('sales','焗雾'),'type'=>'checkbox','eol'=>true),
                         'C6'=>array('name'=>Yii::t('sales','预估成交率').'(0-100%)','type'=>'pct'),
                         'C7'=>array('name'=>Yii::t('sales','合同年金额'),'type'=>'amount','eol'=>true),

@@ -548,6 +548,7 @@ $('#VisitForm_cust_name').on('change', function(){
 		    $('#VisitForm_service_svc_C3').prop('checked', data.svc_C3=='Y');
 		    $('#VisitForm_service_svc_C4').prop('checked', data.svc_C4=='Y');
 		    $('#VisitForm_service_svc_C5').prop('checked', data.svc_C5=='Y');	
+		    $('#VisitForm_service_svc_C11').prop('checked', data.svc_C11=='Y');	
 		    $('#VisitForm_service_svc_C9').prop('checked', data.svc_C9=='Y');		    
 		    $('#VisitForm_service_svc_C6').val(data.svc_C6);
 		    $('#VisitForm_service_svc_C7').val(data.svc_C7);
