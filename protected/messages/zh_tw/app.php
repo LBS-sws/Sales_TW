@@ -103,5 +103,8 @@ return array(
 'Sales history segment query'=>'銷售歷史段位查詢',
 'Sales Rank'=>'銷售段位設置',
 'Sales Turnover'=>'銷售成交率報表',
+	//沈超添加
+	'Sales Search Customer'=>'銷售客戶查詢',
+	'Sales Search Count'=>'銷售客戶查詢統計',
 );
 ?>

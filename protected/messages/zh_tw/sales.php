@@ -163,6 +163,24 @@ return array(
 'Quotation'=>'報價',
 'Quotations'=>'已報價',
 'No Quotation'=>'未報價',
-'Quotation judgment'=>'是否報價（是/否）'
+'Quotation judgment'=>'是否報價（是/否）',
+
+'Coefficient'=>'銷售段位係數',
+'Coefficient List'=>'銷售段位係數列表',
+'Coefficient Form'=>'銷售段位係數表單',
+'Criterion'=>'準則',
+'Bonus'=>'得分',
+'Coefficients'=>'係數',
+'Sign'=>'符號',
+'Start Date'=>'日期',
+
+    'LBS Customer Enquiry'=>'史偉莎客戶查詢',
+    'sales search list'=>'銷售查詢列表',
+    'sales search date'=>'查詢日期',
+    'sales search keyword'=>'查詢關鍵字',
+    'sales search count'=>'查詢次數',
+    'only sales statistics'=>'銷售員工統計',
+    'all sales statistics'=>'城市統計',
+    'city statistics'=>'地區統計',
 );
 ?>
