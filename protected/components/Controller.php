@@ -35,6 +35,19 @@ class Controller extends CController
 			Yii::app()->language = $session['lang'];
 	}
 	
+    public function beforeAction($action) {
+        //ajax請求並且是ajaxController內的方法不需要驗證
+        if(Yii::app()->request->isAjaxRequest&&Yii::app()->controller->id=="ajax"){
+            return true;
+        }
+        if (!Yii::app()->user->isGuest) {
+            $obj = new SysBlock();
+            $url = $obj->blockNRoute($this->id, $this->function_id);
+            if ($url!==false) $this->redirect($url);
+        }
+        return true;
+    }
+	
 	public function filterEnforceRegisteredStation($filterChain) {
 		$rtn = true;
 		if (Yii::app()->params['checkStation']) {
