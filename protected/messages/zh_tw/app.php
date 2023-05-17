@@ -106,5 +106,21 @@ return array(
 	//沈超添加
 	'Sales Search Customer'=>'銷售客戶查詢',
 	'Sales Search Count'=>'銷售客戶查詢統計',
+    'Attribute category'=>'屬性類別',
+    'Renaud Air List'=>'蔚诺空气业务签单排行榜',
+    'Club sales'=>'銷售段位俱樂部',
+    'Club setting'=>'俱樂部配置',
+    'Club recommend'=>'推薦俱樂部銷售',
+    'Stop Back Type'=>'回訪客戶類型',
+    'Stop Customer Site'=>'終止客戶回訪配置',
+    'Stop Customer Other'=>'轉移終止客戶回訪',
+    'Stop Customer Search'=>'已回訪記錄查詢',
+    'Stop Customer Search(All)'=>'回訪記錄查詢(所有)',
+    'Stop Customer None'=>'未回訪記錄查詢',
+    'Stop Customer Back'=>'終止客戶回訪',
+    'Stop Customer Again'=>'再次回訪列表',
+    'Stop Customer'=>'終止客戶',
+    'Club Sales Confirm'=>'銷售俱樂部確認功能',
+    'sales min setting'=>'周拜訪數量設定',
 );
 ?>

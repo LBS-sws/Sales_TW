@@ -133,6 +133,11 @@ return array(
                 'url'=>'/level/index',
                 'tag'=>'@',
             ),
+            'sales min setting'=>array(
+                'access'=>'HC11',
+                'url'=>'/salesMin/edit',
+                'tag'=>'@',
+            ),
 		),
 	),
 

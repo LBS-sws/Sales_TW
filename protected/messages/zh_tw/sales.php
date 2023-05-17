@@ -182,5 +182,19 @@ return array(
     'only sales statistics'=>'銷售員工統計',
     'all sales statistics'=>'城市統計',
     'city statistics'=>'地區統計',
+
+    'display'=>'是否顯示',
+    'show'=>'顯示',
+    'none'=>'隱藏',
+    'type for'=>'類別歸屬',
+    'singular'=>'單數',
+    'Score Ari'=>'機器總數量',
+    'Nature'=>'性质',
+
+    'min num'=>'當周最小拜訪數量',
+
+    '-- all --'=>'--全部--',
+    'shift staff'=>'轉移銷售拜訪',
+    'not shift staff'=>'非轉移銷售拜訪',
 );
 ?>

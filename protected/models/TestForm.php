@@ -1,10 +1,10 @@
 <?php
-class VisitCommand extends CConsoleCommand
+class TestForm
 {
-    public function run($args)
+    public function run($nowDate="",$emailBool=false)
     {
         $suffix = Yii::app()->params['envSuffix'];
-        $firstDay = empty($args) ? date("Y-m-d") : $args[0];
+        $firstDay = !empty($nowDate)?date("Y-m-d",strtotime($nowDate)):date("Y-m-d");
         $arr['start_dt'] = date("Y-m-d", strtotime("$firstDay - 6 day"));
         $arr['end_dt'] = $firstDay;
         $month = date("m",strtotime($arr['start_dt']));
@@ -28,7 +28,7 @@ class VisitCommand extends CConsoleCommand
             $record = $model->getDescendant($Addressee['city']);
             array_unshift($record, $Addressee['city']);
             foreach ($record as $k) {
-                $nocity = array('CN', 'CS', 'H-N', 'HB', 'HD', 'HD1', 'HK', 'HN', 'HN1', 'HN2', 'HX', 'HXHB', 'JMS',  'MO', 'MY', 'RN', 'TY', 'XM', 'ZS1', 'ZY');
+                $nocity = array('CN', 'CS', 'H-N', 'HB', 'HD', 'HD1', 'HK', 'HN', 'HN1', 'HN2', 'HX', 'HXHB', 'JMS', 'KS', 'MO', 'MY', 'RN', 'TC', 'TN', 'TP', 'TY', 'XM', 'ZS1', 'ZY', 'RW', 'WL');
                 $sql_city = "select name from security$suffix.sec_city where code='$k'";
                 $city = Yii::app()->db->createCommand($sql_city)->queryScalar();
                 if (in_array($k, $nocity, true)) {
@@ -213,17 +213,24 @@ EOF;
                         $message = str_replace(':sumIntegral:',$sumIntegral,$message);
                         $lcu = "admin";
                         $comparisonHtml = $this->getHtmlForCity($comparisonHtmlData,$k,$city);
-                        $aaa = Yii::app()->db->createCommand()->insert("swoper$suffix.swo_email_queue", array(
-                            'request_dt' => date('Y-m-d H:i:s'),
-                            'from_addr' => $from_addr,
-                            'to_addr' => $to_addr,
-                            'subject' => $subject,//郵件主題
-                            'description' => $description,//郵件副題
-                            'message' => $comparisonHtml.$message,//郵件內容（html）
-                            'status' => "P",
-                            'lcu' => $lcu,
-                            'lcd' => date('Y-m-d H:i:s'),
-                        ));
+
+                        echo $subject."<br/>";
+                        echo $comparisonHtml.$message;
+                        echo "<br/>toAdr:".$to_addr."<br/>";
+                        if($emailBool){
+                            Yii::app()->db->createCommand()->insert("swoper$suffix.swo_email_queue", array(
+                                'request_dt' => date('Y-m-d H:i:s'),
+                                'from_addr' => $from_addr,
+                                'to_addr' => $to_addr,
+                                'subject' => $subject,//郵件主題
+                                'description' => $description,//郵件副題
+                                'message' => $comparisonHtml.$message,//郵件內容（html）
+                                'status' => "P",
+                                'lcu' => $lcu,
+                                'lcd' => date('Y-m-d H:i:s'),
+                            ));
+                        }
+                        echo "end!<br/>";
                     }else{
                         //发送邮件
                         $from_addr = "it@lbsgroup.com.hk";
@@ -320,17 +327,23 @@ EOF;
 EOF;
                         $lcu = "admin";
                         $comparisonHtml = $this->getHtmlForCity($comparisonHtmlData,$k,$city);
-                        $aaa = Yii::app()->db->createCommand()->insert("swoper$suffix.swo_email_queue", array(
-                            'request_dt' => date('Y-m-d H:i:s'),
-                            'from_addr' => $from_addr,
-                            'to_addr' => $to_addr,
-                            'subject' => $subject,//郵件主題
-                            'description' => $description,//郵件副題
-                            'message' => $comparisonHtml.$message,//郵件內容（html）
-                            'status' => "P",
-                            'lcu' => $lcu,
-                            'lcd' => date('Y-m-d H:i:s'),
-                        ));
+                        echo $subject."<br/>";
+                        echo $comparisonHtml.$message;
+                        echo "<br/>toAdr:".$to_addr."<br/>";
+                        if($emailBool){
+                            Yii::app()->db->createCommand()->insert("swoper$suffix.swo_email_queue", array(
+                                'request_dt' => date('Y-m-d H:i:s'),
+                                'from_addr' => $from_addr,
+                                'to_addr' => $to_addr,
+                                'subject' => $subject,//郵件主題
+                                'description' => $description,//郵件副題
+                                'message' => $comparisonHtml.$message,//郵件內容（html）
+                                'status' => "P",
+                                'lcu' => $lcu,
+                                'lcd' => date('Y-m-d H:i:s'),
+                            ));
+                        }
+                        echo "end!<br/><br/><br/>";
                         }
                     }
                 }

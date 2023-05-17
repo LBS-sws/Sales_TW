@@ -187,5 +187,20 @@ return array(
     'only sales statistics'=>'销售员工统计',
     'all sales statistics'=>'城市统计',
     'city statistics'=>'地区统计',
+
+    'display'=>'是否显示',
+    'show'=>'显示',
+    'none'=>'隐藏',
+    'type for'=>'类别归属',
+    'singular'=>'单数',
+    'Score Ari'=>'机器总数量',
+    'Nature'=>'性质',
+
+    'min num'=>'当周最小拜访数量',
+
+    '-- all --'=>'--全部--',
+    'shift staff'=>'转移销售拜访',
+    'not shift staff'=>'非转移销售拜访',
+    'Lcd'=>'录入时间',
 );
 ?>
