@@ -400,7 +400,7 @@ EOF;
         $html.="<p style='color: red;'>本周停单年金额:{$list["stopWeekSum"]}</p>";
         $html.="<p style='color: red;'>本周停单月金额:{$list["stopMonthSum"]}</p>";
         $html.="<p style='color: red;' data-u='{$list["uServiceMoney"]}'>本月停单率:{$list["stopRate"]}</p>";
-        $html.="<p>月金额超过1000元/月的停单客户明细如下：</p>";
+        $html.="<p>月金额超过1000/月的停单客户明细如下：</p>";
         $html.=self::stopTableHtmlForMonth($list["stopListOnly"]);
         $html.="<br/>";
 
