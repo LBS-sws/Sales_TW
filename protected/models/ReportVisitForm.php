@@ -1819,8 +1819,8 @@ class ReportVisitForm extends CReportForm
             }
 //            print_r('<pre/>');
 //            print_r($records);
-            $sqls="select a.name as cityname ,d.name as names from security$suffix.sec_city a	,hr$suffix.hr_binding b	 ,security$suffix.sec_user  c ,hr$suffix.hr_employee d 
-                where c.username='$peoples' and b.user_id='".$peoples."' and b.employee_id=d.id and c.city=a.code";
+            $sqls="select a.name as cityname ,d.name as names from security{$suffix}.sec_city a	,hr{$suffix}.hr_binding b	 ,security{$suffix}.sec_user  c ,hr{$suffix}.hr_employee d 
+                where c.username='{$peoples}' and b.user_id='{$peoples}' and b.employee_id=d.id and c.city=a.code";
             $cname = Yii::app()->db->createCommand($sqls)->queryRow();
             $sql1="select id,visit_dt  from sal_visit where username='".$peoples."'  and  visit_dt >= '$start_dt'and visit_dt <= '$end_dt' and visit_obj like '%10%'";
             $arr = Yii::app()->db->createCommand($sql1)->queryAll();

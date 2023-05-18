@@ -149,7 +149,7 @@ EOF;
                             $visitColor=$sum['visit']>=$minVisit?"":"color:red";
                             $message.= <<<EOF
 					<tr>
-						<td class="et5" rowspan="4" style="width: 75.75pt; text-align: center;" width="101"><span style="color:#000000;"><a target="_Blank" href="$url&sales={$value['names']}"><span style="font-size:16px;">{$value['names']}</span></a></span></td>
+						<td class="et5" rowspan="4" style="width: 75.75pt; text-align: center;" width="101"><span style="color:#000000;"><a target="_Blank" data-user="{$value['username']}" href="$url&sales={$value['names']}"><span style="font-size:16px;">{$value['names']}</span></a></span></td>
 						<td class="et5" rowspan="4" style="width: 75.75pt; text-align: center;" width="101"><span style="color:#000000;"><span style="font-size:16px;">{$value['cityname']}</span></span></td>
 							<td class="et5" rowspan="4" style="width: 75.75pt; text-align: center;" width="101"><span style="color:#000000;"><span style="font-size:16px;">{$value['rank']}</span></span></td>
 
