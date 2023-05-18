@@ -257,7 +257,7 @@ class ComparisonForm extends CFormModel
 					}
 					if($this->comparison_year==$year){
 						$data[$city]["stopSumOnly"] += $monthMoney;
-						if($monthMoney>=1000){
+						if($monthMoney>=4000){
 							$stopList = $row;
 							$stopList["stopMoneyForMonth"] = $monthMoney;
 							$stopList["stopMoneyForYear"] = $money;

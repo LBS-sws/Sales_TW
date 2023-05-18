@@ -28,7 +28,7 @@ class TestForm
             $record = $model->getDescendant($Addressee['city']);
             array_unshift($record, $Addressee['city']);
             foreach ($record as $k) {
-                $nocity = array('CN', 'CS', 'H-N', 'HB', 'HD', 'HD1', 'HK', 'HN', 'HN1', 'HN2', 'HX', 'HXHB', 'JMS',  'MO', 'MY', 'RN', 'TY', 'XM', 'ZS1', 'ZY');
+                $nocity = array('CN', 'CS', 'H-N', 'HB', 'HD', 'HD1', 'HK', 'HN', 'HN1', 'HN2', 'HX', 'HXHB', 'JMS',  'MO', 'MY', 'RN', 'XM', 'ZS1', 'ZY');
                 $sql_city = "select name from security$suffix.sec_city where code='$k'";
                 $city = Yii::app()->db->createCommand($sql_city)->queryScalar();
                 if (in_array($k, $nocity, true)) {
@@ -413,7 +413,7 @@ EOF;
         $html.="<p style='color: red;'>本周停单年金额:{$list["stopWeekSum"]}</p>";
         $html.="<p style='color: red;'>本周停单月金额:{$list["stopMonthSum"]}</p>";
         $html.="<p style='color: red;' data-u='{$list["uServiceMoney"]}'>本月停单率:{$list["stopRate"]}</p>";
-        $html.="<p>月金额超过1000/月的停单客户明细如下：</p>";
+        $html.="<p>月金额超过4000/月的停单客户明细如下：</p>";
         $html.=self::stopTableHtmlForMonth($list["stopListOnly"]);
         $html.="<br/>";
 
