@@ -1802,13 +1802,15 @@ class ReportVisitForm extends CReportForm
         $end_dt=str_replace("/","-",$model['end_dt']);
         $suffix = Yii::app()->params['envSuffix'];
         $models=array();
+        $obj_where_a = ReportVisitForm::getDealString("a.visit_obj");
+        $obj_where = ReportVisitForm::getDealString("visit_obj");
         foreach ($model['sale'] as $code=>$peoples){
             $sum_arr=array();
             $people=array();
             $sql = "select a.city, a.username, sum(convert(b.field_value, decimal(12,2))) as money 
 				from sal_visit a force index (idx_visit_02), sal_visit_info b   
 				where a.id=b.visit_id and b.field_id in ('svc_A7','svc_B6','svc_C7','svc_D6','svc_E7') 
-				and a.visit_dt >= '$start_dt'and a.visit_dt <= '$end_dt' and  a.visit_obj like '%10%' and a.username ='$peoples' 
+				and a.visit_dt >= '$start_dt'and a.visit_dt <= '$end_dt' and  ({$obj_where_a}) and a.username ='$peoples' 
 				group by a.city, a.username 
 			";
             $records = Yii::app()->db->createCommand($sql)->queryAll();
@@ -1822,7 +1824,7 @@ class ReportVisitForm extends CReportForm
             $sqls="select a.name as cityname ,d.name as names from security{$suffix}.sec_city a	,hr{$suffix}.hr_binding b	 ,security{$suffix}.sec_user  c ,hr{$suffix}.hr_employee d 
                 where c.username='{$peoples}' and b.user_id='{$peoples}' and b.employee_id=d.id and c.city=a.code";
             $cname = Yii::app()->db->createCommand($sqls)->queryRow();
-            $sql1="select id,visit_dt  from sal_visit where username='".$peoples."'  and  visit_dt >= '$start_dt'and visit_dt <= '$end_dt' and visit_obj like '%10%'";
+            $sql1="select id,visit_dt  from sal_visit where username='".$peoples."'  and  visit_dt >= '$start_dt'and visit_dt <= '$end_dt' and ({$obj_where})";
             $arr = Yii::app()->db->createCommand($sql1)->queryAll();
             $start_dt1= date("Y-m-01", strtotime($start_dt));
             $end_dt1=date("Y-m-31", strtotime($end_dt));
