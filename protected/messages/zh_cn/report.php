@@ -134,5 +134,14 @@ return array(
     'Renewal Reminder Report'=>'续约提醒报表',
     'Days Before Expiry'=>'到期前',
     'days'=>'日',
+    'level'=>'段位',
+    'Sales ranking'=>'销售个人段位排行榜',
+    'Sales Rank'=>'销售个人段位明细查询',
+    'Sales Rank man'=>'销售个人段位明细查询人员',
+    'KA Bot'=>'KA项目',
+
+    'dept name'=>'职位',
+    'office name'=>'办事处',
+    'local office'=>'本部',
 );
 ?>
