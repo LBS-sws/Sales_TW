@@ -78,6 +78,50 @@ class ReportVisitForm extends CReportForm
         return $records;
     }
 
+    public static function salemanForHr($city,$startDate="",$endDate=""){
+        $suffix = Yii::app()->params['envSuffix'];
+        $city=empty($city)?Yii::app()->user->city():$city;
+        $startDate = empty($startDate)?date("Y/m/01"):date("Y/m/d",strtotime($startDate));
+        $endDate = empty($endDate)?date("Y/m/d"):date("Y/m/d",strtotime($endDate));
+        $city_allow = City::model()->getDescendantList($city);
+        $city_allow .= (empty($city_allow)) ? "'$city'" : ",'$city'";
+        $list=array();
+        $rows = Yii::app()->db->createCommand()->select("a.name,d.user_id,a.staff_status")
+            ->from("security{$suffix}.sec_user_access f")
+            ->leftJoin("hr{$suffix}.hr_binding d","d.user_id=f.username")
+            ->leftJoin("hr{$suffix}.hr_employee a","d.employee_id=a.id")
+            ->where("f.system_id='sal' and f.a_read_write like '%HK01%' and (
+                (a.staff_status = 0 and date_format(a.entry_time,'%Y/%m/%d')<='{$endDate}')
+                or
+                (a.staff_status=-1 and date_format(a.leave_time,'%Y/%m/%d')>='{$startDate}' and date_format(a.entry_time,'%Y/%m/%d')<='{$endDate}')
+             ) AND a.city in ({$city_allow})"
+            )->order("a.id desc")->queryAll();
+        if($rows){
+            foreach ($rows as $row){
+                $name_label = $row["name"];
+                $name_label.= empty($row["staff_status"])?"":"（已离职）";
+                $list[] = array("name"=>$row["name"],"user_id"=>$row["user_id"],"name_label"=>$name_label);
+            }
+        }
+        return $list;
+    }
+
+    public static function getAllSales($city,$startDate,$endDate){
+        $suffix = Yii::app()->params['envSuffix'];
+        $city = empty($city)?Yii::app()->user->city():$city;
+        $startDate = empty($startDate)?date("Y-m-01"):$startDate;
+        $endDate = empty($endDate)?date("Y-m-31"):$endDate;
+        $city_allow = City::model()->getDescendantList($city);
+        $city_allow .= (empty($city_allow)) ? "'$city'" : ",'$city'";
+        $rows = Yii::app()->db->createCommand()->select("a.username,f.name")
+            ->from("sal_visit a")
+            ->leftJoin("hr$suffix.hr_binding b","a.username = b.user_id")
+            ->leftJoin("hr$suffix.hr_employee f","b.employee_id = f.id")
+            ->where("a.visit_dt between '{$startDate}' and '{$endDate}' and a.city in ($city_allow)")
+            ->group("a.username,f.name")
+            ->queryAll();
+        return $rows;
+    }
     public function salepeople(){
         $suffix = Yii::app()->params['envSuffix'];
         $city=Yii::app()->user->city();
@@ -1821,8 +1865,16 @@ class ReportVisitForm extends CReportForm
             }
 //            print_r('<pre/>');
 //            print_r($records);
-            $sqls="select a.name as cityname ,d.name as names,d.staff_status,d.entry_time from security$suffix.sec_city a	,hr$suffix.hr_binding b	 ,security$suffix.sec_user  c ,hr$suffix.hr_employee d 
-                where c.username='$peoples' and b.user_id='".$peoples."' and b.employee_id=d.id and c.city=a.code";
+            $localOffice = Yii::t("report","local office");
+            $sqls="select a.name as cityname,d.name as names,d.staff_status,d.entry_time,
+                dept.name as dept_name,if(d.office_id=0,'{$localOffice}',office.name) as office_name
+                from hr$suffix.hr_binding b 
+                LEFT JOIN hr$suffix.hr_employee d on d.id=b.employee_id
+                LEFT JOIN hr$suffix.hr_dept dept on dept.id=d.position
+                LEFT JOIN hr$suffix.hr_office office on office.id=d.office_id
+                LEFT JOIN security$suffix.sec_user c on c.username=b.user_id
+                LEFT JOIN security$suffix.sec_city a on d.city=a.code
+                where b.user_id='".$peoples."'";
             $cname = Yii::app()->db->createCommand($sqls)->queryRow();
             $sql1="select id,visit_dt  from sal_visit where username='".$peoples."'  and  visit_dt >= '$start_dt'and visit_dt <= '$end_dt' and ({$obj_where})";
             $arr = Yii::app()->db->createCommand($sql1)->queryAll();
@@ -1844,6 +1896,8 @@ class ReportVisitForm extends CReportForm
             $baifang = Yii::app()->db->createCommand($sqlbf)->queryScalar();
             $people['visit']=$baifang;
             $people['singular']=$sums;
+            $people['dept_name']=$cname['dept_name'];
+            $people['office_name']=$cname['office_name'];
             $people['entry_time']=$cname['entry_time'];
             $people['cityname']=$cname['cityname'];
             $people['names']=$cname['names'].(intval($cname['staff_status'])=="-1"?"（离职）":"");//员工名字
