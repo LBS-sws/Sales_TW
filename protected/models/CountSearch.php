@@ -8,7 +8,7 @@ class CountSearch{
     private static $whereSQL=" and f.rpt_cat!='INV'";
     private static $IDBool=false;//是否需要ID服務的查詢
 
-    private static $system=2;//0:大陸 1:台灣 2:國際
+    private static $system=1;//0:大陸 1:台灣 2:國際
 
     //獲取暫停、終止的最後一條記錄(一条服务在一个月内只能存在一条暂停和终止)，特例：暫停→恢復→終止（三個都需要計算）
     public static function getServiceForST($start_dt,$end_dt,$city_allow){
